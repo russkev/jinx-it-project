@@ -23,42 +23,25 @@ class PortfolioAdmin(admin.ModelAdmin):
 
 @admin.register(models.Page)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'portfolio', 'number', 'owner', 'id']
+    list_display = ['name', 'portfolio', 'index', 'owner', 'id']
     inlines = [SectionInline]
-
-@admin.register(models.TextSection)
-class TextSectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'number', 'content', 'id']
-
-
-@admin.register(models.ImageTextSection)
-class ImageTextSectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'number', 'image', 'content', 'id']
-
-@admin.register(models.ImageSection)
-class ImageTextSectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'number', 'image', 'id']
-
-@admin.register(models.MediaSection)
-class MediaSectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'number', 'media', 'id']
 
 @admin.register(models.Section)
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'number', 'id']
+    list_display = ['name', 'page', 'index', 'id']
 
 @admin.register(models.Link)
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ['icon', 'title', 'address', 'id', 'number']
+    list_display = ['icon', 'title', 'address', 'uuid', 'index']
 
-@admin.register(models.PortfolioLink)
-class PortfolioLinkAdmin(admin.ModelAdmin):
-    list_display = ['link_id', 'portfolio_id']
+# @admin.register(models.PortfolioLink)
+# class PortfolioLinkAdmin(admin.ModelAdmin):
+#     list_display = ['link_id', 'portfolio_id']
 
-@admin.register(models.PageLink)
-class PageLinkAdmin(admin.ModelAdmin):
-    list_display = ['link_id', 'page_id']
+# @admin.register(models.PageLink)
+# class PageLinkAdmin(admin.ModelAdmin):
+#     list_display = ['link_id', 'page_id']
 
-@admin.register(models.SectionLink)
-class SectionLinkAdmin(admin.ModelAdmin):
-    list_display = ['link_id', 'section_id']
+# @admin.register(models.SectionLink)
+# class SectionLinkAdmin(admin.ModelAdmin):
+#     list_display = ['link_id', 'section_id']

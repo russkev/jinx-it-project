@@ -139,32 +139,8 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
         models.Page.objects.normalise(parent_id)
 
 class SectionList(generics.ListCreateAPIView):
-    serializer_class = serializers.PolymorphSectionSerializer
+    serializer_class = serializers.SectionSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
-
-    def get_queryset(self):
-        try:
-            portfolio = models.Portfolio.objects.get(
-                id=self.kwargs['portfolio_id'])
-            page = portfolio.pages.get(id=self.kwargs['page_id'])
-        except (models.Portfolio.DoesNotExist, models.Page.DoesNotExist) as exc:
-            raise Http404 from exc
-
-        filter_param = {
-            'page': page,
-        }
-        # TODO: consolidate all the section data into the section model?
-        section_types = [
-            models.TextSection,
-            models.ImageSection,
-            models.ImageTextSection,
-            models.MediaSection
-        ]
-        ret = []
-        for section in section_types:
-            ret += section.objects.filter(**filter_param)
-
-        return sorted(ret, key=lambda s: s.number)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -175,31 +151,9 @@ class SectionList(generics.ListCreateAPIView):
 
     swagger_schema = swagger.PortfolioAutoSchema
 
-    # bulk section creation/update
-    def put(self, request, *args, **kwargs):
-        
-        request.data.sort(key=(lambda s: s['number']))
-        for i, section in enumerate(request.data):
-            section['number'] = i
-        context = self.get_serializer_context()
-        context['in_list'] = True
-
-        serializer = serializers.SectionListSerializer(
-            self.get_queryset(),
-            data=request.data,
-            child=serializers.PolymorphSectionSerializer(
-                context=context
-            ),
-        )
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class SectionDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.PolymorphSectionSerializer
+    serializer_class = serializers.SectionSerializer
     lookup_url_kwarg = 'section_id'
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
 
@@ -219,36 +173,6 @@ class SectionDetail(generics.RetrieveUpdateDestroyAPIView):
         context = super().get_serializer_context()
         context['page'] = self.kwargs['page_id']
         return context
-
-    # modified based on code from GenericAPIView default implementation
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Perform the lookup filtering.
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-
-        assert lookup_url_kwarg in self.kwargs, (
-            'Expected view %s to be called with a URL keyword argument '
-            'named "%s". Fix your URL conf, or set the `.lookup_field` '
-            'attribute on the view correctly.' %
-            (self.__class__.__name__, lookup_url_kwarg)
-        )
-
-        # find the object with the right key
-        key = self.lookup_field
-        val = self.kwargs[lookup_url_kwarg]
-        obj = None
-        for item in queryset:
-            if getattr(item, key) == val:
-                obj = item
-                break
-        else:
-            raise Http404
-
-        # May raise a permission denied
-        self.check_object_permissions(self.request, obj)
-
-        return obj
 
     swagger_schema = swagger.PortfolioAutoSchema
 

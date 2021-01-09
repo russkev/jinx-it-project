@@ -8,6 +8,8 @@ from django.dispatch import receiver
 
 from account.signals import account_created
 
+import uuid
+
 from . import managers
 
 
@@ -37,6 +39,7 @@ def create_default_portfolio(sender, **kwargs):
 
 
 class Portfolio(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     # Link portfolio to user (which is linked to account)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='portfolios')
@@ -52,11 +55,13 @@ class Portfolio(models.Model):
         return self.name
 
 class Page(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+
     portfolio = models.ForeignKey(
         Portfolio, on_delete=models.CASCADE, related_name='pages')
     name = models.CharField(max_length=100)
     # page number (distinct from its id) to allow reordering of pages
-    number = models.IntegerField(default=0)
+    index = models.IntegerField(default=0)
 
     # set a custom manager for page reordering support
     objects = managers.PageManager()
@@ -72,18 +77,20 @@ class Page(models.Model):
         return self.portfolio.private
 
     class Meta:
-        ordering = ['number']
+        ordering = ['index']
 
     def __str__(self):
         return self.name
 
 
 class Section(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+
     page = models.ForeignKey(
         Page, on_delete=models.CASCADE, related_name='sections')
     name = models.CharField(blank=True, max_length=250)
     # ordering number to order sections on a page
-    number = models.IntegerField(default=0)
+    index = models.IntegerField(default=0)
 
     objects = managers.SectionManager()
 
@@ -96,36 +103,72 @@ class Section(models.Model):
     def private(self):
         return self.page.private
 
-    @property
-    def type(self):
-        mapping = {
-            'TextSection': 'text',
-            'MediaSection': 'media',
-            'ImageSection': 'image',
-            'ImageTextSection': 'image_text',
-        }
-        return mapping[self.__class__.__name__]
-
     class Meta:
-        ordering = ['number']
+        ordering = ['index']
 
     def __str__(self):
         return self.name
 
+class Link(models.Model):
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='links'
+    )
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    title = models.TextField(blank=True)
+    icon = models.IntegerField(default = 0)
+    address = models.TextField(blank=True)
+    index = models.IntegerField(default = 0)
 
-class TextSection(Section):
-    content = models.TextField(blank=True)
+    def __str__(self):
+        return self.title + " | " + self.address
 
 
-class MediaSection(Section):
-    # TODO: password protect files
-    # https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
-    media = models.FileField(upload_to='uploads/%Y/%m/%d/', null=True)
+# class PageLink(models.Model):
+#     # link = models.OneToOneField(
+#     #     Link, 
+#     #     primary_key = True, 
+#     #     on_delete = models.CASCADE
+#     # )
+#     link2 = models.UUIDField(primary_key=True)
+    
+#     page = models.ForeignKey(
+#         Page, 
+#         on_delete = models.CASCADE,
+#         related_name = 'links',
+#     )
 
+# class SectionLink(models.Model):
+#     # link = models.OneToOneField(
+#     #     Link,
+#     #     primary_key = True,
+#     #     on_delete = models.CASCADE,
+#     # )
+#     link2 = models.UUIDField(primary_key=True)
+
+#     section = models.ForeignKey(
+#         Section,
+#         on_delete = models.CASCADE,
+#         related_name = 'links',
+#     )
+
+# class PortfolioLink(models.Model):
+#     link = models.OneToOneField(
+#         Link,
+#         primary_key = True,
+#         on_delete = models.CASCADE,
+#     )
+#     link2 = models.UUIDField(primary_key=True)
+
+#     portfolio = models.ForeignKey(
+#         Portfolio,
+#         on_delete = models.CASCADE,
+#         related_name = 'links'
+#     )
 
 class Image(models.Model):
-    #   Image upload tutorial
-    #   https://medium.com/@emeruchecole9/uploading-images-to-rest-api-backend-in-react-js-b931376b5833
+        #   Image upload tutorial
+        #   https://medium.com/@emeruchecole9/uploading-images-to-rest-api-backend-in-react-js-b931376b5833
+
     def image_path(self, filename):
         _now = datetime.now()
         return 'images/{user}/{year}/{month}/{day}/{file}'.format(
@@ -142,68 +185,3 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class ImageTextSection(Section):
-    image = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
-    content = models.TextField(blank=True)
-
-
-class ImageSection(Section):
-    image = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
-
-
-class Link(models.Model):
-    owner = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='links'
-    )
-
-    id = models.CharField(
-        max_length = 36,
-        primary_key = True
-    )
-    title = models.TextField(blank=True)
-    icon = models.IntegerField(default = 0)
-    address = models.TextField(blank=True)
-    number = models.IntegerField(default = 0)
-
-    def __str__(self):
-        return self.title + " | " + self.address
-
-
-class PageLink(models.Model):
-    link = models.OneToOneField(
-        Link, 
-        primary_key = True, 
-        on_delete = models.CASCADE
-    )
-    
-    page = models.ForeignKey(
-        Page, 
-        on_delete = models.CASCADE,
-        related_name = 'links',
-    )
-
-class SectionLink(models.Model):
-    link = models.OneToOneField(
-        Link,
-        primary_key = True,
-        on_delete = models.CASCADE,
-    )
-    section = models.ForeignKey(
-        Section,
-        on_delete = models.CASCADE,
-        related_name = 'links',
-    )
-
-class PortfolioLink(models.Model):
-    link = models.OneToOneField(
-        Link,
-        primary_key = True,
-        on_delete = models.CASCADE,
-    )
-    portfolio = models.ForeignKey(
-        Portfolio,
-        on_delete = models.CASCADE,
-        related_name = 'links'
-    )
