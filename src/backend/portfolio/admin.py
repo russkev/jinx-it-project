@@ -32,7 +32,14 @@ class SectionAdmin(admin.ModelAdmin):
 
 @admin.register(models.Link)
 class LinkAdmin(admin.ModelAdmin):
-    list_display = ['icon', 'title', 'address', 'uuid', 'index']
+    list_display = ['icon', 'title', 'address', 'id', 'index']
+
+
+
+
+
+
+
 
 # @admin.register(models.PortfolioLink)
 # class PortfolioLinkAdmin(admin.ModelAdmin):

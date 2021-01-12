@@ -2,7 +2,8 @@ import copy
 import numbers
 
 from rest_framework import serializers
-
+from drf_writable_nested.serializers import NestedUpdateMixin, NestedCreateMixin
+from drf_writable_nested import UniqueFieldsMixin
 
 from . import models
 from . import validators
@@ -14,12 +15,34 @@ from . import validators
 
 
 class LinkSerializer(serializers.ModelSerializer):
+    # class LinkSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = models.Link
-        fields = ['id', 'icon', 'address', 'title', 'number']
-        extra_kwargs = {
-            'id': {'validators': []},
-        }
+        fields = ['id', 'icon', 'address', 'title', 'index']
+        # extra_kwargs = {
+        #     'id': {'validators': []},
+        # }
+
+    # def update(self, instance, validated_data):
+    #     print(validated_data)
+    #     return instance
+
+    # def delete_unused_images(self, owner):
+    #     user_images = models.Image.objects.filter(owner=owner)
+    #     for user_image in user_images:
+    #         image_id = user_image.id
+    #         image_is_for_deletion = True
+    #         try:
+    #             models.ImageSection.objects.get(image_id=image_id)
+    #             image_is_for_deletion = False
+    #         except models.ImageSection.DoesNotExist:
+    #             pass
+    #         try:
+    #             models.ImageTextSection.objects.get(image_id=image_id)
+    #         except models.ImageTextSection.DoesNotExist:
+    #             pass
+    #         if image_is_for_deletion:
+    #             user_image.delete()
 
 
 # class PageLinkSerializer(serializers.ListSerializer):
@@ -35,11 +58,32 @@ class LinkSerializer(serializers.ModelSerializer):
 
 
 # class SectionLinkSerializer(serializers.ListSerializer):
-#     link = LinkSerializer()
 
-#     class Meta:
-#         model = models.SectionLink
-#         fields = ['section', 'link']
+
+class SectionLinkSerializer(
+    NestedCreateMixin,
+    NestedUpdateMixin,
+    serializers.ModelSerializer
+):
+    link = LinkSerializer()
+    section = serializers.ReadOnlyField(source='section.id')
+
+    class Meta:
+        model = models.SectionLink
+        fields = ['section', 'link']
+
+
+class PortfolioLinkSerializer(
+    NestedCreateMixin, 
+    NestedUpdateMixin, 
+    serializers.ModelSerializer
+):
+    link = LinkSerializer()
+    portfolio = serializers.ReadOnlyField(source='link.id')
+
+    class Meta:
+        model = models.PortfolioLink
+        fields = ['portfolio', 'link']
 
 #     def update(self, instance, validated_data):
 #         link_mapping = {page_link.link.id: page_link for page_link in instance}
@@ -52,7 +96,7 @@ class LinkSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = models.PortfolioLink
 #         fields = ['portfolio', 'link']
-    
+
 #     def update(self, instance, validated_data):
 #         link_mapping = {portfolio_link.link.id: portfolio_link for portfolio_link in instance}
 #         return LinkAssociationUpdate(self.child, validated_data, link_mapping)
@@ -165,71 +209,6 @@ class LinkSerializer(serializers.ModelSerializer):
 #     return instance
 
 
-class PortfolioInputSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Portfolio
-        fields = ['id', 'name', 'private', 'theme', 'background']
-
-
-class PortfolioOutputSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Portfolio
-        fields = ['id', 'owner', 'name', 'pages', 'private', 'theme', 'background']
-
-
-class SectionSerializer(serializers.ModelSerializer):
-    
-    # links = SectionLinkDetailSerializer(many=True)
-
-
-    # add id explicitly for it to be avaliable in the list serialiser
-    id = serializers.IntegerField(required=False)
-
-    
-    class Meta:
-        model = models.Section
-        fields = ['id', 'name', 'type', 'number', 'page', 'links']
-        extra_kwargs = {
-            # don't need to show the page as that can be inferred from the url
-            'page': {'write_only': True},
-        }
-
-    def validate_page(self, value):
-        # make sure the new page is owned by the user
-        owner = value.owner
-        if self.context['request'].user != owner:
-            raise serializers.ValidationError('You do not own this page')
-        return value
-
-    def to_internal_value(self, data: dict):
-        if 'page' not in data:
-            data['page'] = self.context['page']
-
-        return data
-
-
-class SectionListSerializer(serializers.ListSerializer):
-
-    def __init__(self, *args, **kwargs):
-        self.child = kwargs.pop('child', copy.deepcopy(self.child))
-        self.allow_empty = kwargs.pop('allow_empty', True)
-        super(serializers.ListSerializer, self).__init__(*args, **kwargs)
-
-    def create(self, validated_data):
-        ret = []
-        for i, attrs in enumerate(validated_data):
-            ret.append(self.child.create(attrs))
-        return ret
-
-    # based on example from docs
-    # https://www.django-rest-framework.org/api-guide/serializers/#listserializer
-    def update(self, instance, validated_data):
-        # Maps for id->instance and id->data item.
-        section_mapping = {section.id: section for section in instance}
-
-        return sectionListUpdate(self.child, section_mapping, validated_data)
-
-
 class ImageInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Image
@@ -241,70 +220,129 @@ class ImageOutputSerializer(serializers.ModelSerializer):
         model = models.Image
         fields = ['id', 'owner', 'name', 'path']
 
-class PageListInputSerializer(serializers.ListSerializer):
-    sections = SectionListSerializer()
+
+# def sectionListUpdate(child_serializer, validated_data, section_mapping, ):
+#     # Perform creations and updates.
+#     ret = []
+#     for data in validated_data:
+#         section = section_mapping.get(data.pop('id', None), None)
+#         if section is None:
+#             ret.append(child_serializer.create(data))
+#         else:
+#             ret.append(child_serializer.update(section, data))
+
+#     # Perform deletions.
+#     for section_id, section in section_mapping.items():
+#         if section_id not in map(lambda s: s.id, ret):
+#             section.delete()
+
+#     return ret
+
+
+# class SectionSerializer(serializers.ModelSerializer):
+class SectionSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
+    page = serializers.ReadOnlyField(source='page.id')
+
+    # links = SectionLinkDetailSerializer(many=True)
+
+    # add id explicitly for it to be avaliable in the list serialiser
+    # id = serializers.IntegerField(required=False)
 
     class Meta:
-        model = models.Page
-        fields = ['id', 'name', 'number', 'sections']
-    
-    def update(self, instance, validated_data):
-        number = validated_data.pop('number', None)
+        model = models.Section
+        fields = ['id', 'name', 'type', 'index', 'text', 'page']
+        # extra_kwargs = {
+        #     # don't need to show the page as that can be inferred from the url
+        #     'page': {'write_only': True},
+        # }
 
-        super().update(instance, validated_data)
+    # def validate_page(self, value):
+    #     # make sure the new page is owned by the user
+    #     owner = value.owner
+    #     if self.context['request'].user != owner:
+    #         raise serializers.ValidationError('You do not own this page')
+    #     return value
 
-        # !!! Up to, haven't tried page list update yet
-        
-        page_mapping = {page.id: page for page in instance}
-        return sectionListUpdate(self.child, page_mapping, validated_data)
+    # def to_internal_value(self, data: dict):
+    #     if 'page' not in data:
+    #         data['page'] = self.context['page']
 
-        # return instance
+    #     return data
+
+# class SectionListSerializer(serializers.ListSerializer):
+
+#     def __init__(self, *args, **kwargs):
+#         self.child = kwargs.pop('child', copy.deepcopy(self.child))
+#         self.allow_empty = kwargs.pop('allow_empty', True)
+#         super(serializers.ListSerializer, self).__init__(*args, **kwargs)
+
+#     def create(self, validated_data):
+#         ret = []
+#         for i, attrs in enumerate(validated_data):
+#             ret.append(self.child.create(attrs))
+#         return ret
+
+#     # based on example from docs
+#     # https://www.django-rest-framework.org/api-guide/serializers/#listserializer
+#     def update(self, instance, validated_data):
+#         # Maps for id->instance and id->data item.
+#         section_mapping = {section.id: section for section in instance}
+
+#         return sectionListUpdate(self.child, section_mapping, validated_data)
 
 
-class PageInputSerializer(serializers.ModelSerializer):
-# class PageInputSerializer(WritableNestedModelSerializer):
+class PageListInputSerializer(serializers.ListSerializer):
     sections = SectionSerializer(many=True)
 
     class Meta:
         model = models.Page
-        fields = ['id', 'name', 'number', 'sections']
+        fields = ['id', 'name', 'index']
 
-    # def delete_unused_images(self, owner):
-    #     user_images = models.Image.objects.filter(owner=owner)
-    #     for user_image in user_images:
-    #         image_id = user_image.id
-    #         image_is_for_deletion = True
-    #         try:
-    #             models.ImageSection.objects.get(image_id=image_id)
-    #             image_is_for_deletion = False
-    #         except models.ImageSection.DoesNotExist:
-    #             pass
-    #         try:
-    #             models.ImageTextSection.objects.get(image_id=image_id)
-    #         except models.ImageTextSection.DoesNotExist:
-    #             pass
-    #         if image_is_for_deletion:
-    #             user_image.delete()
-    
+    # def update(self, instance, validated_data):
+    #     number = validated_data.pop('number', None)
 
-class PageOutputSerializer(serializers.ModelSerializer):
+    #     super().update(instance, validated_data)
+
+    #     # !!! Up to, haven't tried page list update yet
+
+    #     page_mapping = {page.id: page for page in instance}
+    #     return sectionListUpdate(self.child, page_mapping, validated_data)
+
+    #     # return instance
+
+
+# class PageInputSerializer(serializers.ModelSerializer):
+#     # class PageInputSerializer(WritableNestedModelSerializer):
+#     # sections = SectionSerializer(many=True)
+
+#     class Meta:
+#         model = models.Page
+#         fields = ['id', 'name', 'index']
+# class PageOutputSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Page
+#         fields = ['id', 'name', 'index']
+
+# class PageSerializer(serializers.ModelSerializer):
+# class PageSerializer(WritableNestedModelSerializer):
+class PageSerializer(NestedCreateMixin, NestedUpdateMixin, serializers.ModelSerializer):
+    sections = SectionSerializer(many=True)
+
     class Meta:
         model = models.Page
-        fields = ['id', 'name', 'number', 'sections', 'links']
+        fields = ['id', 'name', 'index', 'sections']
 
-def sectionListUpdate(child_serializer, validated_data, section_mapping, ):
-    # Perform creations and updates.
-    ret = []
-    for data in validated_data:
-        section = section_mapping.get(data.pop('id', None), None)
-        if section is None:
-            ret.append(child_serializer.create(data))
-        else:
-            ret.append(child_serializer.update(section, data))
+# class PortfolioInputSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.Portfolio
+#         fields = ['id', 'name', 'private', 'theme', 'background']
 
-    # Perform deletions.
-    for section_id, section in section_mapping.items():
-        if section_id not in map(lambda s: s.id, ret):
-            section.delete()
 
-    return ret
+class PortfolioSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.id')
+    pages = PageSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = models.Portfolio
+        fields = ['id', 'owner', 'name', 'pages',
+                  'private', 'theme', 'background']

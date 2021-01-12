@@ -1,10 +1,14 @@
 import string
 import random
 import copy
+import uuid
+from typing import OrderedDict
 
 from hypothesis import given, settings, strategies as st, Verbosity
 from hypothesis.extra.django import TestCase, from_model
 from hypothesis import stateful
+
+import collections
 
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -36,24 +40,39 @@ class UserMixin():
 class PortfolioMixin():
     def setUpPortfolio(self):
         self.portfolio = models.Portfolio.objects.create(
-            owner=self.user, name='cuttlefish')
+            owner=self.user, 
+            name='cuttlefish')
         for i in range(10):
             page = models.Page.objects.create(
                 portfolio=self.portfolio,
                 name='page number {}'.format(i),
-                number=i
+                index=i
             )
             if i == 0:
                 self.page = page
         for i in range(10):
-            section = models.TextSection.objects.create(
+            section = models.Section.objects.create(
                 page=self.page,
                 name='section number {}'.format(i),
-                number=i,
-                content='lorem ipsum'
+                index=i,
+                text='lorem ipsum'
             )
             if i == 0:
                 self.section = section
+        for i in range(10):
+            link = models.Link.objects.create(
+                id = uuid.uuid4(),
+                title = 'link number {}'.format(i),
+                icon = i,
+                address = "http://link.com",
+                index = i,
+            )
+            section_link = models.SectionLink.objects.create(
+                link = link,
+                section = self.section
+            )
+            if i == 0:
+                self.section_link = section_link
 
 
 class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
@@ -62,7 +81,7 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
         self.setUpUser()
         self.setUpPortfolio()
 
-    def test_porfolio_create(self):
+    def test_portfolio_create(self):
         name = 'fasting pumice'
         data = {'name': name}
         response = self.client.post(
@@ -78,7 +97,7 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(portfolio.name, name)
         self.assertEqual(portfolio.pages.count(), 0)
 
-    def test_porfolio_validation(self):
+    def test_portfolio_validation(self):
         name = 'a' * 101
         data = {'name': name}
         response = self.client.post(
@@ -95,21 +114,21 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
                 kwargs={
                     'portfolio_id': self.portfolio.id
                 }
-            )
+            ),
+            format='json',
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {
-            'id': self.portfolio.id,
-            'owner': self.portfolio.owner.id,
-            'name': self.portfolio.name,
-            'pages': list(map(lambda p: p.id, self.portfolio.pages.all())),
-            'private': self.portfolio.private,
-            'theme': None,
-            'background': None,
-        })
+        self.assertEqual(str(self.portfolio.id), response.data['id'])
+        self.assertEqual(self.portfolio.owner.id, response.data['owner'])
+        self.assertEqual(self.portfolio.name, response.data['name'])
+        self.assertEqual(10, len(response.data['pages']))
+        self.assertEqual(self.portfolio.private, response.data['private'])
+        self.assertEqual(self.portfolio.theme, None)
+        self.assertEqual(self.portfolio.background, None)
 
     def test_portfolio_update(self):
         name = 'incontrovertible bisections'
+        expected_id = str(self.portfolio.id)
         response = self.client.patch(
             reverse(
                 'portfolio_detail',
@@ -122,13 +141,14 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get('name'), name)
+        self.assertEqual(expected_id, response.data['id'])
+
 
         # clear out cached data
         self.portfolio.refresh_from_db()
 
         self.assertEqual(self.portfolio.owner, self.user)
         self.assertEqual(self.portfolio.name, name)
-        self.assertEqual(self.portfolio.pages.count(), 10)
 
     def test_portfolio_delete(self):
         response = self.client.delete(
@@ -155,14 +175,17 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
     def test_page_create(self):
         name = 'deteriorating tubes'
         data = {
+            'id': str(uuid.uuid4()),
             'name': name,
-            'number': 0,
-            'sections': []
+            'index': 11,
+            'sections': [],
         }
         response = self.client.post(
-            reverse('page_list', kwargs={'portfolio_id': self.portfolio.id}),
+            reverse('page_list', kwargs={
+                'portfolio_id': self.portfolio.id,
+            }),
             data,
-            format='json',
+            format='json'
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data.get('name'), name)
@@ -193,13 +216,11 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
             )
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {
-            'id': self.page.id,
-            'name': self.page.name,
-            'number': 0,
-            'sections': list(map(lambda s: s.id, self.page.sections.all())),
-            'links': []
-        })
+        self.assertEqual(response.data['id'], str(self.page.id))
+        self.assertEqual(response.data['name'], self.page.name)
+        self.assertEqual(response.data['index'], 0),
+        self.assertEqual(len(response.data['sections']), 10)
+
 
     def test_page_update(self):
         name = 'soggiest contrivances'
@@ -222,7 +243,7 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
 
         self.assertEqual(self.page.portfolio, self.portfolio)
         self.assertEqual(self.page.name, name)
-        self.assertEqual(self.page.sections.count(), 10)
+        # self.assertEqual(self.page.sections.count(), 10)
 
     def test_page_delete(self):
         response = self.client.delete(
@@ -248,39 +269,42 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
         self.setUpPortfolio()
 
     def test_page_nest_update(self):
+        original_uuid = self.section.id
+        new_section_id = str(uuid.uuid4())
         data1 = {
             'name': 'Home page',
             'sections': [
                 {
                     'name': 'About me',
-                    'number': 0,
+                    'index': 0,
                     'type': 'text',
-                    'content': 'lorem ipsum',
-                    'id': 1,
-                    'links': [],
+                    'text': 'lorem ipsum',
+                    'id': self.section.id,
+                    # 'links': [],
                 },
                 {
                     'name': 'Contact',
-                    'number': 1,
+                    'index': 1,
                     'type': 'text',
-                    'content': 'lorem two',
-                    'id': 22,
-                    'links': [
-                        {
-                            'address': 'http://facebook.com',
-                            'icon': 4,
-                            'id': '90b3b5c6-5a49-4bd5-bce4-7194b71507d0',
-                            'number': 0,
-                            'title': 'facebook'
-                        },
-                        {
-                            'address': 'http://github.com',
-                            'icon': 5,
-                            'id': '91b3b5c6-5a49-4bd5-bce4-7194b71507d0',
-                            'number': 1,
-                            'title': 'github'
-                        }
-                    ]
+                    'text': 'lorem two',
+                    'id': str(uuid.uuid4()),
+                    # 'id': 22,
+                    # 'links': [
+                    #     {
+                    #         'address': 'http://facebook.com',
+                    #         'icon': 4,
+                    #         'id': '90b3b5c6-5a49-4bd5-bce4-7194b71507d0',
+                    #         'number': 0,
+                    #         'title': 'facebook'
+                    #     },
+                    #     {
+                    #         'address': 'http://github.com',
+                    #         'icon': 5,
+                    #         'id': '91b3b5c6-5a49-4bd5-bce4-7194b71507d0',
+                    #         'number': 1,
+                    #         'title': 'github'
+                    #     }
+                    # ]
                 },
             ]
         }
@@ -299,12 +323,12 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                         'number': 1,
                         'type': 'text',
                         'content': 'Project 2 info',
-                    },
+                },
             ]
         }
-        response = self.client.patch(
+        response = self.client.put(
             reverse(
-                'page_detail', 
+                'page_detail',
                 kwargs={
                     'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id
@@ -314,246 +338,25 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            len(models.Section.objects.filter(page=self.page.id)), 2)
+        self.assertEqual(self.section.id, original_uuid)
 
 
-class LinkTest(UserMixin, PortfolioMixin, APITestCase):
+class SectionTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
         self.setUpUser()
         self.setUpPortfolio()
 
-    def test_page_link_create(self):
-        data = [
-            {
-                "id": "z",
-                "icon": 2,
-                "address": "string",
-                "title": "string",
-                "number": 0,
-            },
-            {
-                "id": "y",
-                "icon": 3,
-                "address": "string",
-                "title": "string",
-                "number": 1,
-            },
-            {
-                "id": "x",
-                "icon": 3,
-                "address": "string",
-                "title": "string",
-                "number": 2,
-            },
-            {
-                "id": "w",
-                "icon": 3,
-                "address": "string",
-                "title": "string",
-                "number": 3,
-            },
-            {
-                "id": "v",
-                "icon": 3,
-                "address": "string",
-                "title": "string",
-                "number": 4,
-            },
-        ]
-
-        response = self.client.put(
-            reverse(
-                'link_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            ),
-            data,
-            format='json'
-        )
-        self.assertEqual(response.status_code, 201)
-
-    def test_page_link_update(self):
-        data = [
-            {
-                "id": "asc",
-                "icon": 5,
-                "address": "www.linkedin.com",
-                "title": "My LinkedIn",
-                "number": 0,
-            },
-            {
-                "id": "asd",
-                "icon": 6,
-                "address": "www.linkedin.com",
-                "title": "My LinkedIn",
-                "number": 1,
-            }
-        ]
-        response = self.client.put(
-            reverse(
-                'link_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            ),
-            data,
-            format='json'
-        )
-        self.assertEqual(len(response.data), 2)
-
-        self.assertEqual(response.status_code, 201)
-        updated_data = [
-            {
-                "id": "asc",
-                "icon": 3,
-                "address": "www.github.com",
-                "title": "My LinkedIn",
-                "number": 0,
-            },
-        ]
-        response = self.client.put(
-            reverse(
-                'link_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            ),
-            updated_data,
-            format='json'
-        )
-        self.assertEqual(response.status_code, 201)
-        response = self.client.get(
-            reverse(
-                'link_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            ),
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['link']['address'], "www.github.com")
-
-    def test_section_link_create(self):
-        data = [
-            {
-                "id": "asdasfdsa",
-                "icon": 5,
-                "address": "string",
-                "title": "string",
-                "number": 0,
-            },
-            {
-                "id": "asdasfdsb",
-                "icon": 6,
-                "address": "string",
-                "title": "string",
-                "number": 1,
-            }
-        ]
-        response = self.client.put(
-            reverse(
-                'section_link',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': self.section.id
-                }
-            ),
-            data,
-            format='json'
-        )
-        self.assertEqual(response.status_code, 201)
-
-    def test_section_link_update(self):
-        data = [
-            {
-                "id": "asc",
-                "icon": 2,
-                "address": "www.linkedin.com",
-                "title": "My LinkedIn",
-                "number": 0,
-            },
-            {
-                "id": "asd",
-                "icon": 2,
-                "address": "www.linkedin.com",
-                "title": "My LinkedIn",
-                "number": 1,
-            }
-        ]
-        response = self.client.put(
-            reverse(
-                'section_link',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': self.section.id
-                }
-            ),
-            data,
-            format='json'
-        )
-        self.assertEqual(len(response.data), 2)
-
-        self.assertEqual(response.status_code, 201)
-
-        updated_data = [
-            {
-                "id": "asc",
-                "icon": 2,
-                "address": "www.github.com",
-                "title": "My LinkedIn",
-                "number": 0,
-            },
-        ]
-        response = self.client.put(
-            reverse(
-                'section_link',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': self.section.id
-                }
-            ),
-            updated_data,
-            format='json'
-        )
-        self.assertEqual(response.status_code, 201)
-        response = self.client.get(
-            reverse(
-                'section_link',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': self.section.id
-                }
-            ),
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['link']['address'], "www.github.com")
-
-
-class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
-    def setUp(self):
-        """Code run before each test. Setup API access simulation."""
-        self.setUpUser()
-        self.setUpPortfolio()
-
-    def test_text_section_create(self):
+    def test_section_create(self):
         data = {
             'name': 'nervous pillowcase',
-            'number': 0,
+            'index': 0,
             'type': 'text',
-            'content': 'lorem ipsum'
+            'text': 'lorem ipsum',
+            'id': str(uuid.uuid4()),
+            # 'page': self.page.id
         }
         response = self.client.post(
             reverse(
@@ -570,11 +373,32 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
         for key, val in data.items():
             self.assertEqual(response.data.get(key), val)
 
-        section = models.TextSection.objects.get(id=response.data.get('id'))
-        for key, val in data.items():
-            self.assertEqual(getattr(section, key), val)
+        section = models.Section.objects.get(id=response.data.get('id'))
+        self.assertEqual(section.name, response.data['name'])
+        self.assertEqual(section.index, response.data['index'])
+        self.assertEqual(section.type, response.data['type'])
+        self.assertEqual(section.text, response.data['text'])
+        self.assertEqual(str(section.id), response.data['id'])
 
-    def test_text_section_validation(self):
+    # def test_section_create_list(self):
+    #     data = [
+    #         {
+    #             'name': 'nervous pillowcase',
+    #             'index': 0,
+    #             'type': 'text',
+    #             'text': 'lorem ipsum',
+    #             'id': str(uuid.uuid4()),
+    #         },
+    #         {
+    #             'name': 'nervous pillowcase',
+    #             'index': 0,
+    #             'type': 'text',
+    #             'text': 'lorem ipsum',
+    #             'id': str(uuid.uuid4()),
+    #         },
+    #     ]
+
+    def test_section_validation(self):
         data = {
             'name': 'a' * 251,
             'number': 0,
@@ -594,7 +418,7 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_text_section_retrieve(self):
+    def test_section_retrieve(self):
         response = self.client.get(
             reverse(
                 'section_detail',
@@ -605,18 +429,20 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
                 }
             )
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {
-            'id': self.section.id,
+        expected = {
+            'id': str(self.section.id),
             'name': self.section.name,
-            'number': self.section.number,
+            'index': self.section.index,
             'type': self.section.type,
-            'content': self.section.content,
-        })
+            'text': self.section.text,
+            'page': self.page.id,
+        }
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected)
 
-    def test_text_section_update(self):
+    def test_section_update(self):
         name = 'spunky horticulturists'
-        content = 'directionless equipages'
+        text = 'directionless equipages'
 
         def update_field(field, val):
             response = self.client.patch(
@@ -636,7 +462,7 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
 
         with self.subTest(field='name'):
             initial_data = copy.deepcopy(
-                serializers.TextSectionSerializer(self.section).data)
+                serializers.SectionSerializer(self.section).data)
 
             update_field('name', name)
 
@@ -646,14 +472,14 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
             self.assertEqual(self.section.name, name)
             self.assertEqual(self.section.page, self.page)
             self.assertEqual(self.section.type, 'text')
-            self.assertEqual(self.section.number, initial_data.get('number'))
-            self.assertEqual(self.section.content, initial_data.get('content'))
+            self.assertEqual(self.section.index, initial_data.get('index'))
+            self.assertEqual(self.section.text, initial_data.get('text'))
 
-        with self.subTest(field='content'):
+        with self.subTest(field='text'):
             initial_data = copy.deepcopy(
-                serializers.TextSectionSerializer(self.section).data)
+                serializers.SectionSerializer(self.section).data)
 
-            update_field('content', content)
+            update_field('text', text)
 
             # clear out cached data
             self.section.refresh_from_db()
@@ -661,10 +487,10 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
             self.assertEqual(self.section.name, initial_data.get('name'))
             self.assertEqual(self.section.page, self.page)
             self.assertEqual(self.section.type, 'text')
-            self.assertEqual(self.section.number, initial_data.get('number'))
-            self.assertEqual(self.section.content, content)
+            self.assertEqual(self.section.index, initial_data.get('index'))
+            self.assertEqual(self.section.text, text)
 
-    def test_text_section_delete(self):
+    def test_section_delete(self):
         response = self.client.delete(
             reverse(
                 'section_detail',
@@ -681,6 +507,241 @@ class TextSectionTest(UserMixin, PortfolioMixin, APITestCase):
             0
         )
 
+
+class LinkTest(UserMixin, PortfolioMixin, APITestCase):
+    def setUp(self):
+        """Code run before each test. Setup API access simulation."""
+        self.setUpUser()
+        self.setUpPortfolio()
+
+    def test_section_link_create(self):
+        data = {
+            'link':
+                {
+                    "id": str(uuid.uuid4()),
+                    "icon": 2,
+                    "address": "string",
+                    "title": "string",
+                    "index": 0,
+                }
+            }
+
+        response = self.client.post(
+            reverse(
+                'section_link_list',
+                kwargs={
+                    'portfolio_id': self.portfolio.id,
+                    'page_id': self.page.id,
+                    'section_id': self.section.id,
+                }
+            ),
+            data,
+            format='json'
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['section'], self.section.id)
+        self.assertEqual(response.data['link']['id'], data['link']['id'])
+        self.assertEqual(response.data['link']['icon'], data['link']['icon'])
+        self.assertEqual(response.data['link']['address'], data['link']['address'])
+        self.assertEqual(response.data['link']['title'], data['link']['title'])
+        self.assertEqual(response.data['link']['index'], data['link']['index'])
+
+    # def test_page_link_update(self):
+    #     data = [
+    #         {
+    #             "id": "asc",
+    #             "icon": 5,
+    #             "address": "www.linkedin.com",
+    #             "title": "My LinkedIn",
+    #             "number": 0,
+    #         },
+    #         {
+    #             "id": "asd",
+    #             "icon": 6,
+    #             "address": "www.linkedin.com",
+    #             "title": "My LinkedIn",
+    #             "number": 1,
+    #         }
+    #     ]
+    #     response = self.client.put(
+    #         reverse(
+    #             'link_list',
+    #             kwargs={
+    #                 'portfolio_id': self.portfolio.id,
+    #                 'page_id': self.page.id,
+    #             }
+    #         ),
+    #         data,
+    #         format='json'
+    #     )
+    #     self.assertEqual(len(response.data), 2)
+
+    #     self.assertEqual(response.status_code, 201)
+    #     updated_data = [
+    #         {
+    #             "id": "asc",
+    #             "icon": 3,
+    #             "address": "www.github.com",
+    #             "title": "My LinkedIn",
+    #             "number": 0,
+    #         },
+    #     ]
+    #     response = self.client.put(
+    #         reverse(
+    #             'link_list',
+    #             kwargs={
+    #                 'portfolio_id': self.portfolio.id,
+    #                 'page_id': self.page.id,
+    #             }
+    #         ),
+    #         updated_data,
+    #         format='json'
+    #     )
+    #     self.assertEqual(response.status_code, 201)
+    #     response = self.client.get(
+    #         reverse(
+    #             'link_list',
+    #             kwargs={
+    #                 'portfolio_id': self.portfolio.id,
+    #                 'page_id': self.page.id,
+    #             }
+    #         ),
+    #     )
+
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(len(response.data), 1)
+    #     self.assertEqual(response.data[0]['link']['address'], "www.github.com")
+
+    # def test_section_link_create(self):
+    #     data = [
+    #         {
+    #             "id": "asdasfdsa",
+    #             "icon": 5,
+    #             "address": "string",
+    #             "title": "string",
+    #             "number": 0,
+    #         },
+    #         {
+    #             "id": "asdasfdsb",
+    #             "icon": 6,
+    #             "address": "string",
+    #             "title": "string",
+    #             "number": 1,
+    #         }
+    #     ]
+    #     response = self.client.put(
+    #         reverse(
+    #             'section_link',
+    #             kwargs={
+    #                 'portfolio_id': self.portfolio.id,
+    #                 'page_id': self.page.id,
+    #                 'section_id': self.section.id
+    #             }
+    #         ),
+    #         data,
+    #         format='json'
+    #     )
+    #     self.assertEqual(response.status_code, 201)
+
+    def test_link_update(self):
+        data = {
+                "icon": 2,
+                "address": "http://newlink.com",
+                "title": "New Title",
+                "index": self.section_link.link.index,
+            }
+        response = self.client.put(
+            reverse(
+                'link_detail',
+                kwargs={
+                    'link_id': self.section_link.link.id,
+                }
+            ),
+            data,
+            format='json'
+        )
+
+
+        stored_link = models.Link.objects.get(id=self.section_link.link.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(stored_link.id), response.data['id'])
+        self.assertEqual(stored_link.icon, data['icon'])
+        self.assertEqual(stored_link.address, data['address'])
+        self.assertEqual(stored_link.title, data['title'])
+        self.assertEqual(stored_link.index, data['index'])
+
+        # updated_data = [
+        #     {
+        #         "id": "asc",
+        #         "icon": 2,
+        #         "address": "www.github.com",
+        #         "title": "My LinkedIn",
+        #         "number": 0,
+        #     },
+        # ]
+        # response = self.client.put(
+        #     reverse(
+        #         'section_link',
+        #         kwargs={
+        #             'portfolio_id': self.portfolio.id,
+        #             'page_id': self.page.id,
+        #             'section_id': self.section.id
+        #         }
+        #     ),
+        #     updated_data,
+        #     format='json'
+        # )
+        # self.assertEqual(response.status_code, 201)
+        # response = self.client.get(
+        #     reverse(
+        #         'section_link',
+        #         kwargs={
+        #             'portfolio_id': self.portfolio.id,
+        #             'page_id': self.page.id,
+        #             'section_id': self.section.id
+        #         }
+        #     ),
+        # )
+
+        # self.assertEqual(response.status_code, 200)
+        # self.assertEqual(len(response.data), 1)
+        # self.assertEqual(response.data[0]['link']['address'], "www.github.com")
+
+    def test_section_link_validation(self):
+        name = 'a' * 101
+        data = {'name': name}
+        response = self.client.post(
+            reverse(
+                'section_link_list', 
+                kwargs={
+                    'portfolio_id': self.portfolio.id,
+                    'page_id': self.page.id,
+                    'section_id': self.section.id,
+                }
+            ),
+            data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_section_link_retrieve(self):
+        response = self.client.get(
+            reverse(
+                'link_detail',
+                kwargs={
+                    'link_id': self.section_link.link.id
+                }
+            )
+        )
+        stored_link = models.Link.objects.get(id=self.section_link.link.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(stored_link.id), response.data['id'])
+        self.assertEqual(stored_link.icon, response.data['icon'])
+        self.assertEqual(stored_link.address, response.data['address'])
+        self.assertEqual(stored_link.title, response.data['title'])
+        self.assertEqual(stored_link.index, response.data['index'])
 
 class PageOrderingMachine(stateful.RuleBasedStateMachine, UserMixin):
     def __init__(self):
