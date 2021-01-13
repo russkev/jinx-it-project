@@ -1,16 +1,9 @@
-import string
-import random
+
 import copy
 import uuid
-import os
 import tempfile
 from typing import OrderedDict
 
-from hypothesis import given, settings, strategies as st, Verbosity
-from hypothesis.extra.django import TestCase, from_model
-from hypothesis import stateful
-
-import collections
 from PIL import Image
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -19,19 +12,12 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files.images import ImageFile
 
-from unittest import skip
-
-from rest_framework.test import APIClient, APIRequestFactory, force_authenticate, APITestCase
+from rest_framework.test import APITestCase
 
 from account.models import Account
 
 from . import models
-from . import views
 from . import serializers
-
-import io
-from rest_framework.parsers import JSONParser
-
 
 class UserMixin():
     def setUpUser(self):
@@ -106,7 +92,9 @@ class PortfolioMixin():
                 self.portfolio_link = portfolio_link
             self.portfolios.append(portfolio_link)
 
-
+################################################################################
+# PORTFOLIO
+################################################################################
 class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -196,7 +184,9 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
             0
         )
 
-
+################################################################################
+# PAGE
+################################################################################
 class PageTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -486,7 +476,9 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
             )
             self.assertEqual(response.json(), model)
 
-
+################################################################################
+# SECTION
+################################################################################
 class SectionTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -631,7 +623,9 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
             0
         )
 
-
+################################################################################
+# LINK
+################################################################################
 class LinkTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -817,6 +811,9 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
             0
         )
 
+################################################################################
+# IMAGE
+################################################################################
 class ImageTest(UserMixin, PortfolioMixin, APITestCase):
 
     def setUp(self):
@@ -914,6 +911,9 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
             9
         )
 
+################################################################################
+# PERMISSIONS
+################################################################################
 class PermissionTest(APITestCase):
     def setUp(self):
         self.owner = User.objects.create_user(

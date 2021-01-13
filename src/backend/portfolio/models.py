@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import signals
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
@@ -10,7 +9,6 @@ from account.signals import account_created
 
 import uuid
 
-from . import managers
 
 
 @receiver(account_created)
@@ -65,40 +63,6 @@ class Image(models.Model):
 
 
 
-
-# class PageLink(models.Model):
-#     # link = models.OneToOneField(
-#     #     Link, 
-#     #     primary_key = True, 
-#     #     on_delete = models.CASCADE
-#     # )
-#     link2 = models.UUIDField(primary_key=True)
-    
-#     page = models.ForeignKey(
-#         Page, 
-#         on_delete = models.CASCADE,
-#         related_name = 'links',
-#     )
-
-
-
-# class PortfolioLink(models.Model):
-#     link = models.OneToOneField(
-#         Link,
-#         primary_key = True,
-#         on_delete = models.CASCADE,
-#     )
-#     link2 = models.UUIDField(primary_key=True)
-
-#     portfolio = models.ForeignKey(
-#         Portfolio,
-#         on_delete = models.CASCADE,
-#         related_name = 'links'
-#     )
-
-
-
-
 class Portfolio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
     # Link portfolio to user (which is linked to account)
@@ -124,9 +88,6 @@ class Page(models.Model):
     name = models.CharField(max_length=100)
     # page number (distinct from its id) to allow reordering of pages
     index = models.IntegerField(default=0)
-
-    # # set a custom manager for page reordering support
-    # objects = managers.PageManager()
 
     # don't add owner as a field of page as that goes againt relational db
     # normalisation principles
