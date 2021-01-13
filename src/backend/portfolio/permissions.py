@@ -31,17 +31,40 @@ class IsOwner(permissions.BasePermission):
                 page = models.Page.objects.get(
                     id=view.kwargs.get('page_id', None)
                 )
-            except models.Page.DoesNotExist:
+            except models.Page.DoesNotExist as exc:
                 raise exceptions.NotFound() from exc
 
             return page.owner == request.user
+
+        if view_class == views.PortfolioLinkList:
+            try:
+                portfolio = models.Portfolio.objects.get(
+                    id=views.kwargs.get('portfolio_id', None)
+                )
+            except models.Portfolio.DoesNotExist as exc:
+                raise exceptions.NotFound() from exc
+
+            return portfolio.owner == request.user
+
+        if view_class == views.SectionLinkList:
+            try:
+                section = models.Section.objects.get(
+                    id=views.kwargs.get('section_id', None)
+                )
+            except models.Section.DoesNotExist as exc:
+                raise exceptions.NotFound() from exc
+
+            return section.owner == request.user
 
         return True
 
 
 class IsNotPrivate(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return not bool(obj.private)
+        if hasattr(obj, 'private'):
+            return not bool(obj.private)
+        else:
+            return True
 
     # check parent object permissions
     def has_permission(self, request, view):
@@ -68,5 +91,28 @@ class IsNotPrivate(permissions.BasePermission):
                 raise exceptions.NotFound() from exc
 
             return not bool(page.private)
+
+        if view_class == views.ImageList:
+            return True
+        
+        if view_class == views.PortfolioLinkList:
+            try:
+                portfolio = models.Portfolio.objects.get(
+                    id=view.kwargs.get('portfolio_id', None)
+                )
+            except models.Portfolio.DoesNotExist as exc:
+                raise exceptions.NotFound() from exc
+
+            return not bool(portfolio.private)
+
+        if view_class == views.SectionLinkList:
+            try:
+                section = models.Section.objects.get(
+                    id=view.kwargs.get('page_id', None)
+                )
+            except models.Section.DoesNotExist as exc:
+                raise exceptions.NotFound() from exc
+
+            return not bool(section.private)
 
         return True

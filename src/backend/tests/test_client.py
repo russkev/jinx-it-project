@@ -5,6 +5,8 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth.models import User
 from portfolio.models import Portfolio, Page, Section
 
+import uuid
+
 from django.urls import reverse
 
 
@@ -13,15 +15,23 @@ class ClientTest(TestCase):
         # Set up data for the all of the client tests
         self.client = APIClient(enforce_csrf_checks=False)
         # Create an account for the client and log them in
-        self.client.post('/auth/users',
-                         {'email': 'gavin@thegreat.com',
-                          'username': 'gavin', 'password': 'dontJinxIt'},
-                         format='json')
+        self.client.post(
+            '/auth/users',
+            {
+                'email': 'gavin@thegreat.com',
+                'username': 'gavin',
+                'password': 'dontJinxIt'
+            },
+            format='json')
 
         # Apparently .login doesn't authenticate - manually set header
         token = self.client.post(
             '/auth/token/login',
-            data={"username": "gavin", "password": "dontJinxIt"},
+            data=
+            {
+                "username": "gavin", 
+                "password": "dontJinxIt"
+            },
             format="json").json()['auth_token']
 
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
@@ -30,8 +40,12 @@ class ClientTest(TestCase):
         # self.assertTrue(self.client.login(
         #     username='gavin', password='dontJinxIt'))
         # Put some extra client details
-        self.client.put('/api/accounts/me',
-                        {'first_name': 'Gavin', 'last_name': 'The Great'})
+        self.client.put(
+            '/api/accounts/me',
+            {
+                'first_name': 'Gavin', 
+                'last_name': 'The Great'
+            })
 
     def test_portfolio_creation(self):
         # Create a portfolio for an authenticated user, and add some content
@@ -42,47 +56,76 @@ class ClientTest(TestCase):
         # but using the latter string doesn't (always) work
         self.client.post(
             '/api/portfolios',
-            data={"name": "Software"},
+            data=
+            {
+                "name": "Software"
+            },
             format='json'
         )
         portfolio_id = self.client.get('/api/portfolios').json()[0]['id']
 
         # Create some pages
         self.client.post(
-            reverse('page_list', kwargs={'portfolio_id': portfolio_id}),
-            {"name": "About me", "number": 0}  # number must start at 0
+            reverse(
+                'page_list', 
+                kwargs={
+                    'portfolio_id': portfolio_id
+                }
+            ),
+            {
+                "name": "About me", 
+                "index": 0
+            }
         )
         self.client.post(
-            reverse('page_list', kwargs={'portfolio_id': portfolio_id}),
-            {"name": "Projects", "number": 1}  # number must start at 0
+            reverse('page_list', 
+                kwargs={
+                    'portfolio_id': portfolio_id
+                }
+            ),
+            {
+                "name": "Projects", 
+                "index": 1
+            }
         )
         page_id = self.client.get(
-            reverse('page_list', kwargs={'portfolio_id': portfolio_id})).json()[0]['number']
+            reverse(
+                'page_list', 
+                kwargs={
+                    'portfolio_id': portfolio_id
+                }
+            )).json()[0]['index']
 
         # Create some sections
         self.client.post(
-            # reverse('section_list', kwargs={
-            #     'portfolio_id': portfolio_id,
-            #     'page_id': page_id
-            # }), # couldn't get this url to reverse properly; hardcoding
-            "/api/portfolios/" + str(portfolio_id) + \
-            "/pages/" + str(page_id) + "/sections",
-            {"name": "Bio", "number": 0, "type": "text",
-                "content": "I'm a giraffe!"},
+            "/api/portfolios/pages/" + str(page_id) + "/sections",
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Bio", 
+                "index": 0, 
+                "type": "text",
+                "text": "I'm a giraffe!",
+                "links": [],
+            },
             format='json'
         )
 
         self.client.post(
-            "/api/portfolios/" + str(portfolio_id) + \
-            "/pages/" + str(page_id) + "/sections",
-            {"name": "Academic", "number": 1, "type": "text",
-                "content": "I'm a banana!"},
+            "/api/portfolios/pages/" + str(page_id) + "/sections",
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Academic", 
+                "number": 1, 
+                "type": "text",
+                "text": "I'm a banana!",
+                "links": [],
+            },
             format='json'
         )
 
         # Check the pages and sections were created properly
         self.assertIsNotNone(self.client.get(
-            "/api/portfolios/1/pages/1/sections").json())
+            "/api/portfolios/pages/" + portfolio_id + "/sections").json())
 
     def tearDown(self):
         self.client.logout()

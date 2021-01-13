@@ -74,12 +74,12 @@ class SectionLinkSerializer(
 
 
 class PortfolioLinkSerializer(
-    NestedCreateMixin, 
-    NestedUpdateMixin, 
+    NestedCreateMixin,
+    NestedUpdateMixin,
     serializers.ModelSerializer
 ):
     link = LinkSerializer()
-    portfolio = serializers.ReadOnlyField(source='link.id')
+    portfolio = serializers.ReadOnlyField(source='portfolio.id')
 
     class Meta:
         model = models.PortfolioLink
@@ -240,7 +240,13 @@ class ImageOutputSerializer(serializers.ModelSerializer):
 
 
 # class SectionSerializer(serializers.ModelSerializer):
-class SectionSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
+class SectionSerializer(
+    UniqueFieldsMixin,
+    NestedCreateMixin,
+    NestedUpdateMixin,
+    serializers.ModelSerializer
+):
+    links = SectionLinkSerializer(many=True)
     page = serializers.ReadOnlyField(source='page.id')
 
     # links = SectionLinkDetailSerializer(many=True)
@@ -250,7 +256,7 @@ class SectionSerializer(UniqueFieldsMixin, serializers.ModelSerializer):
 
     class Meta:
         model = models.Section
-        fields = ['id', 'name', 'type', 'index', 'text', 'page']
+        fields = ['id', 'name', 'type', 'index', 'text', 'page', 'links']
         # extra_kwargs = {
         #     # don't need to show the page as that can be inferred from the url
         #     'page': {'write_only': True},
@@ -346,3 +352,10 @@ class PortfolioSerializer(serializers.ModelSerializer):
         model = models.Portfolio
         fields = ['id', 'owner', 'name', 'pages',
                   'private', 'theme', 'background']
+
+class ImageSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.id')
+
+    class Meta:
+        model = models.Image
+        fields = ['id', 'owner', 'name', 'path']

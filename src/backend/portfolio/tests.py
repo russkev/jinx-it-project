@@ -2,6 +2,8 @@ import string
 import random
 import copy
 import uuid
+import os
+import tempfile
 from typing import OrderedDict
 
 from hypothesis import given, settings, strategies as st, Verbosity
@@ -9,9 +11,13 @@ from hypothesis.extra.django import TestCase, from_model
 from hypothesis import stateful
 
 import collections
+from PIL import Image
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.images import ImageFile
 
 from unittest import skip
 
@@ -40,8 +46,10 @@ class UserMixin():
 class PortfolioMixin():
     def setUpPortfolio(self):
         self.portfolio = models.Portfolio.objects.create(
-            owner=self.user, 
+            owner=self.user,
             name='cuttlefish')
+        # PAGES
+        self.pages = []
         for i in range(10):
             page = models.Page.objects.create(
                 portfolio=self.portfolio,
@@ -50,6 +58,9 @@ class PortfolioMixin():
             )
             if i == 0:
                 self.page = page
+            self.pages.append(page)
+        # SECTIONS
+        self.sections = []
         for i in range(10):
             section = models.Section.objects.create(
                 page=self.page,
@@ -59,20 +70,41 @@ class PortfolioMixin():
             )
             if i == 0:
                 self.section = section
+            self.sections.append(section)
+        # SECTION LINKS
+        self.section_links = []
         for i in range(10):
             link = models.Link.objects.create(
-                id = uuid.uuid4(),
-                title = 'link number {}'.format(i),
-                icon = i,
-                address = "http://link.com",
-                index = i,
+                id=uuid.uuid4(),
+                title='link number {}'.format(i),
+                icon=i,
+                address="http://link.com",
+                index=i,
             )
             section_link = models.SectionLink.objects.create(
-                link = link,
-                section = self.section
+                link=link,
+                section=self.section
             )
             if i == 0:
                 self.section_link = section_link
+            self.section_links.append(section_link)
+        # PORTFOLIO LINKS
+        self.portfolios = []
+        for i in range(10):
+            link = models.Link.objects.create(
+                id=uuid.uuid4(),
+                title='link number {}'.format(i),
+                icon=i,
+                address="http://link.com",
+                index=i,
+            )
+            portfolio_link = models.PortfolioLink.objects.create(
+                link=link,
+                portfolio=self.portfolio
+            )
+            if i == 0:
+                self.portfolio_link = portfolio_link
+            self.portfolios.append(portfolio_link)
 
 
 class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
@@ -143,7 +175,6 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.data.get('name'), name)
         self.assertEqual(expected_id, response.data['id'])
 
-
         # clear out cached data
         self.portfolio.refresh_from_db()
 
@@ -210,7 +241,6 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id
                 }
             )
@@ -221,14 +251,12 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.data['index'], 0),
         self.assertEqual(len(response.data['sections']), 10)
 
-
     def test_page_update(self):
         name = 'soggiest contrivances'
         response = self.client.patch(
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id,
                 }
             ),
@@ -243,14 +271,12 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
 
         self.assertEqual(self.page.portfolio, self.portfolio)
         self.assertEqual(self.page.name, name)
-        # self.assertEqual(self.page.sections.count(), 10)
 
     def test_page_delete(self):
         response = self.client.delete(
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id
                 }
             )
@@ -269,7 +295,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
         self.setUpPortfolio()
 
     def test_page_nest_update(self):
-        original_uuid = self.section.id
+        original_uuid = str(self.section.id)
         new_section_id = str(uuid.uuid4())
         data1 = {
             'name': 'Home page',
@@ -280,49 +306,53 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                     'type': 'text',
                     'text': 'lorem ipsum',
                     'id': self.section.id,
-                    # 'links': [],
+                    'links': [
+                        {'link': {
+                            'address': 'http://facebook.com',
+                            'icon': 4,
+                            'id': str(uuid.uuid4()),
+                            'number': 0,
+                            'title': 'facebook'
+                        }},
+                        {'link': {
+                            'address': 'http://github.com',
+                            'icon': 5,
+                            'id': str(uuid.uuid4()),
+                            'number': 1,
+                            'title': 'github'
+                        }},
+                        {'link': {
+                            'address': 'http://youtube.com',
+                            'icon': 5,
+                            'id': str(uuid.uuid4()),
+                            'number': 1,
+                            'title': 'github'
+                        }}
+                        
+                    ]
                 },
                 {
                     'name': 'Contact',
                     'index': 1,
                     'type': 'text',
                     'text': 'lorem two',
-                    'id': str(uuid.uuid4()),
-                    # 'id': 22,
-                    # 'links': [
-                    #     {
-                    #         'address': 'http://facebook.com',
-                    #         'icon': 4,
-                    #         'id': '90b3b5c6-5a49-4bd5-bce4-7194b71507d0',
-                    #         'number': 0,
-                    #         'title': 'facebook'
-                    #     },
-                    #     {
-                    #         'address': 'http://github.com',
-                    #         'icon': 5,
-                    #         'id': '91b3b5c6-5a49-4bd5-bce4-7194b71507d0',
-                    #         'number': 1,
-                    #         'title': 'github'
-                    #     }
-                    # ]
-                },
-            ]
-        }
-        data2 = {
-            'name': 'Projects',
-            'number': 1,
-            'sections': [
-                    {
-                        'name': 'Project 1',
-                        'number': 0,
-                        'type': 'text',
-                        'content': 'Project 1 info',
-                    },
-                {
-                        'name': 'Project 2',
-                        'number': 1,
-                        'type': 'text',
-                        'content': 'Project 2 info',
+                    'id': new_section_id,
+                    'links': [
+                        {'link': {
+                            'address': 'http://facebook.com',
+                            'icon': 4,
+                            'id': str(uuid.uuid4()),
+                            'number': 0,
+                            'title': 'facebook'
+                        }},
+                        {'link': {
+                            'address': 'http://github.com',
+                            'icon': 5,
+                            'id': str(uuid.uuid4()),
+                            'number': 1,
+                            'title': 'github'
+                        }}
+                    ]
                 },
             ]
         }
@@ -330,7 +360,6 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id
                 }
             ),
@@ -340,7 +369,122 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             len(models.Section.objects.filter(page=self.page.id)), 2)
-        self.assertEqual(self.section.id, original_uuid)
+        self.assertEqual(
+            len(models.SectionLink.objects.filter(section=self.section.id)), 3)
+        self.assertEqual(
+            len(models.SectionLink.objects.filter(section=new_section_id)), 2)
+        self.assertEqual(response.data['sections'][0]['id'], original_uuid)
+        self.assertEqual(len(response.data['sections']), 2)
+        self.assertEqual(len(response.data['sections'][0]['links']), 3)
+        self.assertEqual(len(response.data['sections'][1]['links']), 2)
+    
+    def test_section_list_retrieve(self):
+        response = self.client.get(
+            reverse(
+                'section_list',
+                kwargs={
+                    'page_id': self.page.id,
+                }
+            ),
+        )
+        self.assertEqual(len(response.data), 10)
+        for i, section in enumerate(response.data):
+            instance = self.sections[i]
+            self.assertEqual(instance.name, section.get('name'))
+            self.assertEqual(instance.index, section.get('index'))
+            self.assertEqual(instance.index, i)
+            self.assertTrue('type' in section)
+            if section['type'] == 'text':
+                self.assertEqual(instance.text, section.get('text'))
+
+    def test_section_update(self):
+        path = reverse(
+            'page_detail',
+            kwargs={
+                'page_id': self.page.id,
+            }
+        )
+
+        model = {
+            'id': str(self.page.id),
+            'name': 'Home Page',
+            'index': 0,
+            'sections': []
+        }
+
+        with self.subTest(msg='delete everything'):
+            self.client.put(
+                path,
+                {
+                    'name': 'Home Page',
+                    'sections': []
+                },
+                format='json'
+            )
+            response = self.client.get(path)
+
+            self.assertEqual(response.json(), model)
+
+        with self.subTest(msg='add sections'):
+            model['sections'].append({
+                'id': str(uuid.uuid4()),
+                'name': 'polarised neptune',
+                'type': 'text',
+                'text': 'medial bodging committed unworthier',
+                'links': []
+            })
+            model['sections'].append({
+                'id': str(uuid.uuid4()),
+                'name': 'ostrich drainpipe',
+                'type': 'text',
+                'text': 'novices rehearing leafier stationer',
+                'links': [],
+            })
+            for i, sec in enumerate(model['sections']):
+                sec['index'] = i
+
+            response = self.client.put(
+                path,
+                model,
+                format='json'
+            )
+            for i, sec in enumerate(model['sections']):
+                sec['page'] = str(self.page.id)
+
+            self.assertEqual(response.json(), model)
+
+        with self.subTest(msg='update'):
+            model['sections'][0]['text'] = 'selected Kantian manifolds'
+            response = self.client.put(
+                path,
+                model,
+                format='json'
+            )
+            self.assertEqual(response.json(), model)
+
+        with self.subTest(msg='update, delete, create'):
+            # delete first section
+            model['sections'].pop(0)
+            # update second section
+            model['sections'][0]['name'] = 'encapsulate altarpiece'
+            # add a new section
+            model['sections'].append({
+                'id': str(uuid.uuid4()),
+                'name': 'sacrifice liberates',
+                'type': 'text',
+                'text': 'possessive colonoscopies suburbans',
+                'links': [],
+                'page': str(self.page.id)
+            })
+            for i, sec in enumerate(model['sections']):
+                sec['index'] = i
+
+            response = self.client.put(
+                path,
+                model,
+                format='json'
+            )
+            self.assertEqual(response.json(), model)
 
 
 class SectionTest(UserMixin, PortfolioMixin, APITestCase):
@@ -356,13 +500,12 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
             'type': 'text',
             'text': 'lorem ipsum',
             'id': str(uuid.uuid4()),
-            # 'page': self.page.id
+            'links': []
         }
         response = self.client.post(
             reverse(
                 'section_list',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id,
                 }
             ),
@@ -380,36 +523,17 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(section.text, response.data['text'])
         self.assertEqual(str(section.id), response.data['id'])
 
-    # def test_section_create_list(self):
-    #     data = [
-    #         {
-    #             'name': 'nervous pillowcase',
-    #             'index': 0,
-    #             'type': 'text',
-    #             'text': 'lorem ipsum',
-    #             'id': str(uuid.uuid4()),
-    #         },
-    #         {
-    #             'name': 'nervous pillowcase',
-    #             'index': 0,
-    #             'type': 'text',
-    #             'text': 'lorem ipsum',
-    #             'id': str(uuid.uuid4()),
-    #         },
-    #     ]
-
     def test_section_validation(self):
         data = {
             'name': 'a' * 251,
-            'number': 0,
+            'index': 0,
             'type': 'text',
-            'content': 'lorem ipsum'
+            'text': 'lorem ipsum'
         }
         response = self.client.post(
             reverse(
                 'section_list',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
                     'page_id': self.page.id,
                 }
             ),
@@ -423,8 +547,6 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'section_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
                     'section_id': self.section.id,
                 }
             )
@@ -436,9 +558,15 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
             'type': self.section.type,
             'text': self.section.text,
             'page': self.page.id,
+            'links': self.section.links,
         }
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected)
+        self.assertEqual(self.section.name, response.data['name'])
+        self.assertEqual(self.section.index, response.data['index'])
+        self.assertEqual(self.section.type, response.data['type'])
+        self.assertEqual(self.section.text, response.data['text'])
+        self.assertEqual(str(self.section.id), response.data['id'])
+        self.assertEqual(10, len(response.data['links']))
 
     def test_section_update(self):
         name = 'spunky horticulturists'
@@ -449,8 +577,6 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
                 reverse(
                     'section_detail',
                     kwargs={
-                        'portfolio_id': self.portfolio.id,
-                        'page_id': self.page.id,
                         'section_id': self.section.id,
                     }
                 ),
@@ -495,8 +621,6 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'section_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
                     'section_id': self.section.id,
                 }
             )
@@ -524,14 +648,12 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
                     "title": "string",
                     "index": 0,
                 }
-            }
+        }
 
         response = self.client.post(
             reverse(
                 'section_link_list',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
                     'section_id': self.section.id,
                 }
             ),
@@ -542,114 +664,49 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.data['section'], self.section.id)
         self.assertEqual(response.data['link']['id'], data['link']['id'])
         self.assertEqual(response.data['link']['icon'], data['link']['icon'])
-        self.assertEqual(response.data['link']['address'], data['link']['address'])
+        self.assertEqual(response.data['link']
+                         ['address'], data['link']['address'])
         self.assertEqual(response.data['link']['title'], data['link']['title'])
         self.assertEqual(response.data['link']['index'], data['link']['index'])
 
-    # def test_page_link_update(self):
-    #     data = [
-    #         {
-    #             "id": "asc",
-    #             "icon": 5,
-    #             "address": "www.linkedin.com",
-    #             "title": "My LinkedIn",
-    #             "number": 0,
-    #         },
-    #         {
-    #             "id": "asd",
-    #             "icon": 6,
-    #             "address": "www.linkedin.com",
-    #             "title": "My LinkedIn",
-    #             "number": 1,
-    #         }
-    #     ]
-    #     response = self.client.put(
-    #         reverse(
-    #             'link_list',
-    #             kwargs={
-    #                 'portfolio_id': self.portfolio.id,
-    #                 'page_id': self.page.id,
-    #             }
-    #         ),
-    #         data,
-    #         format='json'
-    #     )
-    #     self.assertEqual(len(response.data), 2)
+    def test_portfolio_link_create(self):
+        data = {
+            'link':
+                {
+                    "id": str(uuid.uuid4()),
+                    "icon": 2,
+                    "address": "string",
+                    "title": "string",
+                    "index": 0,
+                }
+        }
 
-    #     self.assertEqual(response.status_code, 201)
-    #     updated_data = [
-    #         {
-    #             "id": "asc",
-    #             "icon": 3,
-    #             "address": "www.github.com",
-    #             "title": "My LinkedIn",
-    #             "number": 0,
-    #         },
-    #     ]
-    #     response = self.client.put(
-    #         reverse(
-    #             'link_list',
-    #             kwargs={
-    #                 'portfolio_id': self.portfolio.id,
-    #                 'page_id': self.page.id,
-    #             }
-    #         ),
-    #         updated_data,
-    #         format='json'
-    #     )
-    #     self.assertEqual(response.status_code, 201)
-    #     response = self.client.get(
-    #         reverse(
-    #             'link_list',
-    #             kwargs={
-    #                 'portfolio_id': self.portfolio.id,
-    #                 'page_id': self.page.id,
-    #             }
-    #         ),
-    #     )
-
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(len(response.data), 1)
-    #     self.assertEqual(response.data[0]['link']['address'], "www.github.com")
-
-    # def test_section_link_create(self):
-    #     data = [
-    #         {
-    #             "id": "asdasfdsa",
-    #             "icon": 5,
-    #             "address": "string",
-    #             "title": "string",
-    #             "number": 0,
-    #         },
-    #         {
-    #             "id": "asdasfdsb",
-    #             "icon": 6,
-    #             "address": "string",
-    #             "title": "string",
-    #             "number": 1,
-    #         }
-    #     ]
-    #     response = self.client.put(
-    #         reverse(
-    #             'section_link',
-    #             kwargs={
-    #                 'portfolio_id': self.portfolio.id,
-    #                 'page_id': self.page.id,
-    #                 'section_id': self.section.id
-    #             }
-    #         ),
-    #         data,
-    #         format='json'
-    #     )
-    #     self.assertEqual(response.status_code, 201)
+        response = self.client.post(
+            reverse(
+                'portfolio_link_list',
+                kwargs={
+                    'portfolio_id': self.portfolio.id,
+                }
+            ),
+            data,
+            format='json'
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['portfolio'], self.portfolio.id)
+        self.assertEqual(response.data['link']['id'], data['link']['id'])
+        self.assertEqual(response.data['link']['icon'], data['link']['icon'])
+        self.assertEqual(response.data['link']
+                         ['address'], data['link']['address'])
+        self.assertEqual(response.data['link']['title'], data['link']['title'])
+        self.assertEqual(response.data['link']['index'], data['link']['index'])
 
     def test_link_update(self):
         data = {
-                "icon": 2,
-                "address": "http://newlink.com",
-                "title": "New Title",
-                "index": self.section_link.link.index,
-            }
+            "icon": 2,
+            "address": "http://newlink.com",
+            "title": "New Title",
+            "index": self.section_link.link.index,
+        }
         response = self.client.put(
             reverse(
                 'link_detail',
@@ -661,7 +718,6 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
             format='json'
         )
 
-
         stored_link = models.Link.objects.get(id=self.section_link.link.id)
 
         self.assertEqual(response.status_code, 200)
@@ -671,52 +727,13 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(stored_link.title, data['title'])
         self.assertEqual(stored_link.index, data['index'])
 
-        # updated_data = [
-        #     {
-        #         "id": "asc",
-        #         "icon": 2,
-        #         "address": "www.github.com",
-        #         "title": "My LinkedIn",
-        #         "number": 0,
-        #     },
-        # ]
-        # response = self.client.put(
-        #     reverse(
-        #         'section_link',
-        #         kwargs={
-        #             'portfolio_id': self.portfolio.id,
-        #             'page_id': self.page.id,
-        #             'section_id': self.section.id
-        #         }
-        #     ),
-        #     updated_data,
-        #     format='json'
-        # )
-        # self.assertEqual(response.status_code, 201)
-        # response = self.client.get(
-        #     reverse(
-        #         'section_link',
-        #         kwargs={
-        #             'portfolio_id': self.portfolio.id,
-        #             'page_id': self.page.id,
-        #             'section_id': self.section.id
-        #         }
-        #     ),
-        # )
-
-        # self.assertEqual(response.status_code, 200)
-        # self.assertEqual(len(response.data), 1)
-        # self.assertEqual(response.data[0]['link']['address'], "www.github.com")
-
     def test_section_link_validation(self):
         name = 'a' * 101
         data = {'name': name}
         response = self.client.post(
             reverse(
-                'section_link_list', 
+                'section_link_list',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
                     'section_id': self.section.id,
                 }
             ),
@@ -725,7 +742,22 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_section_link_retrieve(self):
+    def test_portfolio_link_validation(self):
+        name = 'a' * 101
+        data = {'name': name}
+        response = self.client.post(
+            reverse(
+                'portfolio_link_list',
+                kwargs={
+                    'portfolio_id': self.portfolio.id,
+                }
+            ),
+            data,
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_link_retrieve(self):
         response = self.client.get(
             reverse(
                 'link_detail',
@@ -743,365 +775,144 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(stored_link.title, response.data['title'])
         self.assertEqual(stored_link.index, response.data['index'])
 
-class PageOrderingMachine(stateful.RuleBasedStateMachine, UserMixin):
-    def __init__(self):
-        super().__init__()
-        self.model = []
-
-        self.client = APIClient()
-        self.setUpUser()
-        self.portfolio = models.Portfolio.objects.create(
-            owner=self.user, name='wolfhound')
-
-    @stateful.rule(data=st.data())
-    def add(self, data):
-        pos = data.draw(st.integers(min_value=0, max_value=len(self.model)))
-
-        # add a new page to database
-        data = {
-            'name': 'test page',
-            'number': pos
-        }
-        response = self.client.post(
-            reverse('page_list', kwargs={'portfolio_id': self.portfolio.id}),
-            data,
-            format='json',
-        )
-
-        # also add the id to a array to compare with later
-        self.model.insert(pos, response.data.get('id'))
-
-    @stateful.rule(data=st.data())
-    @stateful.precondition(lambda self: len(self.model) > 0)
-    def remove(self, data):
-        pos = data.draw(
-            st.integers(min_value=0, max_value=len(self.model) - 1)
-        )
-
-        page_id = self.model[pos]
-
-        # database
+    def test_section_link_delete(self):
         response = self.client.delete(
             reverse(
-                'page_detail',
+                'section_link_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': page_id,
+                    'link_id': self.section_link.link.id,
                 }
             )
         )
-
-        # model
-        self.model.remove(page_id)
-
-    @stateful.rule(data=st.data())
-    @stateful.precondition(lambda self: len(self.model) > 0)
-    def move(self, data):
-        pos_strat = st.integers(min_value=0, max_value=len(self.model) - 1)
-
-        pos = data.draw(pos_strat)
-        new_pos = data.draw(pos_strat)
-
-        page_id = self.model[pos]
-
-        # database
-        response = self.client.patch(
-            reverse(
-                'page_detail',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': page_id,
-                }
-            ),
-            {'number': new_pos},
-            format='json',
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(
+            len(models.SectionLink.objects.filter(
+                link=self.section_link.link.id)),
+            0
+        )
+        self.assertEqual(
+            len(models.Link.objects.filter(
+                id=self.section_link.link.id)),
+            0
         )
 
-        # model
-        self.model.insert(new_pos, self.model.pop(pos))
-
-    @stateful.invariant()
-    def invariant(self):
-        response = self.client.get(
-            reverse('page_list', kwargs={'portfolio_id': self.portfolio.id})
-        )
-        response_ids = list(map(lambda p: p.get('id'), response.data))
-        response_numbers = list(map(lambda p: p.get('number'), response.data))
-        assert(self.model == response_ids)
-        assert(response_numbers == list(range(len(response_numbers))))
-
-    def teardown(self):
-        for page in self.portfolio.pages.all():
-            page.delete()
-        self.portfolio.delete()
-        self.user.delete()
-
-
-class PageOrderingTest(TestCase):
-    def runTest(self):
-        stateful.run_state_machine_as_test(
-            PageOrderingMachine,
-            settings=settings(
-                max_examples=10,
-                stateful_step_count=50,
-                deadline=2000,
-            ),
-        )
-
-    runTest.is_hypothesis_test = True
-
-
-class SectionOrderingMachine(stateful.RuleBasedStateMachine, UserMixin):
-    def __init__(self):
-        super().__init__()
-        self.model = []
-
-        self.client = APIClient()
-        self.setUpUser()
-        self.portfolio = models.Portfolio.objects.create(
-            owner=self.user, name='trellises')
-        self.page = models.Page.objects.create(
-            portfolio=self.portfolio,
-            name='phlegmatic',
-            number=0,
-        )
-
-    @stateful.rule(data=st.data())
-    def add(self, data):
-        pos = data.draw(st.integers(min_value=0, max_value=len(self.model)))
-
-        # add a new page to database
-        data = {
-            'name': 'test section',
-            'number': pos,
-            'type': 'text',
-            'content': 'this is very good content'
-        }
-        response = self.client.post(
-            reverse(
-                'section_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            ),
-            data,
-            format='json',
-        )
-
-        # also add the id to a array to compare with later
-        self.model.insert(pos, response.data.get('id'))
-
-    @stateful.rule(data=st.data())
-    @stateful.precondition(lambda self: len(self.model) > 0)
-    def remove(self, data):
-        pos = data.draw(
-            st.integers(min_value=0, max_value=len(self.model) - 1)
-        )
-
-        section_id = self.model[pos]
-
-        # database
+    def test_portfolio_link_delete(self):
         response = self.client.delete(
             reverse(
-                'section_detail',
+                'portfolio_link_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': section_id,
+                    'link_id': self.portfolio_link.link.id,
                 }
             )
         )
-
-        # model
-        self.model.remove(section_id)
-
-    @stateful.rule(data=st.data())
-    @stateful.precondition(lambda self: len(self.model) > 0)
-    def move(self, data):
-        pos_strat = st.integers(min_value=0, max_value=len(self.model) - 1)
-
-        pos = data.draw(pos_strat)
-        new_pos = data.draw(pos_strat)
-
-        section_id = self.model[pos]
-
-        # database
-        response = self.client.patch(
-            reverse(
-                'section_detail',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                    'section_id': section_id,
-                }
-            ),
-            {'number': new_pos},
-            format='json',
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(
+            len(models.PortfolioLink.objects.filter(
+                link=self.portfolio_link.link.id)),
+            0
+        )
+        self.assertEqual(
+            len(models.Link.objects.filter(
+                id=self.portfolio_link.link.id)),
+            0
         )
 
-        # model
-        self.model.insert(new_pos, self.model.pop(pos))
+class ImageTest(UserMixin, PortfolioMixin, APITestCase):
 
-    @stateful.invariant()
-    def invariant(self):
-        response = self.client.get(
-            reverse(
-                'section_list',
-                kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
-                }
-            )
-        )
-        response_ids = list(map(lambda s: s.get('id'), response.data))
-        response_numbers = list(map(lambda s: s.get('number'), response.data))
-        assert(self.model == response_ids)
-        assert(response_numbers == list(range(len(response_numbers))))
-
-    def teardown(self):
-        for section in self.page.sections.all():
-            section.delete()
-        self.page.delete()
-        self.portfolio.delete()
-        self.user.delete()
-
-
-# class SectionOrderingTest(TestCase):
-#     def runTest(self):
-#         stateful.run_state_machine_as_test(
-#             SectionOrderingMachine,
-#             settings=settings(
-#                 max_examples=10,
-#                 stateful_step_count=50,
-#                 deadline=2000,
-#             ),
-#         )
-
-#     runTest.is_hypothesis_test = True
-
-
-class SectionBulkTest(UserMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
         self.setUpUser()
-        self.portfolio = models.Portfolio.objects.create(
-            owner=self.user, name='chihuahua')
-        self.page = models.Page.objects.create(
-            portfolio=self.portfolio,
-            name='churning crown',
-            number=0,
-        )
-        self.sections = {}
-        for i in range(10):
-            section = models.TextSection.objects.create(
-                page=self.page,
-                name='section number {}'.format(i),
-                number=i,
-                content='lorem ipsum'
-            )
-            self.sections[section.id] = section
+        self.setUpPortfolio()
 
-    def test_section_list_retrieve(self):
+        for i in range(10):
+            file = tempfile.NamedTemporaryFile(suffix='.png')
+            image_file = ImageFile(file, name=file.name)
+            image = models.Image.objects.create(
+                path=image_file,
+                owner=self.user,
+                name='image' + str(i),
+            )
+            if i == 0:
+                self.image = image
+        
+    def test_image_create(self):
+        with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
+            image = Image.new('RGB', (200, 200), 'white')
+            image.save(f, 'PNG')
+        test_image = open(f.name, mode='rb')
+        data = {
+            'name': 'test_image',
+            'path': test_image,
+        }
+        response = self.client.post(
+            reverse(
+                'image_list',
+            ),
+            data=data
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(models.Image.objects.all()), 11)
+        self.assertEqual(response.data['name'], data['name'])
+    
+    def test_image_validation(self):
+        name = 'a' * 101
+        data = {'name': name}
+        response = self.client.post(
+            reverse('image_list'),
+            data,
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    def test_image_retrieve(self):
         response = self.client.get(
             reverse(
-                'section_list',
+                'image_detail',
                 kwargs={
-                    'portfolio_id': self.portfolio.id,
-                    'page_id': self.page.id,
+                    'image_id': self.image.id,
                 }
             ),
-        )
-        for i, section in enumerate(response.data):
-            instance = self.sections.get(section.get('id', None), None)
-            self.assertIsNotNone(instance)
-            self.assertEqual(instance.name, section.get('name'))
-            self.assertEqual(instance.number, section.get('number'))
-            self.assertEqual(instance.number, i)
-            self.assertTrue('type' in section)
-            if section['type'] == 'text':
-                self.assertEqual(instance.content, section.get('content'))
-
-    # TODO: convert this to a hypothesis state machine test?
-    # Currently we may not be testing all possible combinations of updates/creates/deletes
-    def test_section_update(self):
-        path = reverse(
-            'section_list',
-            kwargs={
-                'portfolio_id': self.portfolio.id,
-                'page_id': self.page.id,
-            }
+            format='json',
         )
 
-        # what the data in the database should be
-        model = []
-
-        with self.subTest(msg='delete everything'):
-            self.client.put(
-                path,
-                [],
-                format='json'
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(self.image.id), response.data['id'])
+        self.assertEqual(self.portfolio.owner.id, response.data['owner'])
+        self.assertEqual(self.image.name, response.data['name'])
+    
+    def test_image_update(self):
+        name = 'new image name'
+        response = self.client.patch(
+            reverse(
+                'image_detail',
+                kwargs={
+                    'image_id': self.image.id,
+                }
+            ),
+            {'name': name},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get('name'), name)
+        self.assertEqual(str(self.image.id), response.data['id'])
+    
+    def test_image_delete(self):
+        response = self.client.delete(
+            reverse(
+                'image_detail',
+                kwargs={
+                    'image_id': self.image.id,
+                }
             )
-            response = self.client.get(path)
-
-            self.assertEqual(response.json(), model)
-
-        with self.subTest(msg='add sections'):
-            model.append({
-                'name': 'polarised neptune',
-                'type': 'text',
-                'content': 'medial bodging committed unworthier',
-            })
-            model.append({
-                'name': 'ostrich drainpipe',
-                'type': 'text',
-                'content': 'novices rehearing leafier stationer',
-            })
-            for i, sec in enumerate(model):
-                sec['number'] = i
-
-            response = self.client.put(
-                path,
-                model,
-                format='json'
-            )
-            for i, sec in enumerate(model):
-                sec['id'] = response.json()[i]['id']
-
-            self.assertEqual(response.json(), model)
-
-        with self.subTest(msg='update'):
-            model[0]['content'] = 'selected Kantian manifolds'
-            response = self.client.put(
-                path,
-                model,
-                format='json'
-            )
-            self.assertEqual(response.json(), model)
-
-        with self.subTest(msg='update, delete, create'):
-            # delete first section
-            model.pop(0)
-            # update second section
-            model[0]['name'] = 'encapsulate altarpiece'
-            # add a new section
-            model.append({
-                'name': 'sacrifice liberates',
-                'type': 'text',
-                'content': 'possessive colonoscopies suburbans',
-            })
-            for i, sec in enumerate(model):
-                sec['number'] = i
-
-            response = self.client.put(
-                path,
-                model,
-                format='json'
-            )
-            model[1]['id'] = response.json()[1]['id']
-
-            self.assertEqual(response.json(), model)
-
+        )
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(
+            len(models.Image.objects.filter(id=self.image.id)),
+            0
+        )
+        self.assertEqual(
+            len(models.Image.objects.all()),
+            9
+        )
 
 class PermissionTest(APITestCase):
     def setUp(self):
@@ -1116,6 +927,7 @@ class PermissionTest(APITestCase):
             email='alfred@example.com',
         )
 
+        # PORTFOLIO 1
         self.public_portfolio = models.Portfolio.objects.create(
             owner=self.owner,
             name='oestrous sorceresses',
@@ -1124,15 +936,17 @@ class PermissionTest(APITestCase):
         self.public_page = models.Page.objects.create(
             portfolio=self.public_portfolio,
             name='regimented archdeacon',
-            number=0,
+            index=0,
         )
-        self.public_section = models.TextSection.objects.create(
+        self.public_section = models.Section.objects.create(
             page=self.public_page,
             name='unscrupulous accumulations',
-            content='sympathizer devastator',
-            number=0
+            type='text',
+            text='sympathizer devastator',
+            index=0
         )
 
+        # PORTFOLIO 2
         self.private_portfolio = models.Portfolio.objects.create(
             owner=self.owner,
             name='unscrambled machinations',
@@ -1141,13 +955,14 @@ class PermissionTest(APITestCase):
         self.private_page = models.Page.objects.create(
             portfolio=self.private_portfolio,
             name='curried interpretation',
-            number=0,
+            index=0,
         )
-        self.private_section = models.TextSection.objects.create(
+        self.private_section = models.Section.objects.create(
             page=self.private_page,
             name='loiterer republic',
-            content='diabolic subcommittee',
-            number=0
+            type='text',
+            text='diabolic subcommittee',
+            index=0,
         )
 
     def portfolio_list_helper(self, status_codes):
@@ -1207,8 +1022,10 @@ class PermissionTest(APITestCase):
                 }
             ),
             {
+                'id': str(uuid.uuid4()),
                 'name': 'supposed novices',
-                'number': 0,
+                'index': 0,
+                'sections': [],
             },
             format='json',
         )
@@ -1218,7 +1035,6 @@ class PermissionTest(APITestCase):
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': portfolio_id,
                     'page_id': page_id,
                 }
             )
@@ -1229,7 +1045,6 @@ class PermissionTest(APITestCase):
             reverse(
                 'page_detail',
                 kwargs={
-                    'portfolio_id': portfolio_id,
                     'page_id': page_id,
                 }
             ),
@@ -1245,7 +1060,6 @@ class PermissionTest(APITestCase):
             reverse(
                 'section_list',
                 kwargs={
-                    'portfolio_id': portfolio_id,
                     'page_id': page_id,
                 }
             )
@@ -1256,15 +1070,16 @@ class PermissionTest(APITestCase):
             reverse(
                 'section_list',
                 kwargs={
-                    'portfolio_id': portfolio_id,
                     'page_id': page_id,
                 }
             ),
             {
+                'id': str(uuid.uuid4()),
                 'name': 'ostracizing sweetheart',
                 'type': 'text',
-                'number': 0,
-                'content': 'bonged scandalmongers',
+                'index': 0,
+                'text': 'bonged scandalmongers',
+                'links': [],
             },
             format='json',
         )
@@ -1274,8 +1089,6 @@ class PermissionTest(APITestCase):
             reverse(
                 'section_detail',
                 kwargs={
-                    'portfolio_id': portfolio_id,
-                    'page_id': page_id,
                     'section_id': section_id,
                 }
             )
@@ -1286,8 +1099,6 @@ class PermissionTest(APITestCase):
             reverse(
                 'section_detail',
                 kwargs={
-                    'portfolio_id': portfolio_id,
-                    'page_id': page_id,
                     'section_id': section_id,
                 }
             ),

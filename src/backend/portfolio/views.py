@@ -3,6 +3,7 @@ from rest_framework import permissions
 from rest_framework import serializers as drf_serializers
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from django.db.models import Q
 
 from common.permissions import IsReadOnly
 
@@ -13,36 +14,46 @@ from . import swagger
 from .permissions import IsOwner, IsNotPrivate
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.ImageInputSerializer
+    serializer_class = serializers.ImageSerializer
     # These parses required for receiving over image data
     parser_classes = (MultiPartParser, FormParser)
+    queryset = models.Image.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
 
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_serializer_class(self):
-        # Allows this url to handle GET and POST with different serializers
-        if self.request.method in ['PUT', 'PATCH']:
-            return serializers.ImageInputSerializer
-        return serializers.ImageOutputSerializer
+    # def get_serializer_class(self):
+    #     # Allows this url to handle GET and POST with different serializers
+    #     if self.request.method in ['PUT', 'PATCH']:
+    #         return serializers.ImageInputSerializer
+    #     return serializers.ImageOutputSerializer
 
     lookup_url_kwarg = 'image_id'
 
-    def get_queryset(self):
-        return models.Image.objects.filter(owner=self.request.user)
+    # def get_queryset(self):
+    #     return models.Image.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 
 class ImageList(generics.ListCreateAPIView):
-    serializer_class = serializers.ImageInputSerializer
+    serializer_class = serializers.ImageSerializer
     parser_classes = (MultiPartParser, FormParser)
 
-    def get_serializer_class(self):
-        # Allows this url to handle GET and POST with different serializers
-        if self.request.method in ['POST']:
-            return serializers.ImageInputSerializer
-        return serializers.ImageOutputSerializer
+    # def get_serializer_class(self):
+    #     # Allows this url to handle GET and POST with different serializers
+    #     if self.request.method in ['POST']:
+    #         return serializers.ImageInputSerializer
+    #     return serializers.ImageOutputSerializer
+
+    # def get_queryset(self):
+    #     owner = self.request.user
+    #     filter_query = Q(private=False)
+    #     if owner.is_authenticated:
+    #         filter_query = filter_query | Q(owner=owner)
+
+    #     return models.Image.objects.filter(filter_query)
 
     def get_queryset(self):
         return models.Image.objects.filter(owner=self.request.user)
@@ -50,7 +61,9 @@ class ImageList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
+
 
     def perform_destroy(self, instance):
         parent_id = instance.page
@@ -212,6 +225,29 @@ class ImageList(generics.ListCreateAPIView):
 # LINK
 ################################################################################
 
+class PortfolioLinkList(generics.ListCreateAPIView):
+    serializer_class = serializers.PortfolioLinkSerializer
+    permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
+
+    def perform_create(self, serializer):
+        portfolio = models.Portfolio.objects.get(
+            id=self.kwargs['portfolio_id']
+        )
+        serializer.save(portfolio=portfolio)
+
+
+class PortfolioLinkDetail(generics.DestroyAPIView):
+    serializer_class = serializers.PortfolioLinkSerializer
+    lookup_url_kwarg = 'link_id'
+    permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
+    queryset = models.PortfolioLink.objects.all()
+
+    def perform_destroy(self, instance):
+        link_id = self.kwargs['link_id']
+        models.PortfolioLink.objects.filter(link=link_id).delete()
+        models.Link.objects.get(id=link_id).delete()
+
+
 class SectionLinkList(generics.ListCreateAPIView):
     serializer_class = serializers.SectionLinkSerializer
     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
@@ -221,6 +257,19 @@ class SectionLinkList(generics.ListCreateAPIView):
             id=self.kwargs['section_id']
         )
         serializer.save(section=section)
+
+
+class SectionLinkDetail(generics.DestroyAPIView):
+    serializer_class = serializers.SectionLinkSerializer
+    lookup_url_kwarg = 'link_id'
+    permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
+    queryset = models.SectionLink.objects.all()
+
+    def perform_destroy(self, instance):
+        link_id = self.kwargs['link_id']
+        models.SectionLink.objects.filter(link=link_id).delete()
+        models.Link.objects.filter(id=link_id).delete()
+
 
 class LinkDetail(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.LinkSerializer
@@ -238,6 +287,7 @@ class LinkDetail(generics.RetrieveUpdateAPIView):
 class SectionList(generics.ListCreateAPIView):
     serializer_class = serializers.SectionSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
+    queryset = models.Section.objects.all()
 
     def perform_create(self, serializer):
         page = models.Page.objects.get(
@@ -263,6 +313,8 @@ class SectionDetail(generics.RetrieveUpdateDestroyAPIView):
 class PageList(generics.ListCreateAPIView):
     serializer_class = serializers.PageSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
+    queryset = models.Page.objects.all()
+    swagger_schema = swagger.PortfolioAutoSchema
 
     def perform_create(self, serializer):
         portfolio = models.Portfolio.objects.get(
@@ -270,7 +322,6 @@ class PageList(generics.ListCreateAPIView):
         )
         serializer.save(portfolio = portfolio)
 
-    swagger_schema = swagger.PortfolioAutoSchema
 
 class PageDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PageSerializer

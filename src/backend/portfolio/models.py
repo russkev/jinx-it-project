@@ -26,11 +26,12 @@ def create_default_portfolio(sender, **kwargs):
         name='First Page',
         index=0,
     )
-    TextSection.objects.create(
+    Section.objects.create(
         page=page,
         name='Hello There!',
         index='0',
-        content=
+        type='text',
+        text=
             'Welcome to Jinx\'s portfolio creation software! '
             'This is a default portfolio, feel free to modify or delete.',
     )
@@ -41,6 +42,8 @@ def create_default_portfolio(sender, **kwargs):
 class Image(models.Model):
     #   Image upload tutorial
     #   https://medium.com/@emeruchecole9/uploading-images-to-rest-api-backend-in-react-js-b931376b5833
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
 
     def image_path(self, filename):
         _now = datetime.now()

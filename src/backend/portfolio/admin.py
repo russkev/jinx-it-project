@@ -12,9 +12,9 @@ class SectionInline(admin.TabularInline):
     # don't allow adding
     max_num = 0
 
-@admin.register(models.Image)
-class ImageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'path', 'owner', 'id']
+# @admin.register(models.Image)
+# class ImageAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'path', 'owner', 'id']
 
 @admin.register(models.Portfolio)
 class PortfolioAdmin(admin.ModelAdmin):
