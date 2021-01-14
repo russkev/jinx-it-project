@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   SectionContext,
   useUser,
@@ -101,10 +101,29 @@ export const useSection = () => {
   const [state, updateState, setState, resetState] = useContext(SectionContext);
   const { getConfig, isLoading } = useUser();
   const { linkIndex } = useLink();
+  const [updatedSections, setUpdatedSections] = useState<any>([])
+  const [toSend, setToSend] = useState<any[]>([])
 
   async function fetchSectionsAll(portfolioId: number, pages: TEditPage[]) {
     const result = await getSectionsAll(portfolioId, pages, getConfig());
     setState(result);
+  }
+
+  function registerSection(section: any) {
+    // setUpdatedSections([...updatedSections, section])
+    setUpdatedSections(section)
+  }
+
+  function syncSections() {
+    // Potential solution here:
+    // https://www.smashingmagazine.com/2020/11/react-useref-hook/
+
+    
+    console.log(state)
+    // for (var updated of updatedSections) {
+    //   // updated()
+    //   console.log(updated)
+    // }
   }
 
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
@@ -159,7 +178,7 @@ export const useSection = () => {
     return allSections;
   }
 
-  function setSections(sections: TSections) {
+  function setSections(sections: TSection[]) {
     try {
       setState(sections);
     } catch (e) {
@@ -256,14 +275,16 @@ export const useSection = () => {
   }
 
   function handleSectionMoveUp(pageId: Tuuid, targetIndex: number) {
-    // try {
-    //   setState({
-    //     ...state,
-    //     [pageId]: listMoveUp(state, targetIndex),
-    //   });
-    // } catch (e) {
-    //   throw e;
-    // }
+    try {
+      // setState({
+      //   ...state,
+      //   [pageId]: listMoveUp(state, targetIndex),
+      // });
+      const newState = listMoveUp(state, targetIndex)
+      setState(newState)
+    } catch (e) {
+      throw e;
+    }
   }
 
   function handleSectionMoveDown(pageId: Tuuid, targetIndex: number) {
@@ -376,6 +397,8 @@ export const useSection = () => {
   }
 
   return {
+    registerSection,
+    syncSections,
     sectionIndex,
     fetchSectionsAll,
     getFetchedSection,

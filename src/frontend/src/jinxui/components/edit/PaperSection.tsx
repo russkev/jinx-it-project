@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -65,16 +65,18 @@ const PaperSection = (props: TPaperSection) => {
   const { isSaving } = useUser();
   const { saveFullPortfolio } = usePortfolio();
   const {
+    registerSection,
     getFetchedSections,
     handleSectionDelete,
     handleSectionMoveUp,
     handleSectionMoveDown,
   } = useSection();
 
-  // const index = getFetchedSections(props.pageId).findIndex(
-  //   (p: TSection) => p.id === props.section.id
-  // );
-  const index = 0;
+
+  const index = getFetchedSections(props.pageId).findIndex(
+    (p: TSection) => p.id === props.section.id
+  );
+  // const index = 0;
 
   let deleteDisabled = false;
   let upArrowDisabled = false;
