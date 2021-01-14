@@ -71,22 +71,23 @@ const PaperSection = (props: TPaperSection) => {
     handleSectionMoveDown,
   } = useSection();
 
-  const index = getFetchedSections(props.pageId).findIndex(
-    (p: TSection) => p.id === props.section.id
-  );
+  // const index = getFetchedSections(props.pageId).findIndex(
+  //   (p: TSection) => p.id === props.section.id
+  // );
+  const index = 0;
 
   let deleteDisabled = false;
   let upArrowDisabled = false;
   let downArrowDisabled = false;
-  if (getFetchedSections(props.pageId).length === 1) {
-    deleteDisabled = true;
-  }
-  if (index === 0) {
-    upArrowDisabled = true;
-  }
-  if (index === getFetchedSections(props.pageId).length - 1) {
-    downArrowDisabled = true;
-  }
+  // if (getFetchedSections(props.pageId).length === 1) {
+  //   deleteDisabled = true;
+  // }
+  // if (index === 0) {
+  //   upArrowDisabled = true;
+  // }
+  // if (index === getFetchedSections(props.pageId).length - 1) {
+  //   downArrowDisabled = true;
+  // }
 
   const handleDelete = () => {
     handleSectionDelete(props.pageId, index);

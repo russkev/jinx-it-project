@@ -42,11 +42,11 @@ const DisplayLinks = (props: TDisplayLinks) => {
   };
 
   const linksHaveText = () => {
-    for (var link of links) {
-      if (link.title && link.title !== "") {
-        return true;
-      }
-    }
+    // for (var link of links) {
+    //   if (link.title && link.title !== "") {
+    //     return true;
+    //   }
+    // }
     return false;
   };
 
@@ -73,43 +73,44 @@ const DisplayLinks = (props: TDisplayLinks) => {
   };
 
   const direction = linksHaveText() ? "column" : "row";
-  return (
-    <>
-      <Box display="flex" justifyContent={props.horizontalAlign}>
-        <Box
-          display="flex"
-          width="max-content"
-          flexDirection={direction}
-          alignItems="baseline"
-          marginBottom="20px"
-        >
-          {links.map((link: TLink) => {
-            return (
-              <Box key={link.id} marginTop="15px">
-                {link.address && link.address !== "" ? (
-                  /* Address exists */
-                  <Tooltip title={link.address}>
-                    <Link
-                      href={link.address}
-                      color="textPrimary"
-                      underline="none"
-                    >
-                      <LinkContent link={link} textColor={props.textColor} />
-                    </Link>
-                  </Tooltip>
-                ) : (
-                  /* Address does not exist */
-                  <>
-                    <LinkContent link={link} textColor={props.textColor} />
-                  </>
-                )}
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
-    </>
-  );
+  // return (
+  //   <>
+  //     <Box display="flex" justifyContent={props.horizontalAlign}>
+  //       <Box
+  //         display="flex"
+  //         width="max-content"
+  //         flexDirection={direction}
+  //         alignItems="baseline"
+  //         marginBottom="20px"
+  //       >
+  //         {links.map((link: TLink) => {
+  //           return (
+  //             <Box key={link.id} marginTop="15px">
+  //               {link.address && link.address !== "" ? (
+  //                 /* Address exists */
+  //                 <Tooltip title={link.address}>
+  //                   <Link
+  //                     href={link.address}
+  //                     color="textPrimary"
+  //                     underline="none"
+  //                   >
+  //                     <LinkContent link={link} textColor={props.textColor} />
+  //                   </Link>
+  //                 </Tooltip>
+  //               ) : (
+  //                 /* Address does not exist */
+  //                 <>
+  //                   <LinkContent link={link} textColor={props.textColor} />
+  //                 </>
+  //               )}
+  //             </Box>
+  //           );
+  //         })}
+  //       </Box>
+  //     </Box>
+  //   </>
+  // );
+  return (<> </>)
 };
 
 export default DisplayLinks;

@@ -46,18 +46,18 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
   };
 
   const addSection = (section_type: string) => {
-    setAnchorEl(null);
+    // setAnchorEl(null);
 
-    const index = getFetchedSections(props.pageId).findIndex(
-      (p: TSection) => p.id === props.section.uid
-    );
+    // const index = getFetchedSections(props.pageId).findIndex(
+    //   (p: TSection) => p.id === props.section.uid
+    // );
 
-    const target_index = props.placeAbove ? index : index + 1;
-    // const newSection = DefaultSectionData();
-    const newSection:TSection = JSON.parse(JSON.stringify(defaultPortfolioContext))
-    newSection.type = section_type;
+    // const target_index = props.placeAbove ? index : index + 1;
+    // // const newSection = DefaultSectionData();
+    // const newSection:TSection = JSON.parse(JSON.stringify(defaultPortfolioContext))
+    // newSection.type = section_type;
 
-    handleSectionChange(props.pageId, target_index, newSection);
+    // handleSectionChange(props.pageId, target_index, newSection);
   };
 
   return (

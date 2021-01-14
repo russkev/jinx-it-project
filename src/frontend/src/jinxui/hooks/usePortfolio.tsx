@@ -160,7 +160,7 @@ export const usePortfolio = () => {
         pages.push(this_page)
         // setPageSections(this_page.id, this_page.sections)
         const newSection = { [page.id]: page.sections };
-        setSections(newSection)
+        setSections(page.sections);
       }
       setPages(pages)
 

@@ -12,9 +12,10 @@ type TTextSectionProps = {
 const TextSectionInput = (props: TTextSectionProps) => {
   const { getFetchedSections, handleTitleChange, handleContentChange } = useSection();
 
-  const index = getFetchedSections(props.pageId).findIndex(
-    (p: TSection) => p.id === props.section.id
-  );
+  // const index = getFetchedSections(props.pageId).findIndex(
+  //   (p: TSection) => p.id === props.section.id
+  // );
+  const index = 0
 
   return (
     <>
@@ -39,7 +40,7 @@ const TextSectionInput = (props: TTextSectionProps) => {
           <TextFieldSubSection
             pageId={props.pageId}
             section={props.section}
-            handleChange={handleContentChange}
+            // handleChange={handleContentChange}
             rows={15}
           />
         </OneColumnSectionDiv>

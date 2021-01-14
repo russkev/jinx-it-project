@@ -6,7 +6,8 @@ import { LinkIconEnum } from "jinxui"
 export const defaultLinkContext: TLink = {
   title: "",
   address: "",
-  icon: LinkIconEnum.Disabled,
+  // icon: LinkIconEnum.Disabled,
+  icon: 0,
   id: "",
   number: 0,
 };

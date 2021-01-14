@@ -107,38 +107,42 @@ export const useSection = () => {
     setState(result);
   }
 
-  function sectionIndex(pageId: Tuuid, uuid_index: string) {
-    const index = state[pageId].findIndex(
-      (section: TSection) => section.id === uuid_index
-    );
-    if (index > -1) {
-      return index;
-    } else {
-      throw Error("Section with id: " + uuid_index + " could not be found.");
-    }
+  function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
+    // const index = state.findIndex(
+    //   (section: TSection) => section.id === sectionId
+    // );
+    // if (index > -1) {
+    //   return index;
+    // } else {
+    //   throw Error("Section with id: " + sectionId + " could not be found.");
+    // }
+    return 0
   }
 
-  function sectionIndexFromId(pageId: Tuuid, id: Tuuid) {
-    const index = state[pageId].findIndex(
-      (section: TSection) => section.id === id
-    );
-    if (index > -1) {
-      return index;
-    } else {
-      throw Error("Section with id: " + id + " could not be found.");
-    }
+  function sectionIndexFromId(pageId: Tuuid, sectionId: Tuuid) {
+    // const index = state.findIndex(
+    //   (section: TSection) => section.id === sectionId
+    // );
+    // if (index > -1) {
+    //   return index;
+    // } else {
+    //   throw Error("Section with id: " + sectionId + " could not be found.");
+    // }
+    return 0
   }
 
-  const getFetchedSection = (pageId: Tuuid, uuid_index: Tuuid) => {
-    try {
-      return state[pageId][sectionIndex(pageId, uuid_index)];
-    } catch (e) {
-      throw e;
-    }
+  const getFetchedSection = (pageId: Tuuid, sectionId: Tuuid) => {
+    // try {
+    //   return state[sectionIndex(pageId, sectionId)];
+    // } catch (e) {
+    //   throw e;
+    // }
+    return state
   };
 
   function getFetchedSections(pageId: Tuuid) {
-    return isLoading() ? [defaultSectionContext] : state[pageId];
+    // return isLoading() ? [defaultSectionContext] : state;
+    return state
   }
 
   function getFetchedSectionsAll() {
@@ -178,37 +182,39 @@ export const useSection = () => {
       console.log(error);
     }
   }
-  /**
-   * Prepare section data for sending to backend.
-   * 1. Remove unique identifiers
-   * 2. Override section numbers
-   * 3. Remove empty sections entirely
-   */
-  const getCleanedSections = (pageId: Tuuid) => {
-    const cleanSections = JSON.parse(JSON.stringify(state[pageId]));
-    for (var i = 0; i < cleanSections.length; i++) {
-      if (sectionIsNotBlank(cleanSections[i])) {
-        delete cleanSections[i].uid;
-        cleanSections[i].number = i;
-      }
-    }
-    return cleanSections;
-  };
+  // /**
+  //  * Prepare section data for sending to backend.
+  //  * 1. Remove unique identifiers
+  //  * 2. Override section numbers
+  //  * 3. Remove empty sections entirely
+  //  */
+  // const getCleanedSections = (pageId: Tuuid) => {
+  //   const cleanSections = JSON.parse(JSON.stringify(state[pageId]));
+  //   for (var i = 0; i < cleanSections.length; i++) {
+  //     if (sectionIsNotBlank(cleanSections[i])) {
+  //       delete cleanSections[i].uid;
+  //       cleanSections[i].number = i;
+  //     }
+  //   }
+  //   return cleanSections;
+  // };
 
   const handleContentChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    // event: React.ChangeEvent<HTMLInputElement>,
+    text: string,
     pageId: Tuuid,
-    sectionUid: string
+    index: number
   ) => {
-    updateState(pageId, sectionUid, { content: e.target.value });
+    // updateState(pageId, index, { content: event.target.value });
+    updateState(pageId, index, {text: text})
   };
 
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     pageId: Tuuid,
-    sectionUid: string
+    index: number
   ) => {
-    updateState(pageId, sectionUid, { name: e.target.value });
+    updateState(pageId, index, { name: e.target.value });
   };
 
   function handleSectionChange(
@@ -216,76 +222,76 @@ export const useSection = () => {
     targetIndex: number,
     newSection: TSection
   ) {
-    try {
-      setState({
-        ...state,
-        [pageId]: listAdd(state[pageId], targetIndex, newSection),
-      });
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   setState({
+    //     ...state,
+    //     [pageId]: listAdd(state, targetIndex, newSection),
+    //   });
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function handleSectionAddPage(pageId: Tuuid) {
-    if (pageId in state) {
-      throw Error("Tried to add new page with an existing page ID");
-    } else {
-      setState({ ...state, [pageId]: [] });
-    }
+    // if (pageId in state) {
+    //   throw Error("Tried to add new page with an existing page ID");
+    // } else {
+    //   setState({ ...state, [pageId]: [] });
+    // }
   }
 
   function handleSectionDelete(pageId: Tuuid, targetIndex: number) {
-    try {
-      setState({
-        ...state,
-        [pageId]: listDelete(state[pageId], targetIndex),
-      });
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   setState({
+    //     ...state,
+    //     [pageId]: listDelete(state, targetIndex),
+    //   });
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function handleSectionDeletePage(pageId: Tuuid) {
-    delete state[pageId];
+    // delete state;
   }
 
   function handleSectionMoveUp(pageId: Tuuid, targetIndex: number) {
-    try {
-      setState({
-        ...state,
-        [pageId]: listMoveUp(state[pageId], targetIndex),
-      });
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   setState({
+    //     ...state,
+    //     [pageId]: listMoveUp(state, targetIndex),
+    //   });
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function handleSectionMoveDown(pageId: Tuuid, targetIndex: number) {
-    try {
-      setState({
-        ...state,
-        [pageId]: listMoveDown(state[pageId], targetIndex),
-      });
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   setState({
+    //     ...state,
+    //     [pageId]: listMoveDown(state, targetIndex),
+    //   });
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   async function saveSections(portfolioId: Tuuid, pageId: Tuuid) {
-    try {
-      const sections = state[pageId];
-      return await putSections(portfolioId, pageId, sections, getConfig());
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   const sections = state;
+    //   return await putSections(portfolioId, pageId, sections, getConfig());
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function updateSectionLinks(
     pageId: Tuuid,
-    sectionUid: string,
+    index: number,
     links: TLink[]
   ) {
-    updateState(pageId, sectionUid, { links: links });
+    updateState(pageId, index, { links: links });
   }
 
   function getFetchedSectionLinks(pageId: Tuuid, uuid_index: Tuuid) {
@@ -294,31 +300,32 @@ export const useSection = () => {
   }
 
   function getFetchedSectionLinksFromId(pageId: Tuuid, id: Tuuid) {
-    try {
-      const index = sectionIndexFromId(pageId, id);
-      return state[pageId][index].links;
-    } catch (e) {
-      throw e;
-    }
+    // try {
+    //   const index = sectionIndexFromId(pageId, id);
+    //   return state[index].links;
+    // } catch (e) {
+    //   throw e;
+    // }
+    return state
   }
 
   function sectionLinkAdd(pageId: Tuuid, uuid_index: string, link: TLink) {
-    const sectionLinks: TLink[] = getFetchedSectionLinks(pageId, uuid_index);
-    if (!validate(link.id)) {
-      link.id = uuidv4();
-    }
-    const index = sectionLinks.findIndex(
-      (existingLink: TLink) => existingLink.id === link.id
-    );
-    if (index > -1) {
-      updateSectionLinks(pageId, uuid_index, [
-        ...sectionLinks.slice(0, index),
-        link,
-        ...sectionLinks.slice(index + 1),
-      ]);
-    } else {
-      updateSectionLinks(pageId, uuid_index, [...sectionLinks, link]);
-    }
+    // const sectionLinks: TLink[] = getFetchedSectionLinks(pageId, uuid_index);
+    // if (!validate(link.id)) {
+    //   link.id = uuidv4();
+    // }
+    // const index = sectionLinks.findIndex(
+    //   (existingLink: TLink) => existingLink.id === link.id
+    // );
+    // if (index > -1) {
+    //   updateSectionLinks(pageId, index, [
+    //     ...sectionLinks.slice(0, index),
+    //     link,
+    //     ...sectionLinks.slice(index + 1),
+    //   ]);
+    // } else {
+    //   updateSectionLinks(pageId, index, [...sectionLinks, link]);
+    // }
   }
 
   function handleSectionLinkDelete(
@@ -326,13 +333,13 @@ export const useSection = () => {
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageId, uuid_index);
-    const index = linkIndex(link.id, links);
-    try {
-      updateSectionLinks(pageId, uuid_index, listDelete(links, index));
-    } catch (e) {
-      throw e;
-    }
+    // const links = getFetchedSectionLinks(pageId, uuid_index);
+    // const index = linkIndex(link.id, links);
+    // try {
+    //   updateSectionLinks(pageId, index, listDelete(links, index));
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function handleSectionLinkMoveUp(
@@ -340,13 +347,13 @@ export const useSection = () => {
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageId, uuid_index);
-    const index = linkIndex(link.id, links);
-    try {
-      updateSectionLinks(pageId, uuid_index, listMoveUp(links, index));
-    } catch (e) {
-      throw e;
-    }
+    // const links = getFetchedSectionLinks(pageId, uuid_index);
+    // const index = linkIndex(link.id, links);
+    // try {
+    //   updateSectionLinks(pageId, index, listMoveUp(links, index));
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function handleSectionLinkMoveDown(
@@ -354,13 +361,13 @@ export const useSection = () => {
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageId, uuid_index);
-    const index = linkIndex(link.id, links);
-    try {
-      updateSectionLinks(pageId, uuid_index, listMoveDown(links, index));
-    } catch (e) {
-      throw e;
-    }
+    // const links = getFetchedSectionLinks(pageId, uuid_index);
+    // const index = linkIndex(link.id, links);
+    // try {
+    //   updateSectionLinks(pageId, index, listMoveDown(links, index));
+    // } catch (e) {
+    //   throw e;
+    // }
   }
 
   function resetSections() {
@@ -374,7 +381,6 @@ export const useSection = () => {
     getFetchedSections,
     getFetchedSectionsAll,
     getSectionsIndexedCopyAll,
-    getCleanedSections,
     setSections,
     setPageSections,
     handleContentChange,

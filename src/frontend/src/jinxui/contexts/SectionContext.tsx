@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TSection, TSections, Tuuid } from "jinxui/types";
+import { TSection, Tuuid } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
 export const defaultSectionContext: TSection = {
@@ -14,38 +14,51 @@ export const defaultSectionContext: TSection = {
 
 
 
-export const SectionContext = React.createContext<
-  [TSections, any, any, any]
->([ {}, () => {}, () => {}, () => {}]);
+export const SectionContext = React.createContext<[TSection, any, any, any]>([
+  defaultSectionContext, 
+  () => {}, 
+  () => {},
+  () => {}
+]);
 
 type TSectionContextProvider = {
   children: any;
 };
 export const SectionContextProvider = (props: TSectionContextProvider) => {
-  const [state, setState] = useState<TSections>({});
+  const [state, setState] = useState<TSection>(defaultSectionContext);
 
   const updateState = (
     pageId: Tuuid,
-    sectionId: string,
-    fieldsToUpdate: Partial<TSection[]>
+    index: number,
+    // sectionId: Tuuid,
+    fieldsToUpdate: Partial<TSection>
   ) => {
-    if (!(pageId in state)) {
-      throw Error("Sections for page " + pageId + " not found.")
-    }
-    const index = state[pageId].findIndex(
-      (section: TSection) => section.id === sectionId
-    );
-    setState({
-      ...state,
-        [pageId]: [
-          ...state[pageId].slice(0, index),
-          { ...state[pageId][index], ...fieldsToUpdate },
-          ...state[pageId].slice(index + 1)]
-      });
+    // if (!(pageId in state)) {
+    //   throw Error("Sections for page " + pageId + " not found.")
+    // }
+    // const index = state.findIndex(
+    //   (section: TSection) => section.id === sectionId
+    // );
+    // setState({
+    //   ...state,
+    //     [pageId]: [
+    //       ...state[pageId].slice(0, index),
+    //       { ...state[pageId][index], ...fieldsToUpdate },
+    //       ...state[pageId].slice(index + 1)]
+    //   });
+    var newState = state;
+    newState.text = fieldsToUpdate?.text
+    setState(newState)
+    // setState([
+    //   // ...state.slice(0, index),
+    //   {...state[index], ...fieldsToUpdate},
+    //   // ...state.slice(index + 1)
+    // ])
   };
 
   const resetState = () => {
-    setState({});
+    // setState([]);
+    setState(defaultSectionContext)
   };
 
   return (

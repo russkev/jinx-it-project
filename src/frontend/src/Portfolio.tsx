@@ -86,10 +86,10 @@ const Portfolio = ({ username }: PortfolioProps) => {
   } = useUser();
 
   const { fetchFullPortfolio, getFetchedPortfolio } = usePortfolio();
-  const { getCleanedSections } = useSection();
+  const { getFetchedSections } = useSection();
 
   //!!! hard coded sections just for testing
-  const sections = getCleanedSections("17");
+  const sections = getFetchedSections("17");
 
   const [author, setAuthor] = useState<string>("");
 
@@ -143,7 +143,7 @@ const Portfolio = ({ username }: PortfolioProps) => {
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
             <PortfolioHeader subtitle={author}></PortfolioHeader>
-            <SectionGrid sections={sections} />
+            {/* <SectionGrid sections={sections} /> */}
           </ThemeProvider>
           <Copyright text={author} />
         </ThemeProvider>

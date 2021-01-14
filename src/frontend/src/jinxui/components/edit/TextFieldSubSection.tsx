@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Box } from "@material-ui/core";
-import { LinksDisplay, LinkDialog } from "jinxui"
-import { TSection, Tuuid } from "jinxui/types"
-
+import { LinksDisplay, LinkDialog } from "jinxui";
+import { TSection, Tuuid } from "jinxui/types";
+import { defaultSectionContext } from "jinxui/contexts";
 
 type TTextFieldSubSection = {
   pageId: Tuuid;
   section: TSection;
-  handleChange: any;
+  // handleChange: any;
   rows: number;
 };
 
@@ -19,8 +19,21 @@ type TTextFieldSubSection = {
 //      text before starting to write something of their own.
 
 const TextFieldSubSection = (props: TTextFieldSubSection) => {
-  const [content, setContent] = useState("")
+  const [content, setContent] = useState("");
 
+  const [localText, setLocalText] = useState<string>("");
+
+  useEffect(() => {
+    if (props.section.text){
+      setLocalText(props.section.text)
+    }
+  }, [props.section])
+
+  const handleChange = (
+    new_text: string
+    ) => {
+      setLocalText(new_text)
+  }
 
   return (
     <Box>
@@ -44,8 +57,11 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
           "*This displays in italics*\n\n" +
           "[This displays as a link](https://app.jinx.systems/)"
         }
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          props.handleChange(e, props.pageId, props.section.id)
+        onChange={
+          (event: React.ChangeEvent<HTMLInputElement>) =>
+            handleChange(
+              event.target.value,
+            )
           // setContent(e.target.value)
         }
         id="standard-full-width"
