@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { TextField, Box } from "@material-ui/core";
 import { LinksDisplay, LinkDialog } from "jinxui"
-import { TEditSection } from "jinxui/types"
+import { TSection, Tuuid } from "jinxui/types"
 
 
 type TTextFieldSubSection = {
-  pageUid: string
-  section: TEditSection;
+  pageId: Tuuid;
+  section: TSection;
   handleChange: any;
   rows: number;
 };
@@ -30,12 +30,12 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
         flexWrap="wrap"
         marginBottom="15px"
       >
-        <LinksDisplay sectionUid={props.section.uid} pageUid={props.pageUid} />
-        <LinkDialog sectionUid={props.section.uid} pageUid={props.pageUid} />
+        <LinksDisplay sectionUid={props.section.id} pageUid={props.pageId} />
+        <LinkDialog sectionUid={props.section.id} pageUid={props.pageId} />
       </Box>
       <TextField
-        name={props.section.uid}
-        defaultValue={props.section.content}
+        name={props.section.id}
+        defaultValue={props.section.text}
         placeholder={
           "Start writing...\n\n\n" +
           "You can use markdown to format your text. \n\n" +
@@ -45,7 +45,7 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
           "[This displays as a link](https://app.jinx.systems/)"
         }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          props.handleChange(e, props.pageUid, props.section.uid)
+          props.handleChange(e, props.pageId, props.section.id)
           // setContent(e.target.value)
         }
         id="standard-full-width"

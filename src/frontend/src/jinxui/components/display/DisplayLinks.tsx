@@ -4,7 +4,8 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useTheme } from "@material-ui/core/styles";
-import { useLink, useSection, LinkDisplayIcon, LinkIconEnum } from "jinxui";
+import { useLink, useSection, LinkDisplayIcon, LinkIconEnum, } from "jinxui";
+import { Tuuid } from "jinxui/types"
 
 import { TLink } from "jinxui/types";
 
@@ -16,16 +17,16 @@ import { TLink } from "jinxui/types";
  */
 type TDisplayLinks = {
   horizontalAlign: string;
-  PageUid?: string;
-  sectionId?: number;
+  pageId?: Tuuid;
+  sectionId?: Tuuid;
   textColor?: string;
 };
 const DisplayLinks = (props: TDisplayLinks) => {
   const { getFetchedPortfolioLinks } = useLink();
   const { getFetchedSectionLinksFromId } = useSection();
   const theme = useTheme();
-  const links =  props.PageUid && props.sectionId
-    ? getFetchedSectionLinksFromId(props.PageUid, props.sectionId)
+  const links =  props.pageId && props.sectionId
+    ? getFetchedSectionLinksFromId(props.pageId, props.sectionId)
     : getFetchedPortfolioLinks();
 
   type TGetLinkDisplayIcon = {

@@ -9,12 +9,12 @@ import SubjectSharp from "@material-ui/icons/SubjectSharp";
 import InsertPhotoSharp from "@material-ui/icons/InsertPhotoSharp";
 import VerticalSplitSharp from "@material-ui/icons/VerticalSplitSharp";
 
-import { PrimaryMenu, DefaultSectionData, useSection } from "jinxui";
+import { PrimaryMenu, useSection, defaultPortfolioContext } from "jinxui";
 
-import { TEditSection } from "jinxui/types";
+import { TSection, Tuuid } from "jinxui/types";
 
 type TNewSectionMenu = {
-  pageUid: string;
+  pageId: Tuuid;
   section: any;
   placeAbove?: boolean;
 };
@@ -48,15 +48,16 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
   const addSection = (section_type: string) => {
     setAnchorEl(null);
 
-    const index = getFetchedSections(props.pageUid).findIndex(
-      (p: TEditSection) => p.uid === props.section.uid
+    const index = getFetchedSections(props.pageId).findIndex(
+      (p: TSection) => p.id === props.section.uid
     );
 
     const target_index = props.placeAbove ? index : index + 1;
-    const newSection = DefaultSectionData();
+    // const newSection = DefaultSectionData();
+    const newSection:TSection = JSON.parse(JSON.stringify(defaultPortfolioContext))
     newSection.type = section_type;
 
-    handleSectionChange(props.pageUid, target_index, newSection);
+    handleSectionChange(props.pageId, target_index, newSection);
   };
 
   return (

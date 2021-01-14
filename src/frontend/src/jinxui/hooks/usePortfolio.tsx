@@ -10,7 +10,7 @@ import {
   PORTFOLIOS_PATH,
 } from "jinxui";
 import API from "../../API";
-import { TPortfolio, TPortfolioData, TEditPage, TEditSections, TEditSection, Tuuid } from "jinxui/types";
+import { TPortfolio, TPortfolioData, TPage, TSections, TSection, Tuuid } from "jinxui/types";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { defaultPortfolioContext } from "jinxui/contexts";
 
@@ -111,16 +111,58 @@ export const usePortfolio = () => {
     setErrorMessage,
     setSuccessMessage,
   } = useUser();
-  const { fetchPages, resetPages, getPagesIndexedCopy } = usePage();
-  const { fetchSectionsAll, resetSections, getFetchedSectionsAll, getSectionsIndexedCopyAll } = useSection();
-  const { fetchPortfolioLinks, savePortfolioLinks, resetPortfolioLinks, getFetchedPortfolioLinks } = useLink();
+  const { 
+    fetchPages, 
+    resetPages, 
+    getPagesIndexedCopy, 
+    setPages 
+  } = usePage();
+  const { 
+    fetchSectionsAll, 
+    resetSections, 
+    getFetchedSectionsAll, 
+    getSectionsIndexedCopyAll, 
+    setPageSections,
+    setSections, 
+  } = useSection();
+  const { 
+    fetchPortfolioLinks, 
+    savePortfolioLinks, 
+    resetPortfolioLinks, 
+    getFetchedPortfolioLinks 
+  } = useLink();
 
   const PORTFOLIOS_PATH = "api/portfolios";
 
   async function fetchPortfolio(portfolioId: Tuuid) {
     try {
-      const portfolioDetails: TPortfolio = await getPortfolio(portfolioId, getConfig());
+      const allPortfolioDetails: any = await getPortfolio(portfolioId, getConfig());
+      const portfolioDetails: TPortfolio = {
+        id: allPortfolioDetails.id,
+        owner: allPortfolioDetails.owner,
+        name: allPortfolioDetails.name,
+        pages: [],
+        private: allPortfolioDetails.private,
+        theme: allPortfolioDetails.theme,
+        background: allPortfolioDetails.background,
+      };
       await updateState(portfolioDetails);
+
+
+      var pages:TPage[] = []
+      for (var page of allPortfolioDetails.pages) {
+        const this_page:TPage = {
+          id: page.id,
+          name: page.name,
+          index: page.index,
+          sections: [],
+        }
+        pages.push(this_page)
+        // setPageSections(this_page.id, this_page.sections)
+        const newSection = { [page.id]: page.sections };
+        setSections(newSection)
+      }
+      setPages(pages)
 
       return portfolioDetails;
     } catch (e) {

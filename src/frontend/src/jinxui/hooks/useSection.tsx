@@ -14,19 +14,20 @@ import { v4 as uuidv4, validate } from "uuid";
 import {
   TPage,
   TEditPage,
-  TEditSection,
-  TEditSections,
+  TSection,
+  TSections,
   TLink,
+  Tuuid,
 } from "../types/PortfolioTypes";
 import { defaultSectionContext } from "jinxui/contexts";
 
-const sectionIsNotBlank = (section: TEditSection) => {
+const sectionIsNotBlank = (section: TSection) => {
   if (section.type === "text") {
-    return section.name !== "" || section.content !== "";
-  } else if (section.type === "image") {
-    return section.name !== "" || section.path !== "";
-  } else if (section.type === "image_text") {
-    return section.name !== "" || section.path !== "" || section.content !== "";
+    return section.name !== "" || section.text !== "";
+    // } else if (section.type === "image") {
+    //   return section.name !== "" || section.path !== "";
+    // } else if (section.type === "image_text") {
+    //   return section.name !== "" || section.path !== "" || section.content !== "";
   } else {
     return true;
   }
@@ -52,9 +53,9 @@ async function getSectionsAll(
     );
 
     // Extract appropriate information
-    var cleanResult: TEditSections = {};
+    var cleanResult: TSections = {};
     for (var i = 0; i < pages.length; i++) {
-      const pageUid = pages[i].uid;
+      const pageId = pages[i].uid;
       const sectionsData = sectionsResult[i].data;
       // Give the section a uid
       for (var sectionData of sectionsData) {
@@ -67,7 +68,7 @@ async function getSectionsAll(
         }
         sectionData.links = cleanLinks;
       }
-      cleanResult[pageUid] = sectionsResult[i].data;
+      cleanResult[pageId] = sectionsResult[i].data;
     }
     return cleanResult;
   } catch (e) {
@@ -77,9 +78,9 @@ async function getSectionsAll(
 
 // Call from UsePage to prevent circular dependency issues
 export async function putSections(
-  portfolioId: number,
-  pageId: number,
-  sections: TEditSection[],
+  portfolioId: Tuuid,
+  pageId: Tuuid,
+  sections: TSection[],
   config: any
 ) {
   const basePath =
@@ -106,9 +107,9 @@ export const useSection = () => {
     setState(result);
   }
 
-  function sectionIndex(pageUid: string, uuid_index: string) {
-    const index = state[pageUid].findIndex(
-      (section: TEditSection) => section.uid === uuid_index
+  function sectionIndex(pageId: Tuuid, uuid_index: string) {
+    const index = state[pageId].findIndex(
+      (section: TSection) => section.id === uuid_index
     );
     if (index > -1) {
       return index;
@@ -117,9 +118,9 @@ export const useSection = () => {
     }
   }
 
-  function sectionIndexFromId(pageUid: string, id: number) {
-    const index = state[pageUid].findIndex(
-      (section: TEditSection) => section.id === id
+  function sectionIndexFromId(pageId: Tuuid, id: Tuuid) {
+    const index = state[pageId].findIndex(
+      (section: TSection) => section.id === id
     );
     if (index > -1) {
       return index;
@@ -128,22 +129,63 @@ export const useSection = () => {
     }
   }
 
-  const getFetchedSection = (pageUid: string, uuid_index: string) => {
+  const getFetchedSection = (pageId: Tuuid, uuid_index: Tuuid) => {
     try {
-      return state[pageUid][sectionIndex(pageUid, uuid_index)];
+      return state[pageId][sectionIndex(pageId, uuid_index)];
     } catch (e) {
       throw e;
     }
   };
 
+  function getFetchedSections(pageId: Tuuid) {
+    return isLoading() ? [defaultSectionContext] : state[pageId];
+  }
+
+  function getFetchedSectionsAll() {
+    return isLoading() ? { 1: [defaultSectionContext] } : state;
+  }
+
+  function getSectionsIndexedCopyAll() {
+    const allSections: TSections = JSON.parse(JSON.stringify(state));
+    for (const [, sections] of Object.entries(allSections)) {
+      for (var i = 0; i < sections.length; i++) {
+        sections[i].index = i;
+      }
+    }
+    return allSections;
+  }
+
+  function setSections(sections: TSections) {
+    try {
+      setState(sections);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  // async function setPageSections(pageId: Tuuid, sections: TSection[]) {
+  //   try {
+  //     await setState({...state, [pageId]: sections })
+  //   } catch(e) {
+  //     console.log(e)
+  //     throw e;
+  //   }
+  // }
+  function setPageSections(pageId: Tuuid, sections: TSection[]) {
+    try {
+      setState({ ...state, [pageId]: sections });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   /**
    * Prepare section data for sending to backend.
    * 1. Remove unique identifiers
    * 2. Override section numbers
    * 3. Remove empty sections entirely
    */
-  const getCleanedSections = (pageUid: string) => {
-    const cleanSections = JSON.parse(JSON.stringify(state[pageUid]));
+  const getCleanedSections = (pageId: Tuuid) => {
+    const cleanSections = JSON.parse(JSON.stringify(state[pageId]));
     for (var i = 0; i < cleanSections.length; i++) {
       if (sectionIsNotBlank(cleanSections[i])) {
         delete cleanSections[i].uid;
@@ -155,105 +197,83 @@ export const useSection = () => {
 
   const handleContentChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    pageUid: string,
-    sectionUid: string,
+    pageId: Tuuid,
+    sectionUid: string
   ) => {
-    updateState(pageUid, sectionUid, { content: e.target.value });
+    updateState(pageId, sectionUid, { content: e.target.value });
   };
 
   const handleTitleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    pageUid: string,
-    sectionUid: string,
+    pageId: Tuuid,
+    sectionUid: string
   ) => {
-    updateState(pageUid, sectionUid, { name: e.target.value });
+    updateState(pageId, sectionUid, { name: e.target.value });
   };
 
   function handleSectionChange(
-    pageUid: string,
+    pageId: Tuuid,
     targetIndex: number,
-    newSection: TEditSection
+    newSection: TSection
   ) {
     try {
       setState({
         ...state,
-        [pageUid]: listAdd(state[pageUid], targetIndex, newSection),
+        [pageId]: listAdd(state[pageId], targetIndex, newSection),
       });
     } catch (e) {
       throw e;
     }
   }
 
-  function handleSectionAddPage(pageUid: string) {
-    if (pageUid in state) {
+  function handleSectionAddPage(pageId: Tuuid) {
+    if (pageId in state) {
       throw Error("Tried to add new page with an existing page ID");
     } else {
-      setState({ ...state, [pageUid]: [] });
+      setState({ ...state, [pageId]: [] });
     }
   }
 
-  function handleSectionDelete(pageUid: string, targetIndex: number) {
+  function handleSectionDelete(pageId: Tuuid, targetIndex: number) {
     try {
       setState({
         ...state,
-        [pageUid]: listDelete(state[pageUid], targetIndex),
+        [pageId]: listDelete(state[pageId], targetIndex),
       });
     } catch (e) {
       throw e;
     }
   }
 
-  function handleSectionDeletePage(pageUid: string) {
-    delete state[pageUid];
+  function handleSectionDeletePage(pageId: Tuuid) {
+    delete state[pageId];
   }
 
-  function handleSectionMoveUp(pageUid: string, targetIndex: number) {
+  function handleSectionMoveUp(pageId: Tuuid, targetIndex: number) {
     try {
       setState({
         ...state,
-        [pageUid]: listMoveUp(state[pageUid], targetIndex),
+        [pageId]: listMoveUp(state[pageId], targetIndex),
       });
     } catch (e) {
       throw e;
     }
   }
 
-  function handleSectionMoveDown(pageUid: string, targetIndex: number) {
+  function handleSectionMoveDown(pageId: Tuuid, targetIndex: number) {
     try {
       setState({
         ...state,
-        [pageUid]: listMoveDown(state[pageUid], targetIndex),
+        [pageId]: listMoveDown(state[pageId], targetIndex),
       });
     } catch (e) {
       throw e;
     }
   }
 
-  function getFetchedSections(pageUid: string) {
-    return isLoading() ? [defaultSectionContext] : state[pageUid];
-  }
-
-  function getFetchedSectionsAll() {
-    return isLoading() ? { 1: [defaultSectionContext] } : state;
-  }
-
-  function getSectionsIndexedCopyAll() {
-    const allSections:TEditSections = JSON.parse(JSON.stringify(state));
-      for (const [, sections] of Object.entries(allSections)) {
-        for(var i = 0; i < sections.length; i++) {
-          sections[i].number = i
-        }
-      }
-    return allSections
-  }
-
-  async function saveSections(
-    portfolioId: number,
-    pageId: number,
-    pageUid: string
-  ) {
+  async function saveSections(portfolioId: Tuuid, pageId: Tuuid) {
     try {
-      const sections = state[pageUid];
+      const sections = state[pageId];
       return await putSections(portfolioId, pageId, sections, getConfig());
     } catch (e) {
       throw e;
@@ -261,29 +281,29 @@ export const useSection = () => {
   }
 
   function updateSectionLinks(
-    pageUid: string,
+    pageId: Tuuid,
     sectionUid: string,
     links: TLink[]
   ) {
-    updateState(pageUid, sectionUid, { links: links });
+    updateState(pageId, sectionUid, { links: links });
   }
 
-  function getFetchedSectionLinks(pageUid: string, uuid_index: string) {
-    const fetchedSection = getFetchedSection(pageUid, uuid_index);
+  function getFetchedSectionLinks(pageId: Tuuid, uuid_index: Tuuid) {
+    const fetchedSection = getFetchedSection(pageId, uuid_index);
     return fetchedSection.links;
   }
 
-  function getFetchedSectionLinksFromId(pageUid: string, id: number) {
+  function getFetchedSectionLinksFromId(pageId: Tuuid, id: Tuuid) {
     try {
-      const index = sectionIndexFromId(pageUid, id);
-      return state[pageUid][index].links;
+      const index = sectionIndexFromId(pageId, id);
+      return state[pageId][index].links;
     } catch (e) {
       throw e;
     }
   }
 
-  function sectionLinkAdd(pageUid: string, uuid_index: string, link: TLink) {
-    const sectionLinks: TLink[] = getFetchedSectionLinks(pageUid, uuid_index);
+  function sectionLinkAdd(pageId: Tuuid, uuid_index: string, link: TLink) {
+    const sectionLinks: TLink[] = getFetchedSectionLinks(pageId, uuid_index);
     if (!validate(link.id)) {
       link.id = uuidv4();
     }
@@ -291,53 +311,53 @@ export const useSection = () => {
       (existingLink: TLink) => existingLink.id === link.id
     );
     if (index > -1) {
-      updateSectionLinks(pageUid, uuid_index, [
+      updateSectionLinks(pageId, uuid_index, [
         ...sectionLinks.slice(0, index),
         link,
         ...sectionLinks.slice(index + 1),
       ]);
     } else {
-      updateSectionLinks(pageUid, uuid_index, [...sectionLinks, link]);
+      updateSectionLinks(pageId, uuid_index, [...sectionLinks, link]);
     }
   }
 
   function handleSectionLinkDelete(
-    pageUid: string,
+    pageId: Tuuid,
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageUid, uuid_index);
+    const links = getFetchedSectionLinks(pageId, uuid_index);
     const index = linkIndex(link.id, links);
     try {
-      updateSectionLinks(pageUid, uuid_index, listDelete(links, index));
+      updateSectionLinks(pageId, uuid_index, listDelete(links, index));
     } catch (e) {
       throw e;
     }
   }
 
   function handleSectionLinkMoveUp(
-    pageUid: string,
+    pageId: Tuuid,
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageUid, uuid_index);
+    const links = getFetchedSectionLinks(pageId, uuid_index);
     const index = linkIndex(link.id, links);
     try {
-      updateSectionLinks(pageUid, uuid_index, listMoveUp(links, index));
+      updateSectionLinks(pageId, uuid_index, listMoveUp(links, index));
     } catch (e) {
       throw e;
     }
   }
 
   function handleSectionLinkMoveDown(
-    pageUid: string,
+    pageId: Tuuid,
     uuid_index: string,
     link: TLink
   ) {
-    const links = getFetchedSectionLinks(pageUid, uuid_index);
+    const links = getFetchedSectionLinks(pageId, uuid_index);
     const index = linkIndex(link.id, links);
     try {
-      updateSectionLinks(pageUid, uuid_index, listMoveDown(links, index));
+      updateSectionLinks(pageId, uuid_index, listMoveDown(links, index));
     } catch (e) {
       throw e;
     }
@@ -355,6 +375,8 @@ export const useSection = () => {
     getFetchedSectionsAll,
     getSectionsIndexedCopyAll,
     getCleanedSections,
+    setSections,
+    setPageSections,
     handleContentChange,
     handleTitleChange,
     handleSectionChange,

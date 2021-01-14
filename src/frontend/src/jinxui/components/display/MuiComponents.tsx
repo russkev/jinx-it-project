@@ -13,10 +13,12 @@ import {
 } from "@material-ui/core/styles";
 import {
   usePortfolio,
-  TSection,
   defaultColors,
   DisplayLinks,
 } from "jinxui";
+import {
+  TSection
+} from "jinxui/types"
 
 // Markdown
 import ReactMarkdown from "react-markdown";
@@ -261,7 +263,8 @@ export const Section = (data: TSection) => {
   const classes = useStyles();
 
   // Cols per item when we want the text/media to fit on one row
-  const colsPerItem = data.content && data.path ? 6 : 12;
+  // const colsPerItem = data.content && data.path ? 6 : 12;
+  const colsPerItem = 12
 
   // Markdown syntax highlighting
   const renderers = {
@@ -293,13 +296,13 @@ export const Section = (data: TSection) => {
   var border = false;
   switch (sectionTheme?.border) {
     case "first":
-      border = data.number === 0;
+      border = data.index === 0;
       break;
     case "odds":
-      border = data.number % 2 === 1;
+      border = data.index % 2 === 1;
       break;
     case "evens":
-      border = data.number % 2 === 0;
+      border = data.index % 2 === 0;
       break;
     case "all":
       border = true;
@@ -308,7 +311,7 @@ export const Section = (data: TSection) => {
       border = false;
   }
 
-  const textColor = themeColors(theme, data.number)[1];
+  const textColor = themeColors(theme, data.index)[1];
   return (
     <>
       <Box textAlign="left" paddingTop={sectionGap} paddingBottom={sectionGap}>
@@ -330,7 +333,7 @@ export const Section = (data: TSection) => {
             style={{ marginTop: titleGap }}
             spacing={spacing}
           >
-            {data.path ? (
+            {/* {data.path ? (
               <Grid item xs={12} sm={colsPerItem}>
                 <img
                   src={data.path == null ? "" : data.path}
@@ -339,8 +342,8 @@ export const Section = (data: TSection) => {
                   style={{ marginTop: "25px" }} // compensate for markdown
                 />
               </Grid>
-            ) : null}
-            {data.content ? (
+            ) : null} */}
+            {data.text ? (
               <Grid item xs={12} sm={colsPerItem}>
                 <DisplayLinks 
                   horizontalAlign="flex-start" 
@@ -348,7 +351,7 @@ export const Section = (data: TSection) => {
                   textColor={textColor}/>
                 <Typography variant="body1" component="span">
                   <ReactMarkdown plugins={[gfm]} renderers={renderers}>
-                    {data.content}
+                    {data.text}
                   </ReactMarkdown>
                 </Typography>
               </Grid>

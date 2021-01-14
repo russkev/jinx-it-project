@@ -16,10 +16,10 @@ export type TPortfolio = {
 };
 
 export type TPage = {
-  id: number;
+  id: Tuuid;
   name: string;
-  number: number;
-  sections: number[];
+  index: number;
+  sections: TSection[];
 };
 
 export interface TEditPage extends TPage {
@@ -27,31 +27,42 @@ export interface TEditPage extends TPage {
   isNew: boolean;
 }
 
-export type TSectionData = {
+// export type TSectionData = {
+//   name: string;
+//   content: string;
+//   media?: string;
+//   image?: number | null;
+//   path?: string;
+//   alt?: string;
+// };
+
+// export interface TSection extends TSectionData {
+//   id?: number;
+//   type: string;
+//   number: number;
+// }
+
+export type TSection = {
+  id: Tuuid;
   name: string;
-  content: string;
-  media?: string;
-  image?: number | null;
-  path?: string;
-  alt?: string;
-};
-
-export interface TSection extends TSectionData {
-  id?: number;
   type: string;
-  number: number;
-}
-export interface TEditSection extends TSection {
-  uid?: string
-  links: TLink[]
-};
-
-export interface TSendSection extends TSection {
-  links: TSectionLink[]
+  index: number;
+  text?: string;
+  page: Tuuid;
+  links: TLink[];
 }
 
-export interface TEditSections {
-  [pageUid: string]: TEditSection[]
+// export interface TEditSection extends TSection {
+//   uid?: string
+//   links: TLink[]
+// };
+
+// export interface TSendSection extends TSection {
+//   links: TSectionLink[]
+// }
+
+export interface TSections {
+  [pageId: string]: TSection[]
 }
 
 export type TPortfolioData = {

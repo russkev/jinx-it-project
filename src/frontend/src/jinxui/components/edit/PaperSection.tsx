@@ -13,7 +13,7 @@ import {
   usePortfolio,
   useSection,
 } from "jinxui";
-import { TEditSection } from "jinxui/types";
+import { TSection, Tuuid } from "jinxui/types";
 import { InputAdornment } from "@material-ui/core";
 import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -54,8 +54,8 @@ const StyledButton = styled(Button)`
 `;
 
 type TPaperSection = {
-  pageUid: string;
-  section: TEditSection;
+  pageId: Tuuid;
+  section: TSection;
   children: any;
   hideEditButtons?: boolean;
   handleTitleChange: any;
@@ -71,33 +71,33 @@ const PaperSection = (props: TPaperSection) => {
     handleSectionMoveDown,
   } = useSection();
 
-  const index = getFetchedSections(props.pageUid).findIndex(
-    (p: TEditSection) => p.uid === props.section.uid
+  const index = getFetchedSections(props.pageId).findIndex(
+    (p: TSection) => p.id === props.section.id
   );
 
   let deleteDisabled = false;
   let upArrowDisabled = false;
   let downArrowDisabled = false;
-  if (getFetchedSections(props.pageUid).length === 1) {
+  if (getFetchedSections(props.pageId).length === 1) {
     deleteDisabled = true;
   }
   if (index === 0) {
     upArrowDisabled = true;
   }
-  if (index === getFetchedSections(props.pageUid).length - 1) {
+  if (index === getFetchedSections(props.pageId).length - 1) {
     downArrowDisabled = true;
   }
 
   const handleDelete = () => {
-    handleSectionDelete(props.pageUid, index);
+    handleSectionDelete(props.pageId, index);
   };
 
   const handleMoveUp = () => {
-    handleSectionMoveUp(props.pageUid, index);
+    handleSectionMoveUp(props.pageId, index);
   };
 
   const handleMoveDown = () => {
-    handleSectionMoveDown(props.pageUid, index);
+    handleSectionMoveDown(props.pageId, index);
   }
 
   const handleSave = () => {
@@ -108,16 +108,16 @@ const PaperSection = (props: TPaperSection) => {
   }
 
   return (
-    <PaperSectionDiv id={props.section.uid}>
+    <PaperSectionDiv id={props.section.id}>
       <StyledDivOuter>
         <StyledDivLeft>
           {/* Title */}
 
           <TextField
-            name={props.section.uid}
+            name={props.section.id}
             defaultValue={props.section.name}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              props.handleTitleChange(e, props.pageUid, props.section.uid)
+              props.handleTitleChange(e, props.pageId, props.section.id)
             }
             placeholder="Section Title"
             color="secondary"

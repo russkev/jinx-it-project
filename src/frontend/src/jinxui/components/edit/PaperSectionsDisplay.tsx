@@ -17,7 +17,7 @@ import {
   PageEdit,
 } from "jinxui";
 
-import { TEditSection, TEditPage } from "jinxui/types";
+import { TSection, TPage } from "jinxui/types";
 
 const PaperSectionsDisplay = () => {
   const { isSaving } = useUser();
@@ -25,11 +25,8 @@ const PaperSectionsDisplay = () => {
   const { getFetchedPages } = usePage();
   const {
     getFetchedSections,
-    // handleContentChange,
-    // handleTitleChange,
   } = useSection();
 
-  // const pages = getFetchedPages();
   return (
     <>
       <Backdrop open={isSaving()} style={{ zIndex: 2000 }}>
@@ -38,53 +35,51 @@ const PaperSectionsDisplay = () => {
       <PaperSectionPage />
       {getFetchedPages().map(
         // Map over pages
-        (page: TEditPage, index: number) => {
+        (page: TPage, index: number) => {
+          const sections = getFetchedSections(page.id)
             return (
-              <Box key={page.uid}>
+              <Box key={page.id}>
                 <PageEdit pageIndex={index} />
-                { page.sections.length > 0 ? (
-                  getFetchedSections(page.uid).map(
-                  // Map over sections
-                  (section: TEditSection) => {
-                    if (section.type === "skeleton" && section.uid) {
-                      return <SkeletonSectionInput key={section.uid} />;
-                    } else if (section.type === "text" && section.uid) {
-                      return (
-                        <TextSectionInput
-                          key={section.uid}
-                          // handleChange={handleContentChange}
-                          // handleTitleChange={handleTitleChange}
-                          // handlePublish={saveFullPortfolio}
-                          pageUid={page.uid}
-                          section={section}
-                        />
-                      );
-                    } else if (section.type === "image" && section.uid) {
-                      return (
-                        <ImageSectionInput
-                          key={section.uid}
-                          // handleTitleChange={handleTitleChange}
-                          // handlePublish={saveFullPortfolio}
-                          pageUid={page.uid}
-                          section={section}
-                        />
-                      );
-                    } else if (section.type === "image_text" && section.uid) {
-                      return (
-                        <ImageTextSectionInput
-                          key={section.uid}
-                          // handleChange={handleContentChange}
-                          // handleTitleChange={handleTitleChange}
-                          // handlePublish={saveFullPortfolio}
-                          pageUid={page.uid}
-                          section={section}
-                        />
-                      );
-                    } else {
-                      return <> </>;
+                {sections.length > 0 ? (
+                  sections.map(
+                    // Map over sections
+                    (section: TSection) => {
+                      if (section.type === "skeleton" && section.id) {
+                        console.log("SKELETON");
+                        return <SkeletonSectionInput key={section.id} />;
+                      } else if (section.type === "text" && section.id) {
+                        return (
+                          <TextSectionInput
+                            key={section.id}
+                            pageId={page.id}
+                            section={section}
+                          />
+                        );
+                      } else if (section.type === "image" && section.id) {
+                        return (
+                          <ImageSectionInput
+                            key={section.id}
+                            pageId={page.id}
+                            section={section}
+                          />
+                        );
+                      } else if (section.type === "image_text" && section.id) {
+                        return (
+                          <ImageTextSectionInput
+                            key={section.id}
+                            pageId={page.id}
+                            section={section}
+                          />
+                        );
+                      } else {
+                        return <> </>;
+                      }
                     }
-                  }
-                )) : (<> </>)}
+                  )
+                ) : (
+                  <>
+                  </>
+                )}
                 {index === getFetchedPages().length - 1 ? <PageEdit /> : <> </>}
               </Box>
             );

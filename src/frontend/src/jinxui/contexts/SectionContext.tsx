@@ -1,50 +1,46 @@
 import React, { useState } from "react";
-import { TEditSection, TEditSections } from "jinxui/types";
+import { TSection, TSections, Tuuid } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
-export const defaultSectionContext: TEditSection = {
+export const defaultSectionContext: TSection = {
+  id: "0-0-0-0-0",
   name: "",
-  content: "",
-  media: "",
-  image: null,
-  path: "",
-  alt: "",
-  id: 0,
   type: "skeleton",
-  number: 0,
-  uid: uuidv4(),
+  index: 0,
+  text: "",
+  page: "0-0-0-0-0",
   links: [],
 };
 
 
 
 export const SectionContext = React.createContext<
-  [TEditSections, any, any, any]
+  [TSections, any, any, any]
 >([ {}, () => {}, () => {}, () => {}]);
 
 type TSectionContextProvider = {
   children: any;
 };
 export const SectionContextProvider = (props: TSectionContextProvider) => {
-  const [state, setState] = useState<TEditSections>({});
+  const [state, setState] = useState<TSections>({});
 
   const updateState = (
-    pageUid: string,
-    sectionUid: string,
-    fieldsToUpdate: Partial<TEditSection[]>
+    pageId: Tuuid,
+    sectionId: string,
+    fieldsToUpdate: Partial<TSection[]>
   ) => {
-    if (!(pageUid in state)) {
-      throw Error("Sections for page " + pageUid + " not found.")
+    if (!(pageId in state)) {
+      throw Error("Sections for page " + pageId + " not found.")
     }
-    const index = state[pageUid].findIndex(
-      (section: TEditSection) => section.uid === sectionUid
+    const index = state[pageId].findIndex(
+      (section: TSection) => section.id === sectionId
     );
     setState({
       ...state,
-        [pageUid]: [
-          ...state[pageUid].slice(0, index),
-          { ...state[pageUid][index], ...fieldsToUpdate },
-          ...state[pageUid].slice(index + 1)]
+        [pageId]: [
+          ...state[pageId].slice(0, index),
+          { ...state[pageId][index], ...fieldsToUpdate },
+          ...state[pageId].slice(index + 1)]
       });
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IUserContext } from "jinxui";
+import { IUserContext } from "jinxui/types";
 
 const USER_DATA_KEY = "userData";
 

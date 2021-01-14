@@ -13,11 +13,11 @@ import {
   Tuuid
 } from "jinxui/types"
 import API from "../../API";
-import { TPage, TEditPage } from "../types/PortfolioTypes";
+import { TPage, } from "../types/PortfolioTypes";
 import { defaultPageContext } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
-async function putPage(portfolioId: Tuuid, page: TEditPage, config: any) {
+async function putPage(portfolioId: Tuuid, page: TPage, config: any) {
   const path =
     PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" + page.id;
   try {
@@ -28,14 +28,14 @@ async function putPage(portfolioId: Tuuid, page: TEditPage, config: any) {
   }
 }
 
-async function postPage(portfolioId: Tuuid, data: TEditPage, config: any) {
+async function postPage(portfolioId: Tuuid, data: TPage, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
   try {
     const response = await API.post(
       path,
       {
         name: data.name,
-        number: data.number,
+        index: data.index,
         sections: data.sections,
       },
       config
@@ -46,7 +46,7 @@ async function postPage(portfolioId: Tuuid, data: TEditPage, config: any) {
   }
 }
 
-async function deletePage(portfolioId: Tuuid, pageId: number, config: any) {
+async function deletePage(portfolioId: Tuuid, pageId: Tuuid, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" 
     + pageId.toString();
   try {
@@ -59,20 +59,20 @@ async function deletePage(portfolioId: Tuuid, pageId: number, config: any) {
 
 async function putPages(
   portfolioId: Tuuid,
-  pages: TEditPage[],
+  pages: TPage[],
   saveSections: any,
   config: any
 ) {
   const basePath = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
   try {
     // const pagesResult = await Promise.all(
-      // pages.map((page: TEditPage, index: number) => {
-      const pagesResult = pages.map((page: TEditPage, index: number) => {
-        page.number = index;
-        console.assert(page.id > 0);
+      // pages.map((page: TPage, index: number) => {
+      const pagesResult = pages.map((page: TPage, index: number) => {
+        page.index = index;
+        console.assert(page.id != defaultPageContext.id);
         const pagePath = basePath + "/" + page.id;
         return API.put(pagePath, page, config).then((response: any) => {
-          saveSections(portfolioId, response.data.id, page.uid);
+          saveSections(portfolioId, response.data.id, page.id);
         });
       });
     // );
@@ -84,7 +84,7 @@ async function putPages(
 
 async function deleteOldPages(
   portfolioId: Tuuid,
-  pages: TEditPage[],
+  pages: TPage[],
   config: any
 ) {
   try {
@@ -129,12 +129,12 @@ export const usePage = () => {
     saveSections,
   } = useSection();
 
-  function pageIndex(pageUid: string) {
-    const index = state.findIndex((page: TEditPage) => page.uid === pageUid);
+  function pageIndex(pageId: Tuuid) {
+    const index = state.findIndex((page: TPage) => page.id === pageId);
     if (index > -1) {
       return index;
     } else {
-      throw Error("Page with id: " + pageUid + " could not be found.");
+      throw Error("Page with id: " + pageId + " could not be found.");
     }
   }
 
@@ -145,7 +145,7 @@ export const usePage = () => {
         page.uid = uuidv4();
         page.isNew = false;
       }
-      pages.sort((a: TPage, b: TPage) => (a.number > b.number ? 1 : -1));
+      pages.sort((a: TPage, b: TPage) => (a.index > b.index ? 1 : -1));
       await setPages(pages);
       return pages;
     } catch (e) {
@@ -165,16 +165,16 @@ export const usePage = () => {
     return pages
   }
 
-  function getFetchedPageId(uid: string) {
+  function getFetchedPageId(pageId: Tuuid) {
     for (var page of state) {
-      if (page.uid === uid) {
+      if (page.id === pageId) {
         return page.id;
       }
     }
     return "";
   }
 
-  async function setPages(pages: TEditPage[]) {
+  async function setPages(pages: TPage[]) {
     try {
       await setState(pages);
     } catch (e) {
@@ -200,7 +200,7 @@ export const usePage = () => {
     }
     try {
       setState(listDelete(state, index));
-      handleSectionDeletePage(state[index].uid);
+      handleSectionDeletePage(state[index].id);
     } catch (e) {
       throw e;
     }

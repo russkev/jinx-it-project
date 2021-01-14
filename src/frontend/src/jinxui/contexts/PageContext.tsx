@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { TEditPage } from "jinxui/types";
+import { TPage } from "jinxui/types";
 
-export const defaultPageContext: TEditPage = {
-  id: 0,
+export const defaultPageContext: TPage = {
+  id: "0-0-0-0-0",
   name: "Home",
-  number: 0,
+  index: 0,
   sections: [],
-  uid: "",
-  isNew: true,
 };
 
-export const PageContext = React.createContext<[TEditPage[], any, any, any]>([
+export const PageContext = React.createContext<[TPage[], any, any, any]>([
   [],
   () => {},
   () => {},
@@ -21,11 +19,11 @@ type TPageContextProvider = {
   children: any;
 };
 export const PageContextProvider = (props: TPageContextProvider) => {
-  const [state, setState] = useState<TEditPage[]>([]);
+  const [state, setState] = useState<TPage[]>([]);
 
   const updateState = (
     index: number,
-    fieldsToUpdate: Partial<TEditPage[]>
+    fieldsToUpdate: Partial<TPage[]>
   ) => {
     if (index > state.length-1) {
       setState([...state, {...defaultPageContext,...fieldsToUpdate}])

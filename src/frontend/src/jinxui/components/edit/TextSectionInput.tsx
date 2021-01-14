@@ -1,19 +1,19 @@
 import React from "react";
 import { PaperSection, TextFieldSubSection, OneColumnSectionDiv } from "jinxui";
-import { TEditSection } from "jinxui/types";
+import { TSection, Tuuid } from "jinxui/types";
 import { NewSectionMenu, useSection } from "jinxui";
 
 type TTextSectionProps = {
   key: string;
-  pageUid: string,
-  section: TEditSection;
+  pageId: Tuuid,
+  section: TSection;
 };
 
 const TextSectionInput = (props: TTextSectionProps) => {
   const { getFetchedSections, handleTitleChange, handleContentChange } = useSection();
 
-  const index = getFetchedSections(props.pageUid).findIndex(
-    (p: TEditSection) => p.uid === props.section.uid
+  const index = getFetchedSections(props.pageId).findIndex(
+    (p: TSection) => p.id === props.section.id
   );
 
   return (
@@ -22,7 +22,7 @@ const TextSectionInput = (props: TTextSectionProps) => {
 
       {index === 0 && (
         <NewSectionMenu
-          pageUid={props.pageUid}
+          pageId={props.pageId}
           section={props.section}
           placeAbove={true}
         />
@@ -31,13 +31,13 @@ const TextSectionInput = (props: TTextSectionProps) => {
       {/* Main content */}
 
       <PaperSection
-        pageUid={props.pageUid}
+        pageId={props.pageId}
         section={props.section}
         handleTitleChange={handleTitleChange}
       >
         <OneColumnSectionDiv>
           <TextFieldSubSection
-            pageUid={props.pageUid}
+            pageId={props.pageId}
             section={props.section}
             handleChange={handleContentChange}
             rows={15}
@@ -48,7 +48,7 @@ const TextSectionInput = (props: TTextSectionProps) => {
       {/* Add section menu */}
 
       <NewSectionMenu
-        pageUid={props.pageUid}
+        pageId={props.pageId}
         section={props.section}
       />
     </>
