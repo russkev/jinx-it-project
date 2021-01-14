@@ -8,17 +8,17 @@ import {
   listMoveDown,
 } from "jinxui";
 import API from "../../API";
-import { TLink } from "jinxui/types";
+import { TLink, Tuuid } from "jinxui/types";
 
 async function putPortfolioLinks(
-  portfolio_id: number,
+  portfolioId: Tuuid,
   links: TLink[],
   config: any
 ) {
   const path =
     PORTFOLIOS_PATH +
     "/" +
-    portfolio_id.toString() +
+    portfolioId.toString() +
     "/links";
   try {
     const response = await API.put(path, links, config);
@@ -38,9 +38,9 @@ export const useLink = () => {
     return thisLinks.findIndex((p: TLink) => p.id === id);
   }
 
-  async function getPortfolioLinks(portfolio_id: number) {
+  async function getPortfolioLinks(portfolioId: Tuuid) {
     const path =
-      PORTFOLIOS_PATH + "/" + portfolio_id + "/links";
+      PORTFOLIOS_PATH + "/" + portfolioId + "/links";
     const result = API.get(path, getConfig())
       .then((response: any) => {
         let links: TLink[] = [];
@@ -61,9 +61,9 @@ export const useLink = () => {
     return result;
   }
 
-  async function fetchPortfolioLinks(portfolio_id: number) {
+  async function fetchPortfolioLinks(portfolioId: Tuuid) {
     try {
-      setState(await getPortfolioLinks(portfolio_id));
+      setState(await getPortfolioLinks(portfolioId));
     } catch (e) {
       throw e;
     }
@@ -113,10 +113,10 @@ export const useLink = () => {
     return state;
   }
 
-  async function savePortfolioLinks(portfolio_id: number) {
+  async function savePortfolioLinks(portfolioId: Tuuid) {
     try {
       return await putPortfolioLinks(
-        portfolio_id,
+        portfolioId,
         getCleanedPortfolioLinks(),
         getConfig()
       );

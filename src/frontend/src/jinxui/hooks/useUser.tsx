@@ -11,6 +11,10 @@ import {
   PORTFOLIOS_PATH,
 } from "jinxui";
 
+import {
+  Tuuid
+} from "jinxui/types"
+
 /**
  * The 'user' hook
  *
@@ -235,7 +239,7 @@ export const useUser = () => {
   ): Promise<{
     first_name: string;
     last_name: string;
-    primary_portfolio: number;
+    primary_portfolio: Tuuid;
   }> {
     try {
       const response = await API.get(
@@ -259,7 +263,7 @@ export const useUser = () => {
     return result;
   }
 
-  async function setTheme(portfolio_id: number, theme_name: string) {
+  async function setTheme(portfolioId: Tuuid, theme_name: string) {
     async function savePortfolioTheme(theme: string) {
       try {
         await updateState({theme: theme});
@@ -268,7 +272,7 @@ export const useUser = () => {
       }
     }
 
-    const path = PORTFOLIOS_PATH + "/" + portfolio_id;
+    const path = PORTFOLIOS_PATH + "/" + portfolioId;
     API.get(path, state.config)
       .then((response: any) => {
         const result = API.put(

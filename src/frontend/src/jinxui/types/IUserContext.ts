@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from "axios";
+import { Tuuid } from "jinxui/types"
 
 // Type for user context state
 export interface IUserContext {
@@ -9,7 +10,7 @@ export interface IUserContext {
   // Set true when user logged in; set false when token is invalid
   authenticated: boolean;
   lightThemeMode: boolean;
-  portfolioId: number;
+  portfolioId: Tuuid;
   theme: string;
   isSaving: boolean;
   isLoading: boolean;

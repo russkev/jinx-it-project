@@ -4,7 +4,7 @@ import {
 } from "jinxui/types";
 
 export const defaultPortfolioContext: TPortfolio = {
-  id: 0,
+  id: "0-0-0-0-0",
   owner: 0,
   name: "",
   pages: [],

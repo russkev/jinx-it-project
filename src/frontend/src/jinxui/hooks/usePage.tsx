@@ -9,12 +9,15 @@ import {
   listMoveDown,
   listAdd,
 } from "jinxui";
+import {
+  Tuuid
+} from "jinxui/types"
 import API from "../../API";
 import { TPage, TEditPage } from "../types/PortfolioTypes";
 import { defaultPageContext } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
-async function putPage(portfolioId: number, page: TEditPage, config: any) {
+async function putPage(portfolioId: Tuuid, page: TEditPage, config: any) {
   const path =
     PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" + page.id;
   try {
@@ -25,7 +28,7 @@ async function putPage(portfolioId: number, page: TEditPage, config: any) {
   }
 }
 
-async function postPage(portfolioId: number, data: TEditPage, config: any) {
+async function postPage(portfolioId: Tuuid, data: TEditPage, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
   try {
     const response = await API.post(
@@ -43,7 +46,7 @@ async function postPage(portfolioId: number, data: TEditPage, config: any) {
   }
 }
 
-async function deletePage(portfolioId: number, pageId: number, config: any) {
+async function deletePage(portfolioId: Tuuid, pageId: number, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" 
     + pageId.toString();
   try {
@@ -55,7 +58,7 @@ async function deletePage(portfolioId: number, pageId: number, config: any) {
 }
 
 async function putPages(
-  portfolioId: number,
+  portfolioId: Tuuid,
   pages: TEditPage[],
   saveSections: any,
   config: any
@@ -80,7 +83,7 @@ async function putPages(
 }
 
 async function deleteOldPages(
-  portfolioId: number,
+  portfolioId: Tuuid,
   pages: TEditPage[],
   config: any
 ) {
@@ -105,7 +108,7 @@ async function deleteOldPages(
   }
 }
 
-async function getPages(portfolioId: number, config: any) {
+async function getPages(portfolioId: Tuuid, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId + "/pages";
   const result = API.get(path, config)
     .then((response: any) => response.data)
@@ -135,7 +138,7 @@ export const usePage = () => {
     }
   }
 
-  async function fetchPages(portfolioId: number) {
+  async function fetchPages(portfolioId: Tuuid) {
     try {
       const pages = await getPages(portfolioId, getConfig());
       for (var page of pages) {
@@ -179,7 +182,7 @@ export const usePage = () => {
     }
   }
 
-  async function savePage(isNew: boolean, portfolioId: number, index: number) {
+  async function savePage(isNew: boolean, portfolioId: Tuuid, index: number) {
     try {
       return isNew
         ? await postPage(portfolioId, state[index], getConfig())
@@ -189,7 +192,7 @@ export const usePage = () => {
     }
   }
 
-  async function handlePageDelete(portfolioId: number, index: number) {
+  async function handlePageDelete(portfolioId: Tuuid, index: number) {
     try {
       await deletePage(portfolioId, state[index].id, getConfig())
     } catch (e) {
@@ -203,7 +206,7 @@ export const usePage = () => {
     }
   }
 
-  async function handlePageAdd(portfolioId: number, index: number, ) {
+  async function handlePageAdd(portfolioId: Tuuid, index: number, ) {
     const newPage = JSON.parse(JSON.stringify(defaultPageContext));
     const postedPage = await postPage(portfolioId, newPage, getConfig());
     postedPage.uid = uuidv4();

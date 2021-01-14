@@ -10,16 +10,17 @@ import {
   PORTFOLIOS_PATH,
 } from "jinxui";
 import API from "../../API";
-import { TPortfolio, TPortfolioData, TEditPage, TEditSections, TEditSection } from "../types/PortfolioTypes";
+import { TPortfolio, TPortfolioData, TEditPage, TEditSections, TEditSection, Tuuid } from "jinxui/types";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { defaultPortfolioContext } from "jinxui/contexts";
 
 async function changePortfolioPrivacy(
-  portfolio_id: number,
+  portfolioId: Tuuid,
   privacy: boolean,
   config: any,
   updateState: any
 ) {
-  const path = PORTFOLIOS_PATH + "/" + portfolio_id;
+  const path = PORTFOLIOS_PATH + "/" + portfolioId;
   const outerResult = API.get(path, config)
     .then((response: any) => {
       const result = API.put(
@@ -57,8 +58,8 @@ async function getPortfolios(config: any) {
 }
 
 // Use this if you want to get a specific portfolio
-async function getPortfolio(portfolio_id: number, config: any) {
-  const path = PORTFOLIOS_PATH + "/" + portfolio_id.toString();
+async function getPortfolio(portfolioId: Tuuid, config: any) {
+  const path = PORTFOLIOS_PATH + "/" + portfolioId.toString();
   const result = API.get(path, config)
     .then((response: any) => response.data)
     .catch((error: any) => {
@@ -116,9 +117,9 @@ export const usePortfolio = () => {
 
   const PORTFOLIOS_PATH = "api/portfolios";
 
-  async function fetchPortfolio(id: number) {
+  async function fetchPortfolio(portfolioId: Tuuid) {
     try {
-      const portfolioDetails: TPortfolio = await getPortfolio(id, getConfig());
+      const portfolioDetails: TPortfolio = await getPortfolio(portfolioId, getConfig());
       await updateState(portfolioDetails);
 
       return portfolioDetails;
@@ -140,23 +141,23 @@ export const usePortfolio = () => {
       // eslint-disable-next-line
       const [_, pages] = await Promise.all([
         fetchPortfolio(portfolioId),
-        fetchPages(portfolioId),
+        // fetchPages(portfolioId),
       ]);
-      if (pages.length < 1) {
-        throw Error("No pages found for portfolio");
-      }
+      // if (pages.length < 1) {
+      //   throw Error("No pages found for portfolio");
+      // }
 
-      await Promise.all([
-        fetchSectionsAll(portfolioId, pages),
-        fetchPortfolioLinks(portfolioId),
-      ]);
+      // await Promise.all([
+      //   fetchSectionsAll(portfolioId, pages),
+      //   fetchPortfolioLinks(portfolioId),
+      // ]);
     } catch (e) {
       throw e;
     }
   }
 
   function portfolioIsFetched() {
-    return state.id > 0;
+    return state.id != defaultPortfolioContext.id;
   }
 
   function getFetchedPortfolio() {
@@ -175,7 +176,7 @@ export const usePortfolio = () => {
     return state.private;
   }
 
-  async function setPortfolioTheme(portfolio_id: number, theme_name: string) {
+  async function setPortfolioTheme(portfolioId: Tuuid, theme_name: string) {
     async function savePortfolioTheme(theme: string) {
       try {
         await updateState({
@@ -187,7 +188,7 @@ export const usePortfolio = () => {
       }
     }
 
-    const path = PORTFOLIOS_PATH + "/" + portfolio_id;
+    const path = PORTFOLIOS_PATH + "/" + portfolioId;
     API.get(path, getConfig())
       .then((response: any) => {
         const result = API.put(
@@ -258,18 +259,18 @@ export const usePortfolio = () => {
     }
   }
 
-  async function makePortfolioPublic(portfolio_id: number) {
+  async function makePortfolioPublic(portfolioId: Tuuid) {
     return await changePortfolioPrivacy(
-      portfolio_id,
+      portfolioId,
       false,
       getConfig(),
       updateState
     );
   }
 
-  async function makePortfolioPrivate(portfolio_id: number) {
+  async function makePortfolioPrivate(portfolioId: Tuuid) {
     return await changePortfolioPrivacy(
-      portfolio_id,
+      portfolioId,
       true,
       getConfig(),
       updateState

@@ -2,17 +2,18 @@
    with variables and components. Should be OK to not do this for prop 
    types defined within your file */
 
-import { boolean } from "yup";
+// export type Tuuid = `${string}-${string}-${string}-${string}-${string}`
+export type Tuuid = string
 
 export type TPortfolio = {
-  id: number;
+  id: Tuuid;
   owner: number;
   name: string;
   pages: number[];
   private: boolean;
   theme: string;
   background: string;
-};// | null;
+};
 
 export type TPage = {
   id: number;

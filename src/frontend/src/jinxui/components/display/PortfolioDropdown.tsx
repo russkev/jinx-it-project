@@ -31,6 +31,10 @@ import {
   SnackbarAlert,
 } from "jinxui";
 
+import {
+  Tuuid
+} from "jinxui/types";
+
 const DivWrapper = styled.div`
   height: 100%;
 `;

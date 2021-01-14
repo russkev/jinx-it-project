@@ -11,6 +11,7 @@ export type {
   TLink,
   TPageLink,
   TSectionLink,
+  Tuuid,
 } from "./PortfolioTypes";
 
 export type {
