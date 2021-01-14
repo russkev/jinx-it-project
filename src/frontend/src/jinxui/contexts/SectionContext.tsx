@@ -14,8 +14,8 @@ export const defaultSectionContext: TSection = {
 
 
 
-export const SectionContext = React.createContext<[TSection, any, any, any]>([
-  defaultSectionContext, 
+export const SectionContext = React.createContext<[TSection[], any, any, any]>([
+  [], 
   () => {}, 
   () => {},
   () => {}
@@ -25,7 +25,7 @@ type TSectionContextProvider = {
   children: any;
 };
 export const SectionContextProvider = (props: TSectionContextProvider) => {
-  const [state, setState] = useState<TSection>(defaultSectionContext);
+  const [state, setState] = useState<TSection[]>([]);
 
   const updateState = (
     pageId: Tuuid,
@@ -46,19 +46,19 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
     //       { ...state[pageId][index], ...fieldsToUpdate },
     //       ...state[pageId].slice(index + 1)]
     //   });
-    var newState = state;
-    newState.text = fieldsToUpdate?.text
-    setState(newState)
-    // setState([
-    //   // ...state.slice(0, index),
-    //   {...state[index], ...fieldsToUpdate},
-    //   // ...state.slice(index + 1)
-    // ])
+    // var newState = state;
+    // newState.text = fieldsToUpdate?.text
+    // setState(newState)
+    setState([
+      // ...state.slice(0, index),
+      {...state[index], ...fieldsToUpdate},
+      // ...state.slice(index + 1)
+    ])
   };
 
   const resetState = () => {
     // setState([]);
-    setState(defaultSectionContext)
+    setState([])
   };
 
   return (

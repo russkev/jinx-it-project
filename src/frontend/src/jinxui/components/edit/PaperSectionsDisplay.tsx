@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -24,18 +24,15 @@ const PaperSectionsDisplay = () => {
   const { isSaving } = useUser();
   const { saveFullPortfolio } = usePortfolio();
   const { getFetchedPages } = usePage();
-  const {
-    getFetchedSections,
-  } = useSection();
+  const { getFetchedSections } = useSection();
 
-  const [section, setSection] = useState<TSection>(defaultSectionContext);
+  // const [section, setSection] = useState<TSection>(defaultSectionContext);
 
-  const masterState = getFetchedSections('0-0-0-0-0');
+  const sections = getFetchedSections("0-0-0-0-0");
 
-  useEffect(() => {
-    setSection(masterState)
-  }, [masterState])
-
+  // useEffect(() => {
+  //   setSection(masterState)
+  // }, [masterState])
 
   // return (
   //   <>
@@ -113,11 +110,16 @@ const PaperSectionsDisplay = () => {
           return (
             <Box key={page.id}>
               <PageEdit pageIndex={index} />
-              <TextSectionInput
-                key={section.id}
-                pageId={page.id}
-                section={section}
-              />
+              {sections.map((section: TSection) => {
+                return (
+                  <TextSectionInput
+                    key={section.id}
+                    pageId={page.id}
+                    section={section}
+                  />
+                );
+              })}
+
               <SkeletonSectionInput />
             </Box>
           );

@@ -295,8 +295,9 @@ export const useSection = () => {
   }
 
   function getFetchedSectionLinks(pageId: Tuuid, uuid_index: Tuuid) {
-    const fetchedSection = getFetchedSection(pageId, uuid_index);
-    return fetchedSection.links;
+    // const fetchedSection = getFetchedSection(pageId, uuid_index);
+    // return fetchedSection.links;
+    return []
   }
 
   function getFetchedSectionLinksFromId(pageId: Tuuid, id: Tuuid) {
