@@ -23,7 +23,7 @@ type TNewSectionMenu = {
 
 const NewSectionMenu = (props: TNewSectionMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { getFetchedSections, handleSectionChange } = useSection();
+  const { getFetchedSections } = useSection();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);

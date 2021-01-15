@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -65,31 +65,40 @@ const PaperSection = (props: TPaperSection) => {
   const { isSaving } = useUser();
   const { saveFullPortfolio } = usePortfolio();
   const {
-    registerSection,
     getFetchedSections,
     handleSectionDelete,
     handleSectionMoveUp,
     handleSectionMoveDown,
+    onSectionChange,
+    sectionIndex,
   } = useSection();
+  const [localTitle, setLocalTitle] = useState<string>(props.section.name)
 
+  const onTitleChange = (event: any) => {
+    let newTitle = event.target.value;
+    setLocalTitle(() => {
+      onSectionChange(props.pageId, props.section.id, {name: newTitle})
+      return newTitle
+    })
+  }
 
-  const index = getFetchedSections(props.pageId).findIndex(
-    (p: TSection) => p.id === props.section.id
-  );
-  // const index = 0;
+  // const index = getFetchedSections(props.pageId).findIndex(
+  //   (p: TSection) => p.id === props.section.id
+  // );
+  const index = sectionIndex(props.pageId, props.section.id)
 
   let deleteDisabled = false;
   let upArrowDisabled = false;
   let downArrowDisabled = false;
-  // if (getFetchedSections(props.pageId).length === 1) {
-  //   deleteDisabled = true;
-  // }
-  // if (index === 0) {
-  //   upArrowDisabled = true;
-  // }
-  // if (index === getFetchedSections(props.pageId).length - 1) {
-  //   downArrowDisabled = true;
-  // }
+  if (getFetchedSections(props.pageId).length === 1) {
+    deleteDisabled = true;
+  }
+  if (index === 0) {
+    upArrowDisabled = true;
+  }
+  if (index === getFetchedSections(props.pageId).length - 1) {
+    downArrowDisabled = true;
+  }
 
   const handleDelete = () => {
     handleSectionDelete(props.pageId, index);
@@ -118,10 +127,8 @@ const PaperSection = (props: TPaperSection) => {
 
           <TextField
             name={props.section.id}
-            defaultValue={props.section.name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              props.handleTitleChange(e, props.pageId, props.section.id)
-            }
+            onChange={onTitleChange}
+            value={localTitle}
             placeholder="Section Title"
             color="secondary"
             InputProps={{

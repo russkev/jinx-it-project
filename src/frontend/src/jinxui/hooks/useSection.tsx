@@ -19,7 +19,7 @@ import {
   TLink,
   Tuuid,
 } from "../types/PortfolioTypes";
-import { defaultSectionContext } from "jinxui/contexts";
+import { defaultSectionContext, defaultPageContext } from "jinxui/contexts";
 
 const sectionIsNotBlank = (section: TSection) => {
   if (section.type === "text") {
@@ -109,23 +109,10 @@ export const useSection = () => {
     setState(result);
   }
 
-  function registerSection(section: any) {
-    // setUpdatedSections([...updatedSections, section])
-    setUpdatedSections(section);
-  }
-
-  function syncSections() {
-    // Potential solution here:
-    // https://www.smashingmagazine.com/2020/11/react-useref-hook/
-
-    console.log(state);
-    // for (var updated of updatedSections) {
-    //   // updated()
-    //   console.log(updated)
-    // }
-  }
-
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
+    if ((sectionId = defaultSectionContext.id)) {
+      return 0;
+    }
     const index = state[pageId].findIndex(
       (section: TSection) => section.id === sectionId
     );
@@ -136,35 +123,22 @@ export const useSection = () => {
     }
   }
 
-  function sectionIndexFromId(pageId: Tuuid, sectionId: Tuuid) {
-    // const index = state.findIndex(
-    //   (section: TSection) => section.id === sectionId
-    // );
-    // if (index > -1) {
-    //   return index;
-    // } else {
-    //   throw Error("Section with id: " + sectionId + " could not be found.");
-    // }
-    return 0;
-  }
-
   const getFetchedSection = (pageId: Tuuid, sectionId: Tuuid) => {
-    // try {
-    //   return state[sectionIndex(pageId, sectionId)];
-    // } catch (e) {
-    //   throw e;
-    // }
-    return state;
+    try {
+      return state[pageId][sectionIndex(pageId, sectionId)];
+    } catch (e) {
+      throw Error("Section with id: " + sectionId + " could not be found.");
+    }
   };
 
   function getFetchedSections(pageId: Tuuid) {
-    // return isLoading() ? [defaultSectionContext] : state;
-    console.log(state);
-    return state[pageId];
+    return isLoading() ? [defaultSectionContext] : state[pageId];
   }
 
   function getFetchedSectionsAll() {
-    return isLoading() ? { 1: [defaultSectionContext] } : state;
+    return isLoading()
+      ? { [defaultPageContext.id]: [defaultSectionContext] }
+      : state;
   }
 
   function getSectionsIndexedCopyAll() {
@@ -185,29 +159,22 @@ export const useSection = () => {
     }
   }
 
-  // async function setPageSections(pageId: Tuuid, sections: TSection[]) {
-  //   try {
-  //     await setState({...state, [pageId]: sections })
-  //   } catch(e) {
-  //     console.log(e)
-  //     throw e;
-  //   }
-  // }
-  // function setPageSections(pageId: Tuuid, sections: TSection[]) {
-  //   try {
-  //     setState({ ...state, [pageId]: sections });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  function setPageSections(pageId: Tuuid, sections: TSection[]) {
+    try {
+      setState({ ...state, [pageId]: sections });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const onSectionChange = (
     pageId: Tuuid,
     sectionId: Tuuid,
     fieldsToUpdate: Partial<TSection>
   ) => {
     const index = sectionIndex(pageId, sectionId);
-    const section:TSection = {...state[pageId][index], ...fieldsToUpdate};
-    state[pageId][index] = section
+    const section: TSection = { ...state[pageId][index], ...fieldsToUpdate };
+    state[pageId][index] = section;
   };
   // /**
   //  * Prepare section data for sending to backend.
@@ -244,66 +211,66 @@ export const useSection = () => {
     updateState(pageId, index, { name: e.target.value });
   };
 
-  function handleSectionChange(
-    pageId: Tuuid,
-    targetIndex: number,
-    newSection: TSection
-  ) {
-    // try {
-    //   setState({
-    //     ...state,
-    //     [pageId]: listAdd(state, targetIndex, newSection),
-    //   });
-    // } catch (e) {
-    //   throw e;
-    // }
-  }
+  // function handleSectionChange(
+  //   pageId: Tuuid,
+  //   targetIndex: number,
+  //   newSection: TSection
+  // ) {
+  //   // try {
+  //   //   setState({
+  //   //     ...state,
+  //   //     [pageId]: listAdd(state, targetIndex, newSection),
+  //   //   });
+  //   // } catch (e) {
+  //   //   throw e;
+  //   // }
+  // }
 
   function handleSectionAddPage(pageId: Tuuid) {
-    // if (pageId in state) {
-    //   throw Error("Tried to add new page with an existing page ID");
-    // } else {
-    //   setState({ ...state, [pageId]: [] });
-    // }
+    if (pageId in state) {
+      throw Error("Tried to add new page with an existing page ID");
+    } else {
+      setState({ ...state, [pageId]: [] });
+    }
   }
 
   function handleSectionDelete(pageId: Tuuid, targetIndex: number) {
-    // try {
-    //   setState({
-    //     ...state,
-    //     [pageId]: listDelete(state, targetIndex),
-    //   });
-    // } catch (e) {
-    //   throw e;
-    // }
+    try {
+      setState({
+        ...state,
+        [pageId]: listDelete(state[pageId], targetIndex),
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   function handleSectionDeletePage(pageId: Tuuid) {
-    // delete state;
+    delete state[pageId];
   }
 
   function handleSectionMoveUp(pageId: Tuuid, targetIndex: number) {
     try {
-      // setState({
-      //   ...state,
-      //   [pageId]: listMoveUp(state, targetIndex),
-      // });
-      const newState = listMoveUp(state[pageId], targetIndex);
-      setState(newState);
+      // const newState = listMoveUp(state[pageId], targetIndex);
+      // setState(newState);
+      setState({
+        ...state,
+        [pageId]: listMoveUp(state[pageId], targetIndex),
+      });
     } catch (e) {
       throw e;
     }
   }
 
   function handleSectionMoveDown(pageId: Tuuid, targetIndex: number) {
-    // try {
-    //   setState({
-    //     ...state,
-    //     [pageId]: listMoveDown(state, targetIndex),
-    //   });
-    // } catch (e) {
-    //   throw e;
-    // }
+    try {
+      setState({
+        ...state,
+        [pageId]: listMoveDown(state[pageId], targetIndex),
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   async function saveSections(portfolioId: Tuuid, pageId: Tuuid) {
@@ -401,8 +368,6 @@ export const useSection = () => {
   }
 
   return {
-    registerSection,
-    syncSections,
     sectionIndex,
     fetchSectionsAll,
     getFetchedSection,
@@ -411,10 +376,10 @@ export const useSection = () => {
     getSectionsIndexedCopyAll,
     setSections,
     onSectionChange,
-    // setPageSections,
+    setPageSections,
     handleContentChange,
     handleTitleChange,
-    handleSectionChange,
+    // handleSectionChange,
     handleSectionAddPage,
     handleSectionDelete,
     handleSectionDeletePage,
