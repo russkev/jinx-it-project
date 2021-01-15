@@ -110,7 +110,7 @@ export const useSection = () => {
   }
 
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
-    if ((sectionId = defaultSectionContext.id)) {
+    if ((sectionId === defaultSectionContext.id)) {
       return 0;
     }
     const index = state[pageId].findIndex(
@@ -211,20 +211,20 @@ export const useSection = () => {
     updateState(pageId, index, { name: e.target.value });
   };
 
-  // function handleSectionChange(
-  //   pageId: Tuuid,
-  //   targetIndex: number,
-  //   newSection: TSection
-  // ) {
-  //   // try {
-  //   //   setState({
-  //   //     ...state,
-  //   //     [pageId]: listAdd(state, targetIndex, newSection),
-  //   //   });
-  //   // } catch (e) {
-  //   //   throw e;
-  //   // }
-  // }
+  function handleSectionChange(
+    pageId: Tuuid,
+    targetIndex: number,
+    newSection: TSection
+  ) {
+    try {
+      setState({
+        ...state,
+        [pageId]: listAdd(state[pageId], targetIndex, newSection),
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
 
   function handleSectionAddPage(pageId: Tuuid) {
     if (pageId in state) {
@@ -367,6 +367,10 @@ export const useSection = () => {
     resetState();
   }
 
+  function logState() {
+    console.log(state)
+  }
+
   return {
     sectionIndex,
     fetchSectionsAll,
@@ -379,7 +383,7 @@ export const useSection = () => {
     setPageSections,
     handleContentChange,
     handleTitleChange,
-    // handleSectionChange,
+    handleSectionChange,
     handleSectionAddPage,
     handleSectionDelete,
     handleSectionDeletePage,
@@ -394,5 +398,6 @@ export const useSection = () => {
     handleSectionLinkMoveUp,
     handleSectionLinkMoveDown,
     resetSections,
+    logState,
   };
 };

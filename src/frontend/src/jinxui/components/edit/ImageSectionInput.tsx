@@ -14,7 +14,7 @@ type TImageSection = {
   section: TSection;
 };
 const ImageSectionInput = (props: TImageSection) => {
-  const { sectionIndex, handleTitleChange } = useSection();
+  const { sectionIndex } = useSection();
   const index = props.section.id 
     ? sectionIndex(props.pageId, props.section.id)
     : 0
@@ -31,7 +31,6 @@ const ImageSectionInput = (props: TImageSection) => {
       <PaperSection
         pageId={props.pageId}
         section={props.section}
-        handleTitleChange={handleTitleChange}
       >
         <OneColumnSectionDiv>
           <UploadImageSubSection section={props.section} />

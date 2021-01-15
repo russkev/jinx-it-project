@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Box } from "@material-ui/core";
+import { TextField, Box, Button } from "@material-ui/core";
 import { useSection, LinksDisplay, LinkDialog } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
+import { cpuUsage } from "process";
 
 
 type TTextFieldSubSection = {
@@ -20,6 +21,7 @@ type TTextFieldSubSection = {
 const TextFieldSubSection = (props: TTextFieldSubSection) => {
   const {
     onSectionChange,
+    logState,
   } = useSection();
   const [localText, setLocalText] = useState<string>(
     props.section.text ? props.section.text : ""
@@ -29,9 +31,14 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
     let newValue = event.target.value;
     setLocalText(() => {
       onSectionChange(props.pageId, props.section.id, {text: newValue})
+      console.log(props.section.id)
       return newValue
     });
   };
+
+  useEffect(() => {
+    console.log(props.section)
+  }, [props.section])
 
   return (
     <Box>
@@ -43,6 +50,7 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
       >
         <LinksDisplay sectionUid={props.section.id} pageUid={props.pageId} />
         <LinkDialog sectionUid={props.section.id} pageUid={props.pageId} />
+        <Button onClick={logState}>Log State</Button>
       </Box>
       <TextField
         name={props.section.id}

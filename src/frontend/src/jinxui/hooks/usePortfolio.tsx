@@ -277,18 +277,16 @@ export const usePortfolio = () => {
     setSaving(true);
     if (state) {
       try {
-        const portfolioResponse = await savePortfolio(isNew);
+        await savePortfolio(isNew);
         const pages = getPagesIndexedCopy()
         const allSections = getSectionsIndexedCopyAll();
-        for(var page of pages) {
-          page.sections = allSections[page.uid]
+
+        for(var [index, page] of pages.entries()){
+          page.sections = allSections[page.id];
+          page.index = index;
+          const path = PORTFOLIOS_PATH + "/pages/" + page.id;
+          await API.put(path, page, getConfig());
         }
-
-        const singlePage = pages[0]
-        const path = PORTFOLIOS_PATH + "/" + portfolioResponse.data.id + "/pages"
-        const pagePath = path + "/" + singlePage.id
-
-        await API.patch(pagePath, singlePage, getConfig())
 
         await setSuccessMessage("Portfolio saved");
       } catch (e) {

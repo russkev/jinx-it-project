@@ -58,7 +58,6 @@ type TPaperSection = {
   section: TSection;
   children: any;
   hideEditButtons?: boolean;
-  handleTitleChange: any;
 };
 
 const PaperSection = (props: TPaperSection) => {
@@ -82,9 +81,6 @@ const PaperSection = (props: TPaperSection) => {
     })
   }
 
-  // const index = getFetchedSections(props.pageId).findIndex(
-  //   (p: TSection) => p.id === props.section.id
-  // );
   const index = sectionIndex(props.pageId, props.section.id)
 
   let deleteDisabled = false;

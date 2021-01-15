@@ -9,7 +9,9 @@ import SubjectSharp from "@material-ui/icons/SubjectSharp";
 import InsertPhotoSharp from "@material-ui/icons/InsertPhotoSharp";
 import VerticalSplitSharp from "@material-ui/icons/VerticalSplitSharp";
 
-import { PrimaryMenu, useSection, defaultPortfolioContext } from "jinxui";
+import { v4 as uuidv4 } from "uuid"
+
+import { PrimaryMenu, useSection, defaultSectionContext } from "jinxui";
 
 import { TSection, Tuuid } from "jinxui/types";
 
@@ -23,7 +25,7 @@ type TNewSectionMenu = {
 
 const NewSectionMenu = (props: TNewSectionMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { getFetchedSections } = useSection();
+  const { handleSectionChange, sectionIndex } = useSection();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -46,18 +48,18 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
   };
 
   const addSection = (section_type: string) => {
-    // setAnchorEl(null);
+    setAnchorEl(null);
 
-    // const index = getFetchedSections(props.pageId).findIndex(
-    //   (p: TSection) => p.id === props.section.uid
-    // );
+    const index = sectionIndex(props.pageId, props.section.id)
 
-    // const target_index = props.placeAbove ? index : index + 1;
-    // // const newSection = DefaultSectionData();
-    // const newSection:TSection = JSON.parse(JSON.stringify(defaultPortfolioContext))
-    // newSection.type = section_type;
+    const target_index = props.placeAbove ? index : index + 1;
+    // const newSection = DefaultSectionData();
+    const newSection:TSection = JSON.parse(JSON.stringify(defaultSectionContext))
+    newSection.type = section_type;
+    newSection.id = uuidv4();
+    newSection.page = props.pageId;
 
-    // handleSectionChange(props.pageId, target_index, newSection);
+    handleSectionChange(props.pageId, target_index, newSection);
   };
 
   return (
