@@ -107,23 +107,25 @@ const PaperSectionsDisplay = () => {
         // Map over pages
         (page: TPage, index: number) => {
           // const section = getFetchedSections(page.id);
-          const sections=getFetchedSections(page.id)
-          return (
-            <Box key={page.id}>
-              <PageEdit pageIndex={index} />
-              {sections.map((section: TSection) => {
-                return (
-                  <TextSectionInput
-                    key={section.id}
-                    pageId={page.id}
-                    section={section}
-                  />
-                );
-              })}
+          const sections = getFetchedSections(page.id);
+          if (sections) {
+            return (
+              <Box key={page.id}>
+                <PageEdit pageIndex={index} />
+                {sections.map((section: TSection) => {
+                  return (
+                    <TextSectionInput
+                      key={section.id}
+                      pageId={page.id}
+                      section={section}
+                    />
+                  );
+                })}
 
-              <SkeletonSectionInput />
-            </Box>
-          );
+                <SkeletonSectionInput />
+              </Box>
+            );
+          }
         }
       )}
     </>

@@ -122,7 +122,6 @@ export const usePortfolio = () => {
     resetSections, 
     getFetchedSectionsAll, 
     getSectionsIndexedCopyAll, 
-    setPageSections,
     setSections, 
   } = useSection();
   const { 

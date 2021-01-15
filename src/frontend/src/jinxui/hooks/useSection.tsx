@@ -101,8 +101,8 @@ export const useSection = () => {
   const [state, updateState, setState, resetState] = useContext(SectionContext);
   const { getConfig, isLoading } = useUser();
   const { linkIndex } = useLink();
-  const [updatedSections, setUpdatedSections] = useState<any>([])
-  const [toSend, setToSend] = useState<any[]>([])
+  const [updatedSections, setUpdatedSections] = useState<any>([]);
+  const [toSend, setToSend] = useState<any[]>([]);
 
   async function fetchSectionsAll(portfolioId: number, pages: TEditPage[]) {
     const result = await getSectionsAll(portfolioId, pages, getConfig());
@@ -111,15 +111,14 @@ export const useSection = () => {
 
   function registerSection(section: any) {
     // setUpdatedSections([...updatedSections, section])
-    setUpdatedSections(section)
+    setUpdatedSections(section);
   }
 
   function syncSections() {
     // Potential solution here:
     // https://www.smashingmagazine.com/2020/11/react-useref-hook/
 
-    
-    console.log(state)
+    console.log(state);
     // for (var updated of updatedSections) {
     //   // updated()
     //   console.log(updated)
@@ -127,15 +126,14 @@ export const useSection = () => {
   }
 
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
-    // const index = state.findIndex(
-    //   (section: TSection) => section.id === sectionId
-    // );
-    // if (index > -1) {
-    //   return index;
-    // } else {
-    //   throw Error("Section with id: " + sectionId + " could not be found.");
-    // }
-    return 0
+    const index = state[pageId].findIndex(
+      (section: TSection) => section.id === sectionId
+    );
+    if (index > -1) {
+      return index;
+    } else {
+      throw Error("Section with id: " + sectionId + " could not be found.");
+    }
   }
 
   function sectionIndexFromId(pageId: Tuuid, sectionId: Tuuid) {
@@ -147,7 +145,7 @@ export const useSection = () => {
     // } else {
     //   throw Error("Section with id: " + sectionId + " could not be found.");
     // }
-    return 0
+    return 0;
   }
 
   const getFetchedSection = (pageId: Tuuid, sectionId: Tuuid) => {
@@ -156,13 +154,13 @@ export const useSection = () => {
     // } catch (e) {
     //   throw e;
     // }
-    return state
+    return state;
   };
 
   function getFetchedSections(pageId: Tuuid) {
     // return isLoading() ? [defaultSectionContext] : state;
-    console.log(state)
-    return state[pageId]
+    console.log(state);
+    return state[pageId];
   }
 
   function getFetchedSectionsAll() {
@@ -195,13 +193,22 @@ export const useSection = () => {
   //     throw e;
   //   }
   // }
-  function setPageSections(pageId: Tuuid, sections: TSection[]) {
-    try {
-      setState({ ...state, [pageId]: sections });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // function setPageSections(pageId: Tuuid, sections: TSection[]) {
+  //   try {
+  //     setState({ ...state, [pageId]: sections });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  const onSectionChange = (
+    pageId: Tuuid,
+    sectionId: Tuuid,
+    fieldsToUpdate: Partial<TSection>
+  ) => {
+    const index = sectionIndex(pageId, sectionId);
+    const section:TSection = {...state[pageId][index], ...fieldsToUpdate};
+    state[pageId][index] = section
+  };
   // /**
   //  * Prepare section data for sending to backend.
   //  * 1. Remove unique identifiers
@@ -226,7 +233,7 @@ export const useSection = () => {
     index: number
   ) => {
     // updateState(pageId, index, { content: event.target.value });
-    updateState(pageId, index, {text: text})
+    updateState(pageId, index, { text: text });
   };
 
   const handleTitleChange = (
@@ -281,8 +288,8 @@ export const useSection = () => {
       //   ...state,
       //   [pageId]: listMoveUp(state, targetIndex),
       // });
-      const newState = listMoveUp(state[pageId], targetIndex)
-      setState(newState)
+      const newState = listMoveUp(state[pageId], targetIndex);
+      setState(newState);
     } catch (e) {
       throw e;
     }
@@ -308,18 +315,14 @@ export const useSection = () => {
     // }
   }
 
-  function updateSectionLinks(
-    pageId: Tuuid,
-    index: number,
-    links: TLink[]
-  ) {
+  function updateSectionLinks(pageId: Tuuid, index: number, links: TLink[]) {
     updateState(pageId, index, { links: links });
   }
 
   function getFetchedSectionLinks(pageId: Tuuid, uuid_index: Tuuid) {
     // const fetchedSection = getFetchedSection(pageId, uuid_index);
     // return fetchedSection.links;
-    return []
+    return [];
   }
 
   function getFetchedSectionLinksFromId(pageId: Tuuid, id: Tuuid) {
@@ -329,7 +332,7 @@ export const useSection = () => {
     // } catch (e) {
     //   throw e;
     // }
-    return state
+    return state;
   }
 
   function sectionLinkAdd(pageId: Tuuid, uuid_index: string, link: TLink) {
@@ -407,7 +410,8 @@ export const useSection = () => {
     getFetchedSectionsAll,
     getSectionsIndexedCopyAll,
     setSections,
-    setPageSections,
+    onSectionChange,
+    // setPageSections,
     handleContentChange,
     handleTitleChange,
     handleSectionChange,

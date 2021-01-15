@@ -25,13 +25,14 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
     syncSections,
     setSections,
     getFetchedSection,
+    onSectionChange,
   } = useSection();
   const [content, setContent] = useState("");
   // const [localText, setLocalText] = useState<string>("");
-  const [localSection, setLocalSection] = useState<TSection>(
-    props.section
+  const [localSection, setLocalSection] = useState<TSection>(props.section);
+  const [localText, setLocalText] = useState<string>(
+    props.section.text ? props.section.text : ""
   );
-  const [localText, setLocalText] = useState<string>("");
 
   // useEffect(() => {
   //   // if (props.section.text){
@@ -67,15 +68,17 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
 
   const onChange = (event: any) => {
     let newValue = event.target.value;
-    setLocalSection((prevState) => {
-      let newSection = { ...prevState, text: newValue };
-      const currSections = getFetchedSection("asdfas", "asdasd");
-      // setSections([
-      //   newSection,
-      //   ...currSections.slice(1),
-      // ]);
-      currSections[props.pageId][0] = newSection
-      return newSection
+    setLocalText(() => {
+      onSectionChange(props.pageId, props.section.id, {text: newValue})
+      return newValue
+      // let newSection = { ...prevState, text: newValue };
+      // const currSections = getFetchedSection("asdfas", "asdasd");
+      // // setSections([
+      // //   newSection,
+      // //   ...currSections.slice(1),
+      // // ]);
+      // currSections[props.pageId][0] = newSection;
+      // return newSection;
     });
   };
 
@@ -119,7 +122,7 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
         //   // setContent(e.target.value)
         // }}
         onChange={onChange}
-        value={localSection.text}
+        value={localText}
         id="standard-full-width"
         style={{ margin: 0, marginBottom: 15 }}
         fullWidth
