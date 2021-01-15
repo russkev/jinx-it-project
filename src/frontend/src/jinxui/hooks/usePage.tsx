@@ -209,14 +209,30 @@ export const usePage = () => {
     }
   }
 
-  async function handlePageDelete(portfolioId: Tuuid, index: number) {
-    try {
-      await deletePage(portfolioId, state[index].id, getConfig())
-    } catch (e) {
-      throw e;
+  // Delete pages marked for deletion from server
+  async function commitPageDeletions() {
+    for (var page of state) {
+      if (page.toDelete && !page.isNew) {
+        const path = PORTFOLIOS_PATH + "/pages/" + page.id
+        try {
+          await API.delete(path, getConfig())
+        } catch (e) {
+          throw e
+        }
+      }
     }
+  }
+
+  // Mark pages for deletion from server
+  async function handlePageDelete(portfolioId: Tuuid, index: number) {
+    // try {
+    //   await deletePage(portfolioId, state[index].id, getConfig())
+    // } catch (e) {
+    //   throw e;
+    // }
     try {
-      setState(listDelete(state, index));
+      // setState(listDelete(state, index));
+      state[index].toDelete = true;
       handleSectionDeletePage(state[index].id);
     } catch (e) {
       throw e;
@@ -265,6 +281,7 @@ export const usePage = () => {
     getFetchedPageId,
     savePage,
     // savePages,
+    commitPageDeletions,
     handlePageDelete,
     handlePageAdd,
     handlePageMoveUp,

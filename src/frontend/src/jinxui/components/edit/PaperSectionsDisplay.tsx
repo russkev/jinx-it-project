@@ -36,7 +36,7 @@ const PaperSectionsDisplay = () => {
         // Map over pages
         (page: TPage, index: number) => {
           const sections = getFetchedSections(page.id);
-          if (sections) {
+          if (sections && !page.toDelete) {
             return (
               <Box key={page.id}>
                 <PageEdit pageIndex={index} />

@@ -21,6 +21,7 @@ export type TPage = {
   index: number;
   sections: TSection[];
   isNew?: boolean;
+  toDelete?: boolean;
 };
 
 export interface TEditPage extends TPage {
