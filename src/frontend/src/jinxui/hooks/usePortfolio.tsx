@@ -115,14 +115,16 @@ export const usePortfolio = () => {
     fetchPages, 
     resetPages, 
     getPagesIndexedCopy, 
-    setPages 
+    setPages,
+    savePage,
   } = usePage();
   const { 
     fetchSectionsAll, 
     resetSections, 
     getFetchedSectionsAll, 
     getSectionsIndexedCopyAll, 
-    setSections, 
+    // setSections, 
+    setPageSections
   } = useSection();
   const { 
     fetchPortfolioLinks, 
@@ -158,8 +160,8 @@ export const usePortfolio = () => {
         }
         pages.push(this_page)
         // setPageSections(this_page.id, this_page.sections)
-        const newSection:TSections = { [page.id]: page.sections };
-        setSections(newSection);
+        // const newSection:TSections = { [page.id]: page.sections };
+        setPageSections(page.id, page.sections);
       }
       setPages(pages)
 
@@ -284,8 +286,9 @@ export const usePortfolio = () => {
         for(var [index, page] of pages.entries()){
           page.sections = allSections[page.id];
           page.index = index;
-          const path = PORTFOLIOS_PATH + "/pages/" + page.id;
-          await API.put(path, page, getConfig());
+          await savePage(state.id, page)
+          // const path = PORTFOLIOS_PATH + "/pages/" + page.id;
+          // await API.put(path, page, getConfig());
         }
 
         await setSuccessMessage("Portfolio saved");

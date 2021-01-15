@@ -20,6 +20,7 @@ export type TPage = {
   name: string;
   index: number;
   sections: TSection[];
+  isNew?: boolean;
 };
 
 export interface TEditPage extends TPage {

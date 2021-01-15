@@ -189,7 +189,6 @@ class PortfolioList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-
 class PortfolioDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PortfolioSerializer
     # the owner always has full permissions
@@ -199,6 +198,3 @@ class PortfolioDetail(generics.RetrieveUpdateDestroyAPIView):
     # key to use in url configuration
     lookup_url_kwarg = 'portfolio_id'
     swagger_schema = swagger.PortfolioAutoSchema
-
-    def get_queryset(self):
-        return models.Portfolio.objects.filter(owner=self.request.user)

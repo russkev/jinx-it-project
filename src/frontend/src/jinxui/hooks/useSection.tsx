@@ -171,6 +171,7 @@ export const useSection = () => {
 
   function setPageSections(pageId: Tuuid, sections: TSection[]) {
     try {
+      console.log(pageId)
       setState({ ...state, [pageId]: sections });
     } catch (error) {
       console.log(error);

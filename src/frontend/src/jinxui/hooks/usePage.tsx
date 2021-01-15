@@ -183,13 +183,29 @@ export const usePage = () => {
     }
   }
 
-  async function savePage(isNew: boolean, portfolioId: Tuuid, index: number) {
+  // async function savePage(isNew: boolean, portfolioId: Tuuid, index: number) {
+  //   try {
+  //     return isNew
+  //       ? await postPage(portfolioId, state[index], getConfig())
+  //       : await putPage(portfolioId, state[index], getConfig());
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+  async function savePage(portfolioId: Tuuid, page: TPage) {
+    // !!! Need to make sure deleted pages are removed from the database
     try {
-      return isNew
-        ? await postPage(portfolioId, state[index], getConfig())
-        : await putPage(portfolioId, state[index], getConfig());
+
+      if (page.isNew) {
+        const path = PORTFOLIOS_PATH + "/" + portfolioId + "/pages";
+        await API.post(path, page, getConfig());
+        delete page.isNew
+      } else {
+        const path = PORTFOLIOS_PATH + "/pages/" + page.id;
+        await API.put(path, page, getConfig())
+      }
     } catch (e) {
-      throw e;
+      throw e
     }
   }
 
@@ -210,6 +226,7 @@ export const usePage = () => {
   async function handlePageAdd(index: number) {
     const newPage:TPage = JSON.parse(JSON.stringify(defaultPageContext));
     newPage.id=uuidv4();
+    newPage.isNew=true
 
     // const postedPage = await postPage(portfolioId, newPage, getConfig());
     // postedPage.uid = uuidv4();
