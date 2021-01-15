@@ -112,7 +112,6 @@ export const usePortfolio = () => {
     setSuccessMessage,
   } = useUser();
   const { 
-    fetchPages, 
     resetPages, 
     getPagesIndexedCopy, 
     setPages,

@@ -4,7 +4,6 @@ import {
   useUser,
   useSection,
   PORTFOLIOS_PATH,
-  listDelete,
   listMoveUp,
   listMoveDown,
   listAdd,
@@ -17,107 +16,6 @@ import { TPage, } from "../types/PortfolioTypes";
 import { defaultPageContext } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
-async function putPage(portfolioId: Tuuid, page: TPage, config: any) {
-  const path =
-    PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" + page.id;
-  try {
-    const response = await API.put(path, page, config);
-    return response;
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function postPage(portfolioId: Tuuid, data: TPage, config: any) {
-  const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
-  try {
-    const response = await API.post(
-      path,
-      {
-        name: data.name,
-        index: data.index,
-        sections: data.sections,
-      },
-      config
-    );
-    return response.data;
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function deletePage(portfolioId: Tuuid, pageId: Tuuid, config: any) {
-  const path = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages/" 
-    + pageId.toString();
-  try {
-    const response = await API.delete(path, config)
-    return response.data;
-  } catch(e) {
-    throw e;
-  }
-}
-
-async function putPages(
-  portfolioId: Tuuid,
-  pages: TPage[],
-  saveSections: any,
-  config: any
-) {
-  const basePath = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
-  try {
-    // const pagesResult = await Promise.all(
-      // pages.map((page: TPage, index: number) => {
-      const pagesResult = pages.map((page: TPage, index: number) => {
-        page.index = index;
-        console.assert(page.id != defaultPageContext.id);
-        const pagePath = basePath + "/" + page.id;
-        return API.put(pagePath, page, config).then((response: any) => {
-          saveSections(portfolioId, response.data.id, page.id);
-        });
-      });
-    // );
-    return pagesResult;
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function deleteOldPages(
-  portfolioId: Tuuid,
-  pages: TPage[],
-  config: any
-) {
-  try {
-    const basePath = PORTFOLIOS_PATH + "/" + portfolioId.toString() + "/pages";
-
-    getPages(portfolioId, config).then((response: any) => {
-      const pagesToDelete = response.filter((responsePage: TPage) => {
-        return !pages.some((page) => page.id === responsePage.id);
-      });
-      const promiseResult = Promise.all(
-        pagesToDelete.map((pageToDelete: TPage) => {
-          const deletePath = basePath + "/" + pageToDelete.id;
-          const deleteResult = API.delete(deletePath, config);
-          return deleteResult;
-        })
-      );
-      return promiseResult;
-    });
-  } catch (e) {
-    throw e;
-  }
-}
-
-async function getPages(portfolioId: Tuuid, config: any) {
-  const path = PORTFOLIOS_PATH + "/" + portfolioId + "/pages";
-  const result = API.get(path, config)
-    .then((response: any) => response.data)
-    .catch((error: any) => {
-      throw error;
-    });
-  return result;
-}
-
 export const usePage = () => {
   // Update state will be useful when using multiple pages
   // eslint-disable-next-line
@@ -126,8 +24,6 @@ export const usePage = () => {
   const {
     handleSectionDeletePage,
     handleSectionAddPage,
-    makeNewSection,
-    saveSections,
   } = useSection();
 
   function pageIndex(pageId: Tuuid) {
@@ -136,21 +32,6 @@ export const usePage = () => {
       return index;
     } else {
       throw Error("Page with id: " + pageId + " could not be found.");
-    }
-  }
-
-  async function fetchPages(portfolioId: Tuuid) {
-    try {
-      const pages = await getPages(portfolioId, getConfig());
-      for (var page of pages) {
-        page.uid = uuidv4();
-        page.isNew = false;
-      }
-      pages.sort((a: TPage, b: TPage) => (a.index > b.index ? 1 : -1));
-      await setPages(pages);
-      return pages;
-    } catch (e) {
-      throw e;
     }
   }
 
@@ -183,19 +64,8 @@ export const usePage = () => {
     }
   }
 
-  // async function savePage(isNew: boolean, portfolioId: Tuuid, index: number) {
-  //   try {
-  //     return isNew
-  //       ? await postPage(portfolioId, state[index], getConfig())
-  //       : await putPage(portfolioId, state[index], getConfig());
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
   async function savePage(portfolioId: Tuuid, page: TPage) {
-    // !!! Need to make sure deleted pages are removed from the database
     try {
-
       if (page.isNew) {
         const path = PORTFOLIOS_PATH + "/" + portfolioId + "/pages";
         await API.post(path, page, getConfig());
@@ -225,13 +95,7 @@ export const usePage = () => {
 
   // Mark pages for deletion from server
   async function handlePageDelete(portfolioId: Tuuid, index: number) {
-    // try {
-    //   await deletePage(portfolioId, state[index].id, getConfig())
-    // } catch (e) {
-    //   throw e;
-    // }
     try {
-      // setState(listDelete(state, index));
       state[index].toDelete = true;
       handleSectionDeletePage(state[index].id);
     } catch (e) {
@@ -244,10 +108,6 @@ export const usePage = () => {
     newPage.id=uuidv4();
     newPage.isNew=true
 
-    // const postedPage = await postPage(portfolioId, newPage, getConfig());
-    // postedPage.uid = uuidv4();
-    
-    // setState(listAdd(state, index, newPage));
     setState(listAdd(state, index, newPage))
     handleSectionAddPage(newPage.id);
   }
@@ -274,13 +134,11 @@ export const usePage = () => {
 
   return {
     pageIndex,
-    fetchPages,
     setPages,
     getFetchedPages,
     getPagesIndexedCopy,
     getFetchedPageId,
     savePage,
-    // savePages,
     commitPageDeletions,
     handlePageDelete,
     handlePageAdd,
