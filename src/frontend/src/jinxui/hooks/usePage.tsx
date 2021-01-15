@@ -126,6 +126,7 @@ export const usePage = () => {
   const {
     handleSectionDeletePage,
     handleSectionAddPage,
+    makeNewSection,
     saveSections,
   } = useSection();
 
@@ -206,12 +207,16 @@ export const usePage = () => {
     }
   }
 
-  async function handlePageAdd(portfolioId: Tuuid, index: number, ) {
-    const newPage = JSON.parse(JSON.stringify(defaultPageContext));
-    const postedPage = await postPage(portfolioId, newPage, getConfig());
-    postedPage.uid = uuidv4();
-    setState(listAdd(state, index, postedPage));
-    handleSectionAddPage(postedPage.uid);
+  async function handlePageAdd(index: number) {
+    const newPage:TPage = JSON.parse(JSON.stringify(defaultPageContext));
+    newPage.id=uuidv4();
+
+    // const postedPage = await postPage(portfolioId, newPage, getConfig());
+    // postedPage.uid = uuidv4();
+    
+    // setState(listAdd(state, index, newPage));
+    setState(listAdd(state, index, newPage))
+    handleSectionAddPage(newPage.id);
   }
 
   function handlePageMoveUp(index: number) {

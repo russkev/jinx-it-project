@@ -151,6 +151,16 @@ export const useSection = () => {
     return allSections;
   }
 
+  function makeNewSection(pageId: Tuuid, sectionType: string): TSection {
+    const newSection: TSection = JSON.parse(
+      JSON.stringify(defaultSectionContext)
+    );
+    newSection.type = sectionType;
+    newSection.id = uuidv4();
+    newSection.page = pageId;
+    return newSection
+  }
+
   function setSections(sections: TSections) {
     try {
       setState(sections);
@@ -230,7 +240,8 @@ export const useSection = () => {
     if (pageId in state) {
       throw Error("Tried to add new page with an existing page ID");
     } else {
-      setState({ ...state, [pageId]: [] });
+      const newSection = makeNewSection(pageId, "text");
+      setState({ ...state, [pageId]: [newSection] });
     }
   }
 
@@ -378,6 +389,7 @@ export const useSection = () => {
     getFetchedSections,
     getFetchedSectionsAll,
     getSectionsIndexedCopyAll,
+    makeNewSection,
     setSections,
     onSectionChange,
     setPageSections,

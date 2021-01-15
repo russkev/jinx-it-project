@@ -36,7 +36,7 @@ const PageEdit = (props: TPageEdit) => {
   function handleAdd() {
     if (props.pageIndex !== undefined) {
       try {
-        handlePageAdd(getFetchedPortfolio().id, props.pageIndex);
+        handlePageAdd(props.pageIndex);
         setSuccessMessage("New page added");
       } catch (e) {
         setErrorMessage(e.message);

@@ -25,7 +25,7 @@ type TNewSectionMenu = {
 
 const NewSectionMenu = (props: TNewSectionMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { handleSectionChange, sectionIndex } = useSection();
+  const { handleSectionChange, sectionIndex, makeNewSection } = useSection();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -47,17 +47,13 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
     addSection("image");
   };
 
-  const addSection = (section_type: string) => {
+  const addSection = (sectionType: string) => {
     setAnchorEl(null);
 
     const index = sectionIndex(props.pageId, props.section.id)
 
     const target_index = props.placeAbove ? index : index + 1;
-    // const newSection = DefaultSectionData();
-    const newSection:TSection = JSON.parse(JSON.stringify(defaultSectionContext))
-    newSection.type = section_type;
-    newSection.id = uuidv4();
-    newSection.page = props.pageId;
+    const newSection:TSection = makeNewSection(props.pageId, sectionType)
 
     handleSectionChange(props.pageId, target_index, newSection);
   };

@@ -26,14 +26,6 @@ const PaperSectionsDisplay = () => {
   const { getFetchedPages } = usePage();
   const { getFetchedSections } = useSection();
 
-  // const [section, setSection] = useState<TSection>(defaultSectionContext);
-
-  // const sections = getFetchedSections("0-0-0-0-0");
-
-  // useEffect(() => {
-  //   setSection(masterState)
-  // }, [masterState])
-
   return (
     <>
       <Backdrop open={isSaving()} style={{ zIndex: 2000 }}>

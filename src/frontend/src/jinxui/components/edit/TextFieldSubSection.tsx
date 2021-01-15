@@ -31,14 +31,9 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
     let newValue = event.target.value;
     setLocalText(() => {
       onSectionChange(props.pageId, props.section.id, {text: newValue})
-      console.log(props.section.id)
       return newValue
     });
   };
-
-  useEffect(() => {
-    console.log(props.section)
-  }, [props.section])
 
   return (
     <Box>
