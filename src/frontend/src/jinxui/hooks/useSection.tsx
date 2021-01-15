@@ -33,70 +33,6 @@ const sectionIsNotBlank = (section: TSection) => {
   }
 };
 
-async function getSectionsAll(
-  portfolioId: number,
-  pages: TEditPage[],
-  config: any
-) {
-  try {
-    const sectionsResult = await Promise.all(
-      pages.map((page: TPage) => {
-        const sectionPath =
-          PORTFOLIOS_PATH +
-          "/" +
-          portfolioId +
-          "/pages/" +
-          page.id +
-          "/sections";
-        return API.get(sectionPath, config);
-      })
-    );
-
-    // Extract appropriate information
-    var cleanResult: TSections = {};
-    for (var i = 0; i < pages.length; i++) {
-      const pageId = pages[i].uid;
-      const sectionsData = sectionsResult[i].data;
-      // Give the section a uid
-      for (var sectionData of sectionsData) {
-        sectionData.uid = uuidv4();
-
-        // Extract link from sectionLink object
-        var cleanLinks = [];
-        for (var sectionLink of sectionData.links) {
-          cleanLinks.push(sectionLink.link);
-        }
-        sectionData.links = cleanLinks;
-      }
-      cleanResult[pageId] = sectionsResult[i].data;
-    }
-    return cleanResult;
-  } catch (e) {
-    throw e;
-  }
-}
-
-// Call from UsePage to prevent circular dependency issues
-export async function putSections(
-  portfolioId: Tuuid,
-  pageId: Tuuid,
-  sections: TSection[],
-  config: any
-) {
-  const basePath =
-    PORTFOLIOS_PATH + "/" + portfolioId + "/pages/" + pageId + "/sections";
-
-  return API.put(basePath, sections, config).then((response: any) => {
-    Promise.all(
-      response.data.map((responseSection: any, index: number) => {
-        const linksPath = basePath + "/" + responseSection.id + "/links";
-        const linksResponse = API.put(linksPath, sections[index].links, config);
-        return linksResponse;
-      })
-    );
-  });
-}
-
 export const useSection = () => {
   const [state, updateState, setState, resetState] = useContext(SectionContext);
   const { getConfig, isLoading } = useUser();
@@ -104,10 +40,6 @@ export const useSection = () => {
   const [updatedSections, setUpdatedSections] = useState<any>([]);
   const [toSend, setToSend] = useState<any[]>([]);
 
-  async function fetchSectionsAll(portfolioId: number, pages: TEditPage[]) {
-    const result = await getSectionsAll(portfolioId, pages, getConfig());
-    setState(result);
-  }
 
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
     if ((sectionId === defaultSectionContext.id)) {
@@ -169,15 +101,6 @@ export const useSection = () => {
     }
   }
 
-  function setPageSections(pageId: Tuuid, sections: TSection[]) {
-    try {
-      console.log(pageId)
-      setState({ ...state, [pageId]: sections });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const onSectionChange = (
     pageId: Tuuid,
     sectionId: Tuuid,
@@ -187,30 +110,12 @@ export const useSection = () => {
     const section: TSection = { ...state[pageId][index], ...fieldsToUpdate };
     state[pageId][index] = section;
   };
-  // /**
-  //  * Prepare section data for sending to backend.
-  //  * 1. Remove unique identifiers
-  //  * 2. Override section numbers
-  //  * 3. Remove empty sections entirely
-  //  */
-  // const getCleanedSections = (pageId: Tuuid) => {
-  //   const cleanSections = JSON.parse(JSON.stringify(state[pageId]));
-  //   for (var i = 0; i < cleanSections.length; i++) {
-  //     if (sectionIsNotBlank(cleanSections[i])) {
-  //       delete cleanSections[i].uid;
-  //       cleanSections[i].number = i;
-  //     }
-  //   }
-  //   return cleanSections;
-  // };
 
   const handleContentChange = (
-    // event: React.ChangeEvent<HTMLInputElement>,
     text: string,
     pageId: Tuuid,
     index: number
   ) => {
-    // updateState(pageId, index, { content: event.target.value });
     updateState(pageId, index, { text: text });
   };
 
@@ -263,8 +168,6 @@ export const useSection = () => {
 
   function handleSectionMoveUp(pageId: Tuuid, targetIndex: number) {
     try {
-      // const newState = listMoveUp(state[pageId], targetIndex);
-      // setState(newState);
       setState({
         ...state,
         [pageId]: listMoveUp(state[pageId], targetIndex),
@@ -283,15 +186,6 @@ export const useSection = () => {
     } catch (e) {
       throw e;
     }
-  }
-
-  async function saveSections(portfolioId: Tuuid, pageId: Tuuid) {
-    // try {
-    //   const sections = state;
-    //   return await putSections(portfolioId, pageId, sections, getConfig());
-    // } catch (e) {
-    //   throw e;
-    // }
   }
 
   function updateSectionLinks(pageId: Tuuid, index: number, links: TLink[]) {
@@ -385,7 +279,6 @@ export const useSection = () => {
 
   return {
     sectionIndex,
-    fetchSectionsAll,
     getFetchedSection,
     getFetchedSections,
     getFetchedSectionsAll,
@@ -393,7 +286,6 @@ export const useSection = () => {
     makeNewSection,
     setSections,
     onSectionChange,
-    setPageSections,
     handleContentChange,
     handleTitleChange,
     handleSectionChange,
@@ -402,7 +294,6 @@ export const useSection = () => {
     handleSectionDeletePage,
     handleSectionMoveUp,
     handleSectionMoveDown,
-    saveSections,
     updateSectionLinks,
     getFetchedSectionLinks,
     getFetchedSectionLinksFromId,

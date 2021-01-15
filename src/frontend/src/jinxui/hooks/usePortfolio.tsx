@@ -119,12 +119,10 @@ export const usePortfolio = () => {
     commitPageDeletions,
   } = usePage();
   const { 
-    fetchSectionsAll, 
     resetSections, 
     getFetchedSectionsAll, 
     getSectionsIndexedCopyAll, 
     setSections, 
-    setPageSections,
   } = useSection();
   const { 
     fetchPortfolioLinks, 
