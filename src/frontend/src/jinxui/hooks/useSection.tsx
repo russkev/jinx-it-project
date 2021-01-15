@@ -161,7 +161,8 @@ export const useSection = () => {
 
   function getFetchedSections(pageId: Tuuid) {
     // return isLoading() ? [defaultSectionContext] : state;
-    return state
+    console.log(state)
+    return state[pageId]
   }
 
   function getFetchedSectionsAll() {
@@ -178,7 +179,7 @@ export const useSection = () => {
     return allSections;
   }
 
-  function setSections(sections: TSection[]) {
+  function setSections(sections: TSections) {
     try {
       setState(sections);
     } catch (e) {
@@ -280,7 +281,7 @@ export const useSection = () => {
       //   ...state,
       //   [pageId]: listMoveUp(state, targetIndex),
       // });
-      const newState = listMoveUp(state, targetIndex)
+      const newState = listMoveUp(state[pageId], targetIndex)
       setState(newState)
     } catch (e) {
       throw e;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TSection, Tuuid } from "jinxui/types";
+import { TSection, TSections, Tuuid } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
 export const defaultSectionContext: TSection = {
@@ -14,8 +14,8 @@ export const defaultSectionContext: TSection = {
 
 
 
-export const SectionContext = React.createContext<[TSection[], any, any, any]>([
-  [], 
+export const SectionContext = React.createContext<[TSections, any, any, any]>([
+  {}, 
   () => {}, 
   () => {},
   () => {}
@@ -25,7 +25,7 @@ type TSectionContextProvider = {
   children: any;
 };
 export const SectionContextProvider = (props: TSectionContextProvider) => {
-  const [state, setState] = useState<TSection[]>([]);
+  const [state, setState] = useState<TSections>({});
 
   const updateState = (
     pageId: Tuuid,
@@ -49,16 +49,16 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
     // var newState = state;
     // newState.text = fieldsToUpdate?.text
     // setState(newState)
-    setState([
-      // ...state.slice(0, index),
-      {...state[index], ...fieldsToUpdate},
-      // ...state.slice(index + 1)
-    ])
+    // setState([
+    //   // ...state.slice(0, index),
+    //   {...state[index], ...fieldsToUpdate},
+    //   // ...state.slice(index + 1)
+    // ])
   };
 
   const resetState = () => {
     // setState([]);
-    setState([])
+    setState({})
   };
 
   return (

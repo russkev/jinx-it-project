@@ -28,7 +28,7 @@ const PaperSectionsDisplay = () => {
 
   // const [section, setSection] = useState<TSection>(defaultSectionContext);
 
-  const sections = getFetchedSections("0-0-0-0-0");
+  // const sections = getFetchedSections("0-0-0-0-0");
 
   // useEffect(() => {
   //   setSection(masterState)
@@ -107,6 +107,7 @@ const PaperSectionsDisplay = () => {
         // Map over pages
         (page: TPage, index: number) => {
           // const section = getFetchedSections(page.id);
+          const sections=getFetchedSections(page.id)
           return (
             <Box key={page.id}>
               <PageEdit pageIndex={index} />

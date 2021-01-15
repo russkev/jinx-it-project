@@ -74,7 +74,7 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
       //   newSection,
       //   ...currSections.slice(1),
       // ]);
-      currSections[0] = newSection
+      currSections[props.pageId][0] = newSection
       return newSection
     });
   };
