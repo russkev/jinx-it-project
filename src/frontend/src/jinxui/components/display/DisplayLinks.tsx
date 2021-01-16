@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useTheme } from "@material-ui/core/styles";
-import { useLink, useSection, LinkDisplayIcon, LinkIconEnum, } from "jinxui";
+import { usePortfolio, useSection, LinkDisplayIcon, LinkIconEnum, } from "jinxui";
 import { Tuuid } from "jinxui/types"
 
 import { TLink } from "jinxui/types";
@@ -22,7 +22,7 @@ type TDisplayLinks = {
   textColor?: string;
 };
 const DisplayLinks = (props: TDisplayLinks) => {
-  const { getFetchedPortfolioLinks } = useLink();
+  const { getFetchedPortfolioLinks } = usePortfolio();
   const { getFetchedSectionLinksFromId } = useSection();
   const theme = useTheme();
   const links =  props.pageId && props.sectionId

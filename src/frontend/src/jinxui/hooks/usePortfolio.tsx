@@ -3,7 +3,6 @@ import {
   PortfolioContext,
   useUser,
   useSection,
-  useLink,
   usePage,
   LightTheme,
   DarkTheme,
@@ -139,12 +138,6 @@ export const usePortfolio = () => {
     getSectionsIndexedCopyAll,
     setSections,
   } = useSection();
-  // const {
-  //   fetchPortfolioLinks,
-  //   savePortfolioLinks,
-  //   resetPortfolioLinks,
-  //   getFetchedPortfolioLinks
-  // } = useLink();
 
   const PORTFOLIOS_PATH = "api/portfolios";
 
@@ -396,6 +389,7 @@ export const usePortfolio = () => {
     makePortfolioPrivate,
     portfolioIsFetched,
     getFetchedPortfolioLinks,
+    portfolioLinkIndex,
     portfolioLinkUpdate,
     handlePortfolioLinkDelete,
     handlePortfolioLinkMoveUp,

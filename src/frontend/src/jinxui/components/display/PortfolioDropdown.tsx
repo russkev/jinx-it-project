@@ -19,6 +19,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import PaletteIcon from "@material-ui/icons/Palette";
 import ShareIcon from "@material-ui/icons/Share";
+import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
 import {
   HeaderButton,
@@ -378,11 +379,7 @@ const PortfolioDropdown = React.forwardRef(
               aria-haspopup="true"
               onClick={handleToggle}
             >
-              <PersonalVideoIcon />
-              <StyledInnerName>
-                  My Portfolio
-              </StyledInnerName>
-              <ExpandMoreIcon fontSize="small" />
+              <MenuRoundedIcon />
             </StyledName>
           ) : null}
           <ClickAwayListener onClickAway={handleClose}>

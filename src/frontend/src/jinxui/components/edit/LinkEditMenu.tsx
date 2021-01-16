@@ -19,7 +19,6 @@ import {
   PrimaryMenu,
   LinkDialog,
   usePortfolio,
-  useLink,
   useSection,
 } from "jinxui";
 import { TLink } from "jinxui/types";
@@ -31,12 +30,9 @@ type TLinkEditMenu = {
 };
 const LinkEditMenu = (props: TLinkEditMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const {
-    linkIndex,
-    // getFetchedPortfolioLinks,
-  } = useLink();
 
   const {
+    portfolioLinkIndex,
     getFetchedPortfolioLinks,
     handlePortfolioLinkDelete,
     handlePortfolioLinkMoveUp,
@@ -44,6 +40,7 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
   } = usePortfolio();
 
   const {
+    sectionLinkIndex,
     getFetchedSectionLinks,
     handleSectionLinkDelete,
     handleSectionLinkMoveUp,
@@ -89,13 +86,13 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
 
   const backIsDisabled =
     props.pageId && props.sectionId
-      ? linkIndex(props.link.id, links) < 1
-      : linkIndex(props.link.id) < 1;
+      ? sectionLinkIndex(links, props.link.id) < 1
+      : portfolioLinkIndex(props.link.id) < 1;
 
   const forwardIsDisabled =
     props.pageId && props.sectionId
-      ? linkIndex(props.link.id, links) > links.length - 2
-      : linkIndex(props.link.id) > links.length - 2;
+      ? sectionLinkIndex(links, props.link.id) > links.length - 2
+      : portfolioLinkIndex(props.link.id) > links.length - 2;
 
   return (
     <div>

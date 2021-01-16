@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import {
   SectionContext,
   useUser,
-  useLink,
   PORTFOLIOS_PATH,
   listDelete,
   listMoveUp,
@@ -288,6 +287,7 @@ export const useSection = () => {
     handleSectionMoveUp,
     handleSectionMoveDown,
     updateSectionLinks,
+    sectionLinkIndex,
     getFetchedSectionLinks,
     getFetchedSectionLinksFromId,
     sectionLinkUpdate,
