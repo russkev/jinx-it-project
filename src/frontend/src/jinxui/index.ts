@@ -27,10 +27,10 @@ export { default as HeaderTitle } from "./components/header/HeaderTitle";
 export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
 export { default as HeaderButton } from "./components/header/HeaderButton";
 export { default as HeaderBarSpacer } from "./components/header/HeaderBarSpacer";
+export { default as PortfolioDropdown } from "./components/header/PortfolioDropdown";
 
 /* Account */
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
-export { default as UserAvatarDropdown } from "./components/account/UserAvatarDropdown";
 
 /* Display */
 export { default as PageName } from "./components/display/PageName";
@@ -39,7 +39,6 @@ export { default as TextSectionDiv } from "./components/display/TextSectionDiv";
 export { default as PageDiv } from "./components/display/PageDiv";
 export { default as OneColumnSectionDiv } from "./components/display/OneColumnSectionDiv";
 export { default as TwoColumnSectionDiv } from "./components/display/TwoColumnSectionDiv";
-export { default as PortfolioDropdown } from "./components/display/PortfolioDropdown";
 export { default as DisplayLinks } from "./components/display/DisplayLinks"
 
 /* Display Mui*/

@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 
 import {
-  UserAvatarDropdown,
   LightHeaderGrad,
   DarkHeaderGrad,
   LogoLink,
@@ -145,7 +144,6 @@ const HeaderBar = (props: HeaderBarProps) => {
                     <StyledLogin>Login</StyledLogin>
                   </StyledLink>
                 )}
-                <UserAvatarDropdown />
                 <PortfolioDropdown
                   isUserView={props.isUserView}
                   isUserEdit={props.isUserEdit}
