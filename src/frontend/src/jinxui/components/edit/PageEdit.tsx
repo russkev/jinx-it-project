@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
+import CreateIcon from "@material-ui/icons/Create";
+
 import { useUser, usePortfolio, usePage } from "jinxui";
+import { TPage } from "jinxui/types";
 
 type TPageEdit = {
   pageIndex?: number;
+  page?: TPage;
 };
 const PageEdit = (props: TPageEdit) => {
   const { setSuccessMessage, setErrorMessage } = useUser();
@@ -19,7 +25,21 @@ const PageEdit = (props: TPageEdit) => {
     handlePageMoveUp,
     handlePageMoveDown,
     getFetchedPages,
+    onPageChange,
   } = usePage();
+  const [localTitle, setLocalTitle] = useState<string>(
+    props.page ? props.page.name : ""
+  );
+
+  const onTitleChange = (event: any) => {
+    let newTitle = event.target.value;
+    setLocalTitle(() => {
+      if (props.page !== undefined) {
+        onPageChange(props.page.id, { name: newTitle });
+      }
+      return newTitle;
+    });
+  };
 
   function handleDelete() {
     if (props.pageIndex !== undefined) {
@@ -67,6 +87,21 @@ const PageEdit = (props: TPageEdit) => {
       />
       <Box height="40px" marginY="15px" display="flex" position="relative">
         <Box></Box>
+        <TextField
+          name={props.page ? props.page.id : "end"}
+          onChange={onTitleChange}
+          value={localTitle}
+          placeholder="Title"
+          color="secondary"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <CreateIcon />
+              </InputAdornment>
+            ),
+            style: { fontSize: 18, fontWeight: 400 },
+          }}
+        />
         <Box>
           <Button onClick={handleAdd}>
             <PostAddIcon />

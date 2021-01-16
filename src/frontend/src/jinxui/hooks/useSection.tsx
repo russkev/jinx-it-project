@@ -114,14 +114,6 @@ export const useSection = () => {
     updateState(pageId, index, { text: text });
   };
 
-  const handleTitleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    pageId: Tuuid,
-    index: number
-  ) => {
-    updateState(pageId, index, { name: e.target.value });
-  };
-
   function handleSectionChange(
     pageId: Tuuid,
     targetIndex: number,
@@ -289,7 +281,6 @@ export const useSection = () => {
     setSections,
     onSectionChange,
     handleContentChange,
-    handleTitleChange,
     handleSectionChange,
     handleSectionAddPage,
     handleSectionDelete,

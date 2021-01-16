@@ -39,7 +39,7 @@ const PaperSectionsDisplay = () => {
           if (sections && !page.toDelete) {
             return (
               <Box key={page.id}>
-                <PageEdit pageIndex={index} />
+                <PageEdit pageIndex={index} page={page} />
                 {sections.length > 0 ? (
                   sections.map(
                     // Map over sections

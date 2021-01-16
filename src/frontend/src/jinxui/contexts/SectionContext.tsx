@@ -30,7 +30,6 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
   const updateState = (
     pageId: Tuuid,
     index: number,
-    // sectionId: Tuuid,
     fieldsToUpdate: Partial<TSection>
   ) => {
     if (!(pageId in state)) {
@@ -51,18 +50,9 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
           { ...state[pageId][index], ...fieldsToUpdate },
           ...state[pageId].slice(index + 1)]
       });
-    // var newState = state;
-    // newState.text = fieldsToUpdate?.text
-    // setState(newState)
-    // setState([
-    //   // ...state.slice(0, index),
-    //   {...state[index], ...fieldsToUpdate},
-    //   // ...state.slice(index + 1)
-    // ])
   };
 
   const resetState = () => {
-    // setState([]);
     setState({})
   };
 

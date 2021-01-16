@@ -56,6 +56,14 @@ export const usePage = () => {
     return "";
   }
 
+  const onPageChange = (
+    pageId: Tuuid,
+    fieldsToUpdate: Partial<TPage>
+  ) => {
+    const index = pageIndex(pageId);
+    state[index] = {...state[index], ...fieldsToUpdate}
+  }
+
   async function setPages(pages: TPage[]) {
     try {
       await setState(pages);
@@ -138,6 +146,7 @@ export const usePage = () => {
     getFetchedPages,
     getPagesIndexedCopy,
     getFetchedPageId,
+    onPageChange,
     savePage,
     commitPageDeletions,
     handlePageDelete,
