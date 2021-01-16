@@ -24,7 +24,7 @@ import {
   LinkIconMenu,
   PrimaryButton,
   SecondaryButton,
-  useLink,
+  usePortfolio,
   useSection,
   LinkIconEnum,
 } from "jinxui";
@@ -57,8 +57,8 @@ const PublishCancelDiv = styled.div`
 type TLinkDialog = {
   link?: TLink;
   // section: TEditSection
-  pageUid?: string,
-  sectionUid?: string;
+  pageId?: string,
+  sectionId?: string;
   setAnchoEl?: any;
 };
 const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
@@ -66,8 +66,8 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
   const [linkIcon, setLinkIcon] = useState(
     props.link ? props.link.icon : LinkIconEnum.Disabled
   );
-  const { updatePortfolioLink, } = useLink();
-  const { sectionLinkAdd, } = useSection();
+  const { portfolioLinkUpdate, } = usePortfolio();
+  const { sectionLinkUpdate, } = useSection();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,7 +75,7 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
 
   // The link to use if not editing an existing one
   const newLink: TLink = {
-    title: "",
+    name: "",
     address: "",
     icon: LinkIconEnum.Disabled,
     id: "",
@@ -90,10 +90,10 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
 
   // Add new link to list / update existing
   const handleUpdate = () => {    
-    if (props.sectionUid && props.pageUid) {
-      sectionLinkAdd(props.pageUid, props.sectionUid, activeLink)
+    if (props.sectionId && props.pageId) {
+      sectionLinkUpdate(props.pageId, props.sectionId, activeLink)
     } else {
-      updatePortfolioLink(activeLink);
+      portfolioLinkUpdate(activeLink);
     }
     setLinkIcon(0);
     setOpen(false);
@@ -145,11 +145,11 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
       <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title">
         <Formik
           initialValues={{
-            linkTitle: activeLink.title,
+            linkName: activeLink.name,
             linkAddress: activeLink.address,
           }}
           onSubmit={(values) => {
-            activeLink.title = values.linkTitle;
+            activeLink.name = values.linkName;
             activeLink.address = values.linkAddress;
             activeLink.icon = linkIcon;
             handleUpdate();
@@ -166,8 +166,8 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
                   <LinkIconMenu linkIcon={linkIcon} setLinkIcon={setLinkIcon} />
                   <Field
                     component={TextField}
-                    id="linkTitle"
-                    name="linkTitle"
+                    id="linkName"
+                    name="linkName"
                     label="Link Title"
                     fullWidth
                     color="secondary"

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { InputAdornment, TextField } from "@material-ui/core";
+import { InputAdornment, TextField, Button } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import CreateIcon from "@material-ui/icons/Create";
 
@@ -29,6 +29,7 @@ const PaperSectionPage = () => {
   const {
     getFetchedPortfolio,
     setPortfolioName,
+    logPortfolioState,
   } = usePortfolio();
 
   return (
@@ -69,6 +70,7 @@ const PaperSectionPage = () => {
               <>
                 <LinksDisplay />
                 <LinkDialog />
+                <Button onClick={logPortfolioState}>Log Portfolio State</Button>
               </>
             )}
           </LinksDiv>

@@ -9,7 +9,8 @@ export type TPortfolio = {
   id: Tuuid;
   owner: number;
   name: string;
-  pages: number[];
+  pages: Tuuid[];
+  links: TLink[];
   private: boolean;
   theme: string;
   background: string;
@@ -80,10 +81,10 @@ export type TPageData = {
 
 
 export type TLink = {
-  title?: string;
+  id: Tuuid;
+  name?: string;
   address?: string;
   icon?: number;
-  id: string;
   number: number;
 };
 

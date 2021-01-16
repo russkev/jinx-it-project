@@ -43,8 +43,8 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
         flexWrap="wrap"
         marginBottom="15px"
       >
-        <LinksDisplay sectionUid={props.section.id} pageUid={props.pageId} />
-        <LinkDialog sectionUid={props.section.id} pageUid={props.pageId} />
+        <LinksDisplay sectionId={props.section.id} pageId={props.pageId} />
+        <LinkDialog sectionId={props.section.id} pageId={props.pageId} />
         <Button onClick={logState}>Log State</Button>
       </Box>
       <TextField

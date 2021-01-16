@@ -18,6 +18,7 @@ import {
   LinkDisplayIcon,
   PrimaryMenu,
   LinkDialog,
+  usePortfolio,
   useLink,
   useSection,
 } from "jinxui";
@@ -25,18 +26,22 @@ import { TLink } from "jinxui/types";
 
 type TLinkEditMenu = {
   link: TLink;
-  pageUid?: string;
-  sectionUid?: string;
+  pageId?: string;
+  sectionId?: string;
 };
 const LinkEditMenu = (props: TLinkEditMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const {
     linkIndex,
+    // getFetchedPortfolioLinks,
+  } = useLink();
+
+  const {
     getFetchedPortfolioLinks,
     handlePortfolioLinkDelete,
     handlePortfolioLinkMoveUp,
     handlePortfolioLinkMoveDown,
-  } = useLink();
+  } = usePortfolio();
 
   const {
     getFetchedSectionLinks,
@@ -54,52 +59,55 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
   };
 
   const handleMoveBack = () => {
-    if ( props.pageUid && props.sectionUid ) {
-      handleSectionLinkMoveUp(props.pageUid, props.sectionUid, props.link);
+    if (props.pageId && props.sectionId) {
+      handleSectionLinkMoveUp(props.pageId, props.sectionId, props.link);
     } else {
       handlePortfolioLinkMoveUp(props.link);
     }
   };
 
   const handleMoveForward = () => {
-    if (props.pageUid && props.sectionUid) {
-      handleSectionLinkMoveDown(props.pageUid, props.sectionUid, props.link);
+    if (props.pageId && props.sectionId) {
+      handleSectionLinkMoveDown(props.pageId, props.sectionId, props.link);
     } else {
       handlePortfolioLinkMoveDown(props.link);
     }
   };
 
   const handleDelete = () => {
-    if (props.pageUid && props.sectionUid) {
-      handleSectionLinkDelete(props.pageUid, props.sectionUid, props.link);
+    if (props.pageId && props.sectionId) {
+      handleSectionLinkDelete(props.pageId, props.sectionId, props.link);
     } else {
       handlePortfolioLinkDelete(props.link);
     }
   };
 
-  const links = props.pageUid && props.sectionUid 
-    ? getFetchedSectionLinks(props.pageUid, props.sectionUid)
-    : getFetchedPortfolioLinks();
+  const links =
+    props.pageId && props.sectionId
+      ? getFetchedSectionLinks(props.pageId, props.sectionId)
+      : getFetchedPortfolioLinks();
 
-  const backIsDisabled = props.pageUid && props.sectionUid
-    ? linkIndex(props.link.id, links) < 1
-    : linkIndex(props.link.id) < 1;
+  const backIsDisabled =
+    props.pageId && props.sectionId
+      ? linkIndex(props.link.id, links) < 1
+      : linkIndex(props.link.id) < 1;
 
-  const forwardIsDisabled = props.pageUid && props.sectionUid
-    ? linkIndex(props.link.id, links) > links.length - 2
-    : linkIndex(props.link.id) > links.length - 2;
+  const forwardIsDisabled =
+    props.pageId && props.sectionId
+      ? linkIndex(props.link.id, links) > links.length - 2
+      : linkIndex(props.link.id) > links.length - 2;
 
   return (
     <div>
       <Tooltip title="Edit link" arrow>
         <Button onClick={handleClick}>
           <LinkDisplayIcon icon={props.link?.icon} />
-          {props.link && props.link.title && props.link.title.length > 0 ? (
+          {props.link && props.link.name && props.link.name.length > 0 ? (
             <Box width="8px" />
           ) : (
             <></>
           )}
-          <Typography variant="button">{props.link?.title}</Typography>
+          <Typography variant="button">{props.link?.name}</Typography>
         </Button>
       </Tooltip>
       <PrimaryMenu
@@ -109,16 +117,15 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {props.sectionUid && props.pageUid ? (
-          <LinkDialog 
-            link={props.link} 
-            setAnchoEl={setAnchorEl} 
-            pageUid={props.pageUid}
-            sectionUid={props.sectionUid} />
+        {props.sectionId && props.pageId ? (
+          <LinkDialog
+            link={props.link}
+            setAnchoEl={setAnchorEl}
+            pageId={props.pageId}
+            sectionId={props.sectionId}
+          />
         ) : (
-          <LinkDialog 
-            link={props.link} 
-            setAnchoEl={setAnchorEl} />
+          <LinkDialog link={props.link} setAnchoEl={setAnchorEl} />
         )}
 
         {props.link.address && props.link.address !== "" ? (

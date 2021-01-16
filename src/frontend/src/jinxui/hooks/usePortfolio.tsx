@@ -7,12 +7,27 @@ import {
   usePage,
   LightTheme,
   DarkTheme,
+  listDelete,
+  listMoveUp,
+  listMoveDown,
+  listAdd,
   PORTFOLIOS_PATH,
 } from "jinxui";
 import API from "../../API";
-import { TPortfolio, TPortfolioData, TPage, TSections, TSection, Tuuid } from "jinxui/types";
+import { v4 as uuidv4, validate } from "uuid";
+import {
+  TPortfolio,
+  TPortfolioData,
+  TPage,
+  TSections,
+  TSection,
+  TLink,
+  Tuuid,
+} from "jinxui/types";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { defaultPortfolioContext } from "jinxui/contexts";
+import { TuneOutlined } from "@material-ui/icons";
+import { string } from "yup";
 
 async function changePortfolioPrivacy(
   portfolioId: Tuuid,
@@ -111,83 +126,70 @@ export const usePortfolio = () => {
     setErrorMessage,
     setSuccessMessage,
   } = useUser();
-  const { 
-    resetPages, 
-    getPagesIndexedCopy, 
+  const {
+    resetPages,
+    getPagesIndexedCopy,
     setPages,
     savePage,
     commitPageDeletions,
   } = usePage();
-  const { 
-    resetSections, 
-    getFetchedSectionsAll, 
-    getSectionsIndexedCopyAll, 
-    setSections, 
+  const {
+    resetSections,
+    getFetchedSectionsAll,
+    getSectionsIndexedCopyAll,
+    setSections,
   } = useSection();
-  const { 
-    fetchPortfolioLinks, 
-    savePortfolioLinks, 
-    resetPortfolioLinks, 
-    getFetchedPortfolioLinks 
-  } = useLink();
+  // const {
+  //   fetchPortfolioLinks,
+  //   savePortfolioLinks,
+  //   resetPortfolioLinks,
+  //   getFetchedPortfolioLinks
+  // } = useLink();
 
   const PORTFOLIOS_PATH = "api/portfolios";
 
   async function fetchPortfolio(portfolioId: Tuuid) {
     try {
-      const portfolioDetails: any = await getPortfolio(portfolioId, getConfig());
+      const portfolioDetails: any = await getPortfolio(
+        portfolioId,
+        getConfig()
+      );
       const pageDetails = portfolioDetails.pages;
       portfolioDetails.pages = [];
 
-      await updateState(portfolioDetails)
+      await updateState(portfolioDetails);
 
-      var pages:TPage[] = []
-      var sections:TSections = {}
+      var pages: TPage[] = [];
+      var sections: TSections = {};
       for (var page of pageDetails) {
-        const pageSections = page.sections
-        page.sections = []
-        pages.push(page)
+        const pageSections = page.sections;
+        page.sections = [];
+        pages.push(page);
 
         // Section id not required in link
         for (var section of pageSections) {
           for (var link of section.links) {
-            delete link.section
+            delete link.section;
           }
         }
-        sections[page.id] = pageSections
+        sections[page.id] = pageSections;
       }
       setPages(pages);
       setSections(sections);
 
+      console.log(state);
       return portfolioDetails;
     } catch (e) {
       throw e;
     }
   }
 
-  /* Will retrieve a portoflio, all of its pages, and the first page's sections.
-     Tried to incorporate functionality to fetch all sections corresponding to all pages,
-     but ran into a very lame bug with nested list indexing :'( */
   async function fetchFullPortfolio(username?: string) {
     try {
       const portfolioId = username
         ? (await getAccountDetailsFromUsername(username)).primary_portfolio
         : getSavedPortfolioId();
-
-      // Run symultanious get requests for speed
-      // eslint-disable-next-line
-      const [_, pages] = await Promise.all([
-        fetchPortfolio(portfolioId),
-        // fetchPages(portfolioId),
-      ]);
-      // if (pages.length < 1) {
-      //   throw Error("No pages found for portfolio");
-      // }
-
-      // await Promise.all([
-      //   fetchSectionsAll(portfolioId, pages),
-      //   fetchPortfolioLinks(portfolioId),
-      // ]);
+      await fetchPortfolio(portfolioId);
     } catch (e) {
       throw e;
     }
@@ -275,17 +277,15 @@ export const usePortfolio = () => {
       try {
         await commitPageDeletions();
         await savePortfolio(isNew);
-        const pages = getPagesIndexedCopy()
+        const pages = getPagesIndexedCopy();
         const allSections = getSectionsIndexedCopyAll();
 
-        for(var [index, page] of pages.entries()){
+        for (var [index, page] of pages.entries()) {
           if (!page.toDelete) {
             page.sections = allSections[page.id];
             page.index = index;
-            await savePage(state.id, page)
+            await savePage(state.id, page);
           }
-          // const path = PORTFOLIOS_PATH + "/pages/" + page.id;
-          // await API.put(path, page, getConfig());
         }
 
         await setSuccessMessage("Portfolio saved");
@@ -316,11 +316,70 @@ export const usePortfolio = () => {
     );
   }
 
+  function getFetchedPortfolioLinks() {
+    return state.links;
+  }
+
+  function updatePortfolioLinks(links: TLink[]) {
+    updateState({ links: links });
+  }
+
+  function portfolioLinkIndex(linkId: Tuuid) {
+    return state.links.findIndex(
+      (existingLink: TLink) => existingLink.id === linkId
+    );
+  }
+
+  function portfolioLinkUpdate(link: TLink) {
+    if (!validate(link.id)) {
+      link.id = uuidv4();
+      updatePortfolioLinks([...state.links, link]);
+    } else {
+      const linkIndex = portfolioLinkIndex(link.id);
+      updatePortfolioLinks([
+        ...state.links.slice(0, linkIndex),
+        link,
+        ...state.links.slice(linkIndex + 1),
+      ]);
+    }
+  }
+
+  function handlePortfolioLinkDelete(link: TLink) {
+    try {
+      const linkIndex = portfolioLinkIndex(link.id);
+      updatePortfolioLinks(listDelete(state.links, linkIndex));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  function handlePortfolioLinkMoveUp(link: TLink) {
+    try {
+      const linkIndex = portfolioLinkIndex(link.id);
+      updatePortfolioLinks(listMoveUp(state.links, linkIndex));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  function handlePortfolioLinkMoveDown(link: TLink) {
+    try {
+      const linkIndex = portfolioLinkIndex(link.id);
+      updatePortfolioLinks(listMoveDown(state.links, linkIndex));
+    } catch (e) {
+      throw e;
+    }
+  }
+
   function resetFullPortfolio() {
     resetState();
     resetPages();
     resetSections();
-    resetPortfolioLinks();
+    // resetPortfolioLinks();
+  }
+
+  function logPortfolioState(){
+    console.log(state)
   }
 
   return {
@@ -336,6 +395,12 @@ export const usePortfolio = () => {
     makePortfolioPublic,
     makePortfolioPrivate,
     portfolioIsFetched,
+    getFetchedPortfolioLinks,
+    portfolioLinkUpdate,
+    handlePortfolioLinkDelete,
+    handlePortfolioLinkMoveUp,
+    handlePortfolioLinkMoveDown,
     resetFullPortfolio,
+    logPortfolioState,
   };
 };

@@ -4,9 +4,8 @@ import { v4 as uuidv4, validate } from "uuid";
 import { LinkIconEnum } from "jinxui"
 
 export const defaultLinkContext: TLink = {
-  title: "",
+  name: "",
   address: "",
-  // icon: LinkIconEnum.Disabled,
   icon: 0,
   id: "",
   number: 0,

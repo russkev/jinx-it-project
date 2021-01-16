@@ -67,7 +67,7 @@ const DisplayLinks = (props: TDisplayLinks) => {
       >
         <GetLinkDisplayIcon link={props.link} size={size} />
         <Box width="15px" />
-        <Typography variant="h6">{props.link.title}</Typography>
+        <Typography variant="h6">{props.link.name}</Typography>
       </Box>
     );
   };

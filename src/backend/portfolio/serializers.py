@@ -79,10 +79,11 @@ class PortfolioSerializer(
 ):
     owner = serializers.ReadOnlyField(source='owner.id')
     pages = PageSerializer(read_only=True, many=True)
+    links = PortfolioLinkSerializer(read_only=True, many=True)
 
     class Meta:
         model = models.Portfolio
-        fields = ['id', 'owner', 'name', 'pages',
+        fields = ['id', 'owner', 'name', 'pages', 'links',
                   'private', 'theme', 'background']
 
 ################################################################################

@@ -1,29 +1,29 @@
 import React from "react";
 
-import { useLink, useSection, LinkEditMenu } from "jinxui";
+import { usePortfolio, useSection, LinkEditMenu } from "jinxui";
 
 import { TLink } from "jinxui/types";
 
 type TLinksDisplay = {
-  pageUid?: string;
-  sectionUid?: string;
+  pageId?: string;
+  sectionId?: string;
 };
 const LinksDisplay = (props: TLinksDisplay) => {
-  const { getFetchedPortfolioLinks } = useLink();
+  const { getFetchedPortfolioLinks } = usePortfolio();
   const { getFetchedSectionLinks } = useSection();
 
   return (
     <>
-      {props.pageUid && props.sectionUid
+      {props.pageId && props.sectionId
         // Display section links
-        ? getFetchedSectionLinks(props.pageUid, props.sectionUid).map(
+        ? getFetchedSectionLinks(props.pageId, props.sectionId).map(
             (link: TLink) => {
               return (
                 <LinkEditMenu
                   key={link.id}
                   link={link}
-                  pageUid={props.pageUid}
-                  sectionUid={props.sectionUid}
+                  pageId={props.pageId}
+                  sectionId={props.sectionId}
                 />
               );
             }

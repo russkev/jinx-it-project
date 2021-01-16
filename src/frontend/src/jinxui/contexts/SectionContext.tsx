@@ -33,19 +33,24 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
     // sectionId: Tuuid,
     fieldsToUpdate: Partial<TSection>
   ) => {
-    // if (!(pageId in state)) {
-    //   throw Error("Sections for page " + pageId + " not found.")
-    // }
-    // const index = state.findIndex(
-    //   (section: TSection) => section.id === sectionId
-    // );
-    // setState({
-    //   ...state,
-    //     [pageId]: [
-    //       ...state[pageId].slice(0, index),
-    //       { ...state[pageId][index], ...fieldsToUpdate },
-    //       ...state[pageId].slice(index + 1)]
-    //   });
+    if (!(pageId in state)) {
+      throw Error("Sections for page " + pageId + " not found.")
+    }
+    const newState = {
+      ...state,
+      [pageId]: [
+        ...state[pageId].slice(0, index),
+        { ...state[pageId][index], ...fieldsToUpdate },
+        ...state[pageId].slice(index + 1),
+      ],
+    };
+    setState({
+      ...state,
+        [pageId]: [
+          ...state[pageId].slice(0, index),
+          { ...state[pageId][index], ...fieldsToUpdate },
+          ...state[pageId].slice(index + 1)]
+      });
     // var newState = state;
     // newState.text = fieldsToUpdate?.text
     // setState(newState)

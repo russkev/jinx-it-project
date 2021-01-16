@@ -96,13 +96,13 @@ export const useLink = () => {
   function updatePortfolioLink(link: TLink, externalUpdateLink?: any) {
     if (externalUpdateLink) {
       externalUpdateLink(link.id, {
-        title: link.title,
+        name: link.name,
         address: link.address,
         icon: link.icon,
       });
     } else {
       updateState(link.id, {
-        title: link.title,
+        name: link.name,
         address: link.address,
         icon: link.icon,
       });
