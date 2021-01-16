@@ -66,9 +66,9 @@ urlpatterns = [
         views.SectionLinkDetail.as_view(),
         name = 'section_link_detail',
     ),
-    path(
-        'links/<uuid:link_id>',
-        views.LinkDetail.as_view(),
-        name = 'link_detail'
-    )
+    # path(
+    #     'links/<uuid:link_id>',
+    #     views.LinkDetail.as_view(),
+    #     name = 'link_detail'
+    # )
 ]

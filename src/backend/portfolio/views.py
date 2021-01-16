@@ -62,17 +62,17 @@ class PortfolioLinkList(generics.ListCreateAPIView):
         serializer.save(portfolio=portfolio)
 
 
-class PortfolioLinkDetail(generics.DestroyAPIView):
+class PortfolioLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PortfolioLinkSerializer
     lookup_url_kwarg = 'link_id'
     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
     queryset = models.PortfolioLink.objects.all()
     swagger_schema = swagger.PortfolioAutoSchema
 
-    def perform_destroy(self, instance):
-        link_id = self.kwargs['link_id']
-        models.PortfolioLink.objects.filter(link=link_id).delete()
-        models.Link.objects.get(id=link_id).delete()
+#     def perform_destroy(self, instance):
+#         link_id = self.kwargs['link_id']
+#         models.PortfolioLink.objects.filter(link=link_id).delete()
+#         models.Link.objects.get(id=link_id).delete()
 
 
 class SectionLinkList(generics.ListCreateAPIView):
@@ -87,26 +87,37 @@ class SectionLinkList(generics.ListCreateAPIView):
         )
         serializer.save(section=section)
 
+    # def put(self, request, *args, **kwargs):
+    #     data_list = []
+    #     # for single_request in request.data:
+    #     #     data_list.append(
+    #     #         {
+    #     #             'section': kwargs['section_id'],
+    #     #             'link': single_request,
+    #     #         }
+    #     #     )
+    #     serializer = view.set_serializer(request.data)
 
-class SectionLinkDetail(generics.DestroyAPIView):
+
+class SectionLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.SectionLinkSerializer
     lookup_url_kwarg = 'link_id'
     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
     queryset = models.SectionLink.objects.all()
     swagger_schema = swagger.PortfolioAutoSchema
 
-    def perform_destroy(self, instance):
-        link_id = self.kwargs['link_id']
-        models.SectionLink.objects.filter(link=link_id).delete()
-        models.Link.objects.filter(id=link_id).delete()
+    # def perform_destroy(self, instance):
+    #     link_id = self.kwargs['link_id']
+    #     models.SectionLink.objects.filter(link=link_id).delete()
+    #     models.Link.objects.filter(id=link_id).delete()
 
 
-class LinkDetail(generics.RetrieveUpdateAPIView):
-    serializer_class = serializers.LinkSerializer
-    lookup_url_kwarg = 'link_id'
-    permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
-    queryset = models.Link.objects.all()
-    swagger_schema = swagger.PortfolioAutoSchema
+# class LinkDetail(generics.RetrieveUpdateAPIView):
+#     serializer_class = serializers.LinkSerializer
+#     lookup_url_kwarg = 'link_id'
+#     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
+#     queryset = models.Link.objects.all()
+#     swagger_schema = swagger.PortfolioAutoSchema
 
 
 ################################################################################

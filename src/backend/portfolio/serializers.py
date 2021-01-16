@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from drf_writable_nested.serializers import NestedUpdateMixin, NestedCreateMixin
+from drf_writable_nested.serializers import (
+    NestedUpdateMixin, 
+    NestedCreateMixin,
+    WritableNestedModelSerializer
+)
 from drf_writable_nested import UniqueFieldsMixin
 
 from . import models
@@ -12,38 +16,79 @@ from . import models
 ################################################################################
 # LINK
 ################################################################################
-class LinkSerializer(
-    serializers.ModelSerializer
-):
-    class Meta:
-        model = models.Link
-        fields = ['id', 'icon', 'address', 'title', 'index']
+# class LinkSerializer(
+#     UniqueFieldsMixin,
+#     serializers.ModelSerializer
+# ):
+#     class Meta:
+#         model = models.Link
+#         fields = ['id', 'icon', 'address', 'title', 'index']
 
 
 class SectionLinkSerializer(
-    NestedCreateMixin,
-    NestedUpdateMixin,
+    UniqueFieldsMixin,
     serializers.ModelSerializer
 ):
-    link = LinkSerializer()
+    # link = LinkSerializer()
     section = serializers.ReadOnlyField(source='section.id')
 
     class Meta:
         model = models.SectionLink
-        fields = ['section', 'link']
+        # fields = ['section', 'link']
+        fields = ['id', 'name', 'icon', 'address', 'index', 'section']
 
 
 class PortfolioLinkSerializer(
-    NestedCreateMixin,
-    NestedUpdateMixin,
+    UniqueFieldsMixin,
     serializers.ModelSerializer
 ):
-    link = LinkSerializer()
+    # link = LinkSerializer()
     portfolio = serializers.ReadOnlyField(source='portfolio.id')
 
     class Meta:
         model = models.PortfolioLink
-        fields = ['portfolio', 'link']
+        # fields = ['section', 'link']
+        fields = ['id', 'name', 'icon', 'address', 'index', 'portfolio']
+
+    # # def update(self, instance, validated_data):
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     # print("updating")
+    #     instance = models.SectionLink.objects.filter(section = validated_data['section'])
+    #     link_mapping = {section_link.link.id: section_link for section_link in instance}
+    #     # print(temp)
+    #     # link_mapping = {section_link.get().link.id: section_link for section_link in instance}
+    #     print(link_mapping)
+    #     ret = []
+    #     # for data in validated_data:
+    #     this_link = validated_data['link']
+    #     this_id = this_link['id']
+    #     existing_link = link_mapping.get(this_id, None)
+    #     if existing_link is None:
+    #         ret.append(LinkSerializer.create(LinkSerializer, validated_data))
+    #     else:
+    #         ret.append(LinkSerializer.update(LinkSerializer, existing_link, validated_data))
+        
+    #     updated_ids = [x.link.id for x in ret]
+    #     for link_id, link in link_mapping.items():
+    #         if link_id not in updated_ids:
+    #             link.link.delete()
+    #             link.delete()
+    #     return ret
+
+
+# class PortfolioLinkSerializer(
+#     UniqueFieldsMixin,
+#     NestedCreateMixin,
+#     NestedUpdateMixin,
+#     serializers.ModelSerializer
+# ):
+#     link = LinkSerializer()
+#     portfolio = serializers.ReadOnlyField(source='portfolio.id')
+
+#     class Meta:
+#         model = models.PortfolioLink
+#         fields = ['portfolio', 'link']
 
 ################################################################################
 # SECTION
@@ -66,8 +111,8 @@ class SectionSerializer(
 # PAGE
 ################################################################################
 class PageSerializer(
-    NestedCreateMixin, 
-    NestedUpdateMixin, 
+    NestedCreateMixin,
+    NestedUpdateMixin,
     serializers.ModelSerializer
 ):
     sections = SectionSerializer(many=True)
@@ -79,6 +124,8 @@ class PageSerializer(
 ################################################################################
 # PORTFOLIO
 ################################################################################
+
+
 class PortfolioSerializer(
     serializers.ModelSerializer
 ):
@@ -93,6 +140,8 @@ class PortfolioSerializer(
 ################################################################################
 # IMAGE
 ################################################################################
+
+
 class ImageSerializer(
     serializers.ModelSerializer
 ):

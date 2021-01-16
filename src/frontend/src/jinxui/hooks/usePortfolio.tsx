@@ -135,36 +135,29 @@ export const usePortfolio = () => {
 
   async function fetchPortfolio(portfolioId: Tuuid) {
     try {
-      const allPortfolioDetails: any = await getPortfolio(portfolioId, getConfig());
-      const portfolioDetails: TPortfolio = {
-        id: allPortfolioDetails.id,
-        owner: allPortfolioDetails.owner,
-        name: allPortfolioDetails.name,
-        pages: [],
-        private: allPortfolioDetails.private,
-        theme: allPortfolioDetails.theme,
-        background: allPortfolioDetails.background,
-      };
-      await updateState(portfolioDetails);
+      const portfolioDetails: any = await getPortfolio(portfolioId, getConfig());
+      const pageDetails = portfolioDetails.pages;
+      portfolioDetails.pages = [];
 
+      await updateState(portfolioDetails)
 
       var pages:TPage[] = []
-      var pageSections:TSections = {}
-      for (var page of allPortfolioDetails.pages) {
-        const this_page:TPage = {
-          id: page.id,
-          name: page.name,
-          index: page.index,
-          sections: [],
+      var sections:TSections = {}
+      for (var page of pageDetails) {
+        const pageSections = page.sections
+        page.sections = []
+        pages.push(page)
+
+        // Section id not required in link
+        for (var section of pageSections) {
+          for (var link of section.links) {
+            delete link.section
+          }
         }
-        pages.push(this_page)
-        // setPageSections(this_page.id, this_page.sections)
-        // const newSection:TSections = { [page.id]: page.sections };
-        pageSections[page.id] = page.sections
-        // setPageSections(page.id, page.sections);
+        sections[page.id] = pageSections
       }
       setPages(pages);
-      setSections(pageSections);
+      setSections(sections);
 
       return portfolioDetails;
     } catch (e) {

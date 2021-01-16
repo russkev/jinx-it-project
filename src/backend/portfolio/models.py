@@ -10,7 +10,6 @@ from account.signals import account_created
 import uuid
 
 
-
 @receiver(account_created)
 def create_default_portfolio(sender, **kwargs):
     account = kwargs.get('account')
@@ -29,9 +28,8 @@ def create_default_portfolio(sender, **kwargs):
         name='Hello There!',
         index='0',
         type='text',
-        text=
-            'Welcome to Jinx\'s portfolio creation software! '
-            'This is a default portfolio, feel free to modify or delete.',
+        text='Welcome to Jinx\'s portfolio creation software! '
+        'This is a default portfolio, feel free to modify or delete.',
     )
     account.primary_portfolio = portfolio
     account.save()
@@ -59,8 +57,6 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
-
-
 
 
 class Portfolio(models.Model):
@@ -105,6 +101,7 @@ class Page(models.Model):
     def __str__(self):
         return self.name
 
+
 class Section(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
 
@@ -113,7 +110,7 @@ class Section(models.Model):
     name = models.CharField(blank=True, max_length=250)
     # ordering number to order sections on a page
     index = models.IntegerField(default=0)
-    type = models.CharField(max_length = 100, default='text')
+    type = models.CharField(max_length=100, default='text')
     text = models.TextField(blank=True)
 
     # not a field for the same reasoning as Page's owner
@@ -132,26 +129,32 @@ class Section(models.Model):
         return self.name
 
 
-class Link(models.Model):
-    # owner = models.ForeignKey(
-    #     User, on_delete=models.CASCADE, related_name='links'
-    # )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
-    title = models.TextField(blank=True)
-    icon = models.IntegerField(default=0)
-    address = models.TextField(blank=True)
-    index = models.IntegerField(default=0)
+# class Link(models.Model):
+#     # owner = models.ForeignKey(
+#     #     User, on_delete=models.CASCADE, related_name='links'
+#     # )
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+#     title = models.TextField(blank=True)
+#     icon = models.IntegerField(default=0)
+#     address = models.TextField(blank=True)
+#     index = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.title + " | " + self.address
+#     def __str__(self):
+#         return self.title + " | " + self.address
 
 
 class PortfolioLink(models.Model):
-    link = models.OneToOneField(
-        Link,
-        primary_key=True,
-        on_delete=models.CASCADE,
-    )
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, unique=True)
+    name = models.CharField(blank=True, max_length=100)
+    icon = models.IntegerField(default=0)
+    address = models.TextField(blank=True)
+    index = models.IntegerField(default=0)
+    # link = models.OneToOneField(
+    #     Link,
+    #     primary_key=True,
+    #     on_delete=models.CASCADE,
+    # )
 
     portfolio = models.ForeignKey(
         Portfolio,
@@ -163,13 +166,24 @@ class PortfolioLink(models.Model):
     def owner(self):
         return self.portfolio.owner
 
+    def __str__(self):
+        if len(self.name) > 0:
+            return self.name
+        else:
+            return self.address
+
 
 class SectionLink(models.Model):
-    link = models.OneToOneField(
-        Link,
-        primary_key=True,
-        on_delete=models.CASCADE,
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
+    name = models.CharField(blank=True, max_length=100)
+    icon = models.IntegerField(default=0)
+    address = models.TextField(blank=True)
+    index = models.IntegerField(default=0)
+    # link = models.OneToOneField(
+    #     Link,
+    #     primary_key=True,
+    #     on_delete=models.CASCADE,
+    # )
 
     section = models.ForeignKey(
         Section,
@@ -180,3 +194,9 @@ class SectionLink(models.Model):
     @property
     def owner(self):
         return self.section.owner
+    
+    def __str__(self):
+        if len(self.name) > 0:
+            return self.name
+        else:
+            return self.address

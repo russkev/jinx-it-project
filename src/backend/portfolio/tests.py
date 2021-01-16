@@ -60,32 +60,30 @@ class PortfolioMixin():
         # SECTION LINKS
         self.section_links = []
         for i in range(10):
-            link = models.Link.objects.create(
+            section_link = models.SectionLink.objects.create(
                 id=uuid.uuid4(),
-                title='link number {}'.format(i),
+                name='link number {}'.format(i),
                 icon=i,
                 address="http://link.com",
                 index=i,
+                section=self.section,
             )
-            section_link = models.SectionLink.objects.create(
-                link=link,
-                section=self.section
-            )
+            # section_link = models.SectionLink.objects.create(
+            #     link=link,
+            #     section=self.section
+            # )
             if i == 0:
                 self.section_link = section_link
             self.section_links.append(section_link)
         # PORTFOLIO LINKS
         self.portfolios = []
         for i in range(10):
-            link = models.Link.objects.create(
+            portfolio_link = models.PortfolioLink.objects.create(
                 id=uuid.uuid4(),
-                title='link number {}'.format(i),
+                name='link number {}'.format(i),
                 icon=i,
                 address="http://link.com",
                 index=i,
-            )
-            portfolio_link = models.PortfolioLink.objects.create(
-                link=link,
                 portfolio=self.portfolio
             )
             if i == 0:
@@ -287,7 +285,14 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
     def test_page_nest_update(self):
         original_uuid = str(self.section.id)
         new_section_id = str(uuid.uuid4())
-        data1 = {
+        update_link_data = {
+            'address': 'http://facebook.com',
+            'icon': 4,
+            'id': self.section_link.id,
+            'number': 0,
+            'name': 'facebook'
+        }
+        data = {
             'name': 'Home page',
             'sections': [
                 {
@@ -297,28 +302,21 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                     'text': 'lorem ipsum',
                     'id': self.section.id,
                     'links': [
-                        {'link': {
-                            'address': 'http://facebook.com',
-                            'icon': 4,
-                            'id': str(uuid.uuid4()),
-                            'number': 0,
-                            'title': 'facebook'
-                        }},
-                        {'link': {
+                        update_link_data,
+                        {
                             'address': 'http://github.com',
                             'icon': 5,
                             'id': str(uuid.uuid4()),
                             'number': 1,
-                            'title': 'github'
-                        }},
-                        {'link': {
+                            'name': 'github'
+                        },
+                        {
                             'address': 'http://youtube.com',
                             'icon': 5,
                             'id': str(uuid.uuid4()),
                             'number': 1,
-                            'title': 'github'
-                        }}
-                        
+                            'name': 'github'
+                        }
                     ]
                 },
                 {
@@ -328,20 +326,20 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                     'text': 'lorem two',
                     'id': new_section_id,
                     'links': [
-                        {'link': {
+                        {
                             'address': 'http://facebook.com',
                             'icon': 4,
                             'id': str(uuid.uuid4()),
                             'number': 0,
-                            'title': 'facebook'
-                        }},
-                        {'link': {
+                            'name': 'facebook'
+                        },
+                        {
                             'address': 'http://github.com',
                             'icon': 5,
                             'id': str(uuid.uuid4()),
                             'number': 1,
-                            'title': 'github'
-                        }}
+                            'name': 'github'
+                        }
                     ]
                 },
             ]
@@ -353,10 +351,14 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                     'page_id': self.page.id
                 }
             ),
-            data1,
+            data,
             format='json'
         )
         self.assertEqual(response.status_code, 200)
+        updated_link = models.SectionLink.objects.get(id = self.section_link.id)
+        updated_link_response = response.data['sections'][0]['links'][0]
+        self.assertEqual(updated_link_response['id'], str(updated_link.id))
+        self.assertEqual(updated_link.name, update_link_data['name'])
         self.assertEqual(
             len(models.Section.objects.filter(page=self.page.id)), 2)
         self.assertEqual(
@@ -634,14 +636,11 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
 
     def test_section_link_create(self):
         data = {
-            'link':
-                {
-                    "id": str(uuid.uuid4()),
-                    "icon": 2,
-                    "address": "string",
-                    "title": "string",
-                    "index": 0,
-                }
+            "id": str(uuid.uuid4()),
+            "name": "string",
+            "icon": 2,
+            "address": "string",
+            "index": 0,
         }
 
         response = self.client.post(
@@ -656,24 +655,21 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['section'], self.section.id)
-        self.assertEqual(response.data['link']['id'], data['link']['id'])
-        self.assertEqual(response.data['link']['icon'], data['link']['icon'])
-        self.assertEqual(response.data['link']
-                         ['address'], data['link']['address'])
-        self.assertEqual(response.data['link']['title'], data['link']['title'])
-        self.assertEqual(response.data['link']['index'], data['link']['index'])
+        self.assertEqual(response.data['id'], data['id'])
+        self.assertEqual(response.data['icon'], data['icon'])
+        self.assertEqual(response.data
+                         ['address'], data['address'])
+        self.assertEqual(response.data['name'], data['name'])
+        self.assertEqual(response.data['index'], data['index'])
 
     def test_portfolio_link_create(self):
         data = {
-            'link':
-                {
                     "id": str(uuid.uuid4()),
+                    "name": "string",
                     "icon": 2,
                     "address": "string",
-                    "title": "string",
                     "index": 0,
                 }
-        }
 
         response = self.client.post(
             reverse(
@@ -687,38 +683,64 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['portfolio'], self.portfolio.id)
-        self.assertEqual(response.data['link']['id'], data['link']['id'])
-        self.assertEqual(response.data['link']['icon'], data['link']['icon'])
-        self.assertEqual(response.data['link']
-                         ['address'], data['link']['address'])
-        self.assertEqual(response.data['link']['title'], data['link']['title'])
-        self.assertEqual(response.data['link']['index'], data['link']['index'])
+        self.assertEqual(response.data['id'], data['id'])
+        self.assertEqual(response.data['icon'], data['icon'])
+        self.assertEqual(response.data
+                         ['address'], data['address'])
+        self.assertEqual(response.data['name'], data['name'])
+        self.assertEqual(response.data['index'], data['index'])
 
-    def test_link_update(self):
+    def test_section_link_update(self):
         data = {
             "icon": 2,
+            "name": "New name",
             "address": "http://newlink.com",
-            "title": "New Title",
-            "index": self.section_link.link.index,
+            "index": self.section_link.index,
         }
-        response = self.client.put(
+        response = self.client.patch(
             reverse(
-                'link_detail',
+                'section_link_detail',
                 kwargs={
-                    'link_id': self.section_link.link.id,
+                    'link_id': self.section_link.id,
                 }
             ),
             data,
             format='json'
         )
 
-        stored_link = models.Link.objects.get(id=self.section_link.link.id)
+        stored_link = models.SectionLink.objects.get(id=self.section_link.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(stored_link.id), response.data['id'])
         self.assertEqual(stored_link.icon, data['icon'])
         self.assertEqual(stored_link.address, data['address'])
-        self.assertEqual(stored_link.title, data['title'])
+        self.assertEqual(stored_link.name, data['name'])
+        self.assertEqual(stored_link.index, data['index'])
+
+    def test_portfolio_link_update(self):
+        data = {
+            "icon": 2,
+            "name": "New name",
+            "address": "http://newlink.com",
+            "index": self.portfolio_link.index,
+        }
+        response = self.client.patch(
+            reverse(
+                'portfolio_link_detail',
+                kwargs={
+                    'link_id': self.portfolio_link.id,
+                }
+            ),
+            data,
+            format='json'
+        )
+        stored_link = models.PortfolioLink.objects.get(id=self.portfolio_link.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(stored_link.id), response.data['id'])
+        self.assertEqual(stored_link.icon, data['icon'])
+        self.assertEqual(stored_link.address, data['address'])
+        self.assertEqual(stored_link.name, data['name'])
         self.assertEqual(stored_link.index, data['index'])
 
     def test_section_link_validation(self):
@@ -751,22 +773,40 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_link_retrieve(self):
+    def test_section_link_retrieve(self):
         response = self.client.get(
             reverse(
-                'link_detail',
+                'section_link_detail',
                 kwargs={
-                    'link_id': self.section_link.link.id
+                    'link_id': self.section_link.id
                 }
             )
         )
-        stored_link = models.Link.objects.get(id=self.section_link.link.id)
+        stored_link = models.SectionLink.objects.get(id=self.section_link.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(stored_link.id), response.data['id'])
         self.assertEqual(stored_link.icon, response.data['icon'])
         self.assertEqual(stored_link.address, response.data['address'])
-        self.assertEqual(stored_link.title, response.data['title'])
+        self.assertEqual(stored_link.name, response.data['name'])
+        self.assertEqual(stored_link.index, response.data['index'])
+
+    def test_portfolio_link_retrieve(self):
+        response = self.client.get(
+            reverse(
+                'portfolio_link_detail',
+                kwargs={
+                    'link_id': self.portfolio_link.id
+                }
+            )
+        )
+        stored_link = models.PortfolioLink.objects.get(id=self.portfolio_link.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(stored_link.id), response.data['id'])
+        self.assertEqual(stored_link.icon, response.data['icon'])
+        self.assertEqual(stored_link.address, response.data['address'])
+        self.assertEqual(stored_link.name, response.data['name'])
         self.assertEqual(stored_link.index, response.data['index'])
 
     def test_section_link_delete(self):
@@ -774,19 +814,14 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'section_link_detail',
                 kwargs={
-                    'link_id': self.section_link.link.id,
+                    'link_id': self.section_link.id,
                 }
             )
         )
         self.assertEqual(response.status_code, 204)
         self.assertEqual(
             len(models.SectionLink.objects.filter(
-                link=self.section_link.link.id)),
-            0
-        )
-        self.assertEqual(
-            len(models.Link.objects.filter(
-                id=self.section_link.link.id)),
+                id=self.section_link.id)),
             0
         )
 
@@ -795,21 +830,17 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
             reverse(
                 'portfolio_link_detail',
                 kwargs={
-                    'link_id': self.portfolio_link.link.id,
+                    'link_id': self.portfolio_link.id,
                 }
             )
         )
         self.assertEqual(response.status_code, 204)
         self.assertEqual(
             len(models.PortfolioLink.objects.filter(
-                link=self.portfolio_link.link.id)),
+                id=self.portfolio_link.id)),
             0
         )
-        self.assertEqual(
-            len(models.Link.objects.filter(
-                id=self.portfolio_link.link.id)),
-            0
-        )
+
 
 ################################################################################
 # IMAGE

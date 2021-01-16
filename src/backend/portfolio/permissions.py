@@ -108,7 +108,7 @@ class IsNotPrivate(permissions.BasePermission):
         if view_class == views.SectionLinkList:
             try:
                 section = models.Section.objects.get(
-                    id=view.kwargs.get('page_id', None)
+                    id=view.kwargs.get('section_id', None)
                 )
             except models.Section.DoesNotExist as exc:
                 raise exceptions.NotFound() from exc
