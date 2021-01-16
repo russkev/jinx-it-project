@@ -19,6 +19,7 @@ from account.models import Account
 from . import models
 from . import serializers
 
+
 class UserMixin():
     def setUpUser(self):
         self.user = User.objects.create_user(
@@ -93,6 +94,8 @@ class PortfolioMixin():
 ################################################################################
 # PORTFOLIO
 ################################################################################
+
+
 class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -101,7 +104,10 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
 
     def test_portfolio_create(self):
         name = 'fasting pumice'
-        data = {'name': name}
+        data = {
+            'name': name,
+            'links': [],
+            }
         response = self.client.post(
             reverse('portfolio_list'),
             data,
@@ -167,6 +173,50 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(self.portfolio.owner, self.user)
         self.assertEqual(self.portfolio.name, name)
 
+    def test_portfolio_update_with_links(self):
+        update_link_data = {
+            'id': self.portfolio_link.id,
+            'name': 'facebook',
+            'address': 'http://facebook.com',
+            'icon': 4,
+            'number': 0,
+        }
+        data = {
+            'name': self.portfolio.name,
+            'links': [
+                update_link_data,
+                {
+                    'id': str(uuid.uuid4()),
+                    'name': 'github',
+                    'address': 'http://github.com',
+                    'icon': 5,
+                    'index': 1,
+                }
+            ]
+        }
+        response = self.client.put(
+            reverse(
+                'portfolio_detail',
+                kwargs={
+                    'portfolio_id': self.portfolio.id
+                }
+            ),
+            data,
+            format='json'
+        )
+        self.assertEqual(response.status_code, 200)
+        
+        updated_link = models.PortfolioLink.objects.get(
+            id = self.portfolio_link.id)
+        all_links = models.PortfolioLink.objects.filter(
+            portfolio = self.portfolio.id
+        )
+        
+        self.assertEqual(len(all_links), 2)
+        self.assertEqual(len(response.data['links']), 2)
+        self.assertEqual(updated_link.name, update_link_data['name'])
+        self.assertEqual(updated_link.address, update_link_data['address'])
+
     def test_portfolio_delete(self):
         response = self.client.delete(
             reverse(
@@ -185,6 +235,8 @@ class PortfolioTest(UserMixin, PortfolioMixin, APITestCase):
 ################################################################################
 # PAGE
 ################################################################################
+
+
 class PageTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -198,6 +250,7 @@ class PageTest(UserMixin, PortfolioMixin, APITestCase):
             'name': name,
             'index': 11,
             'sections': [],
+            'links': []
         }
         response = self.client.post(
             reverse('page_list', kwargs={
@@ -356,7 +409,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, 200)
-        updated_link = models.SectionLink.objects.get(id = self.section_link.id)
+        updated_link = models.SectionLink.objects.get(id=self.section_link.id)
         updated_link_response = response.data['sections'][0]['links'][0]
         self.assertEqual(updated_link_response['id'], str(updated_link.id))
         self.assertEqual(updated_link.name, update_link_data['name'])
@@ -370,7 +423,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(len(response.data['sections']), 2)
         self.assertEqual(len(response.data['sections'][0]['links']), 3)
         self.assertEqual(len(response.data['sections'][1]['links']), 2)
-    
+
     def test_section_list_retrieve(self):
         response = self.client.get(
             reverse(
@@ -482,6 +535,8 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
 ################################################################################
 # SECTION
 ################################################################################
+
+
 class SectionTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -629,6 +684,8 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
 ################################################################################
 # LINK
 ################################################################################
+
+
 class LinkTest(UserMixin, PortfolioMixin, APITestCase):
     def setUp(self):
         """Code run before each test. Setup API access simulation."""
@@ -665,12 +722,12 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
 
     def test_portfolio_link_create(self):
         data = {
-                    "id": str(uuid.uuid4()),
-                    "name": "string",
+            "id": str(uuid.uuid4()),
+            "name": "string",
                     "icon": 2,
                     "address": "string",
                     "index": 0,
-                }
+        }
 
         response = self.client.post(
             reverse(
@@ -735,7 +792,8 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
             data,
             format='json'
         )
-        stored_link = models.PortfolioLink.objects.get(id=self.portfolio_link.id)
+        stored_link = models.PortfolioLink.objects.get(
+            id=self.portfolio_link.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(stored_link.id), response.data['id'])
@@ -801,7 +859,8 @@ class LinkTest(UserMixin, PortfolioMixin, APITestCase):
                 }
             )
         )
-        stored_link = models.PortfolioLink.objects.get(id=self.portfolio_link.id)
+        stored_link = models.PortfolioLink.objects.get(
+            id=self.portfolio_link.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(stored_link.id), response.data['id'])
@@ -863,7 +922,7 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
             )
             if i == 0:
                 self.image = image
-        
+
     def test_image_create(self):
         with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
             image = Image.new('RGB', (200, 200), 'white')
@@ -883,7 +942,7 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(models.Image.objects.all()), 11)
         self.assertEqual(response.data['name'], data['name'])
-    
+
     def test_image_validation(self):
         name = 'a' * 101
         data = {'name': name}
@@ -892,7 +951,7 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
             data,
         )
         self.assertEqual(response.status_code, 400)
-    
+
     def test_image_retrieve(self):
         response = self.client.get(
             reverse(
@@ -908,7 +967,7 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(str(self.image.id), response.data['id'])
         self.assertEqual(self.portfolio.owner.id, response.data['owner'])
         self.assertEqual(self.image.name, response.data['name'])
-    
+
     def test_image_update(self):
         name = 'new image name'
         response = self.client.patch(
@@ -923,7 +982,7 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get('name'), name)
         self.assertEqual(str(self.image.id), response.data['id'])
-    
+
     def test_image_delete(self):
         response = self.client.delete(
             reverse(
@@ -946,6 +1005,8 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
 ################################################################################
 # PERMISSIONS
 ################################################################################
+
+
 class PermissionTest(APITestCase):
     def setUp(self):
         self.owner = User.objects.create_user(
@@ -1004,7 +1065,8 @@ class PermissionTest(APITestCase):
         response = self.client.post(
             reverse('portfolio_list'),
             {
-                'name': 'grasshoppers equation'
+                'name': 'grasshoppers equation',
+                'links': []
             },
             format='json',
         )

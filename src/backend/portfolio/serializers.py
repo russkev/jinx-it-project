@@ -61,6 +61,7 @@ class SectionSerializer(
 # PAGE
 ################################################################################
 class PageSerializer(
+    # UniqueFieldsMixin,
     NestedCreateMixin,
     NestedUpdateMixin,
     serializers.ModelSerializer
@@ -75,11 +76,13 @@ class PageSerializer(
 # PORTFOLIO
 ################################################################################
 class PortfolioSerializer(
+    NestedCreateMixin,
+    NestedUpdateMixin,
     serializers.ModelSerializer
 ):
     owner = serializers.ReadOnlyField(source='owner.id')
     pages = PageSerializer(read_only=True, many=True)
-    links = PortfolioLinkSerializer(read_only=True, many=True)
+    links = PortfolioLinkSerializer(many=True)
 
     class Meta:
         model = models.Portfolio
