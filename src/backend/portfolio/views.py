@@ -46,9 +46,8 @@ class ImageList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 ################################################################################
-# LINK
+# PORTFOLIO LINK
 ################################################################################
-
 class PortfolioLinkList(generics.ListCreateAPIView):
     serializer_class = serializers.PortfolioLinkSerializer
     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
@@ -69,12 +68,9 @@ class PortfolioLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.PortfolioLink.objects.all()
     swagger_schema = swagger.PortfolioAutoSchema
 
-#     def perform_destroy(self, instance):
-#         link_id = self.kwargs['link_id']
-#         models.PortfolioLink.objects.filter(link=link_id).delete()
-#         models.Link.objects.get(id=link_id).delete()
-
-
+################################################################################
+# SECTION LINK
+################################################################################
 class SectionLinkList(generics.ListCreateAPIView):
     serializer_class = serializers.SectionLinkSerializer
     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
@@ -87,17 +83,6 @@ class SectionLinkList(generics.ListCreateAPIView):
         )
         serializer.save(section=section)
 
-    # def put(self, request, *args, **kwargs):
-    #     data_list = []
-    #     # for single_request in request.data:
-    #     #     data_list.append(
-    #     #         {
-    #     #             'section': kwargs['section_id'],
-    #     #             'link': single_request,
-    #     #         }
-    #     #     )
-    #     serializer = view.set_serializer(request.data)
-
 
 class SectionLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.SectionLinkSerializer
@@ -106,24 +91,10 @@ class SectionLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.SectionLink.objects.all()
     swagger_schema = swagger.PortfolioAutoSchema
 
-    # def perform_destroy(self, instance):
-    #     link_id = self.kwargs['link_id']
-    #     models.SectionLink.objects.filter(link=link_id).delete()
-    #     models.Link.objects.filter(id=link_id).delete()
-
-
-# class LinkDetail(generics.RetrieveUpdateAPIView):
-#     serializer_class = serializers.LinkSerializer
-#     lookup_url_kwarg = 'link_id'
-#     permission_class = [(IsNotPrivate & IsReadOnly) | IsOwner]
-#     queryset = models.Link.objects.all()
-#     swagger_schema = swagger.PortfolioAutoSchema
-
 
 ################################################################################
 # SECTION
 ################################################################################
-
 class SectionList(generics.ListCreateAPIView):
     serializer_class = serializers.SectionSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
@@ -148,7 +119,6 @@ class SectionDetail(generics.RetrieveUpdateDestroyAPIView):
 ################################################################################
 # PAGE
 ################################################################################
-
 class PageList(generics.ListCreateAPIView):
     serializer_class = serializers.PageSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
@@ -172,7 +142,6 @@ class PageDetail(generics.RetrieveUpdateDestroyAPIView):
 ################################################################################
 # PORTFOLIO
 ################################################################################
-
 class PortfolioList(generics.ListCreateAPIView):
     serializer_class = serializers.PortfolioSerializer
     # allow anyone to see the list of portfolios, 

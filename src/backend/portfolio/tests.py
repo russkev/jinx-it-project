@@ -283,6 +283,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
         self.setUpPortfolio()
 
     def test_page_nest_update(self):
+        # Do updates and new additions of sections and links all at once
         original_uuid = str(self.section.id)
         new_section_id = str(uuid.uuid4())
         update_link_data = {

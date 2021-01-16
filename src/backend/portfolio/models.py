@@ -129,20 +129,6 @@ class Section(models.Model):
         return self.name
 
 
-# class Link(models.Model):
-#     # owner = models.ForeignKey(
-#     #     User, on_delete=models.CASCADE, related_name='links'
-#     # )
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
-#     title = models.TextField(blank=True)
-#     icon = models.IntegerField(default=0)
-#     address = models.TextField(blank=True)
-#     index = models.IntegerField(default=0)
-
-#     def __str__(self):
-#         return self.title + " | " + self.address
-
-
 class PortfolioLink(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True)
@@ -150,11 +136,6 @@ class PortfolioLink(models.Model):
     icon = models.IntegerField(default=0)
     address = models.TextField(blank=True)
     index = models.IntegerField(default=0)
-    # link = models.OneToOneField(
-    #     Link,
-    #     primary_key=True,
-    #     on_delete=models.CASCADE,
-    # )
 
     portfolio = models.ForeignKey(
         Portfolio,
@@ -179,11 +160,6 @@ class SectionLink(models.Model):
     icon = models.IntegerField(default=0)
     address = models.TextField(blank=True)
     index = models.IntegerField(default=0)
-    # link = models.OneToOneField(
-    #     Link,
-    #     primary_key=True,
-    #     on_delete=models.CASCADE,
-    # )
 
     section = models.ForeignKey(
         Section,

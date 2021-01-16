@@ -30,14 +30,10 @@ class PageAdmin(admin.ModelAdmin):
 class SectionAdmin(admin.ModelAdmin):
     list_display = ['name', 'page', 'index', 'owner', 'id']
 
-# @admin.register(models.Link)
-# class LinkAdmin(admin.ModelAdmin):
-#     list_display = ['icon', 'title', 'address', 'id', 'index']
+@admin.register(models.PortfolioLink)
+class PortfolioLinkAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icon', 'address', 'index', 'portfolio']
 
-# @admin.register(models.PortfolioLink)
-# class PortfolioLinkAdmin(admin.ModelAdmin):
-#     list_display = ['link_id', 'portfolio_id']
-
-# @admin.register(models.SectionLink)
-# class SectionLinkAdmin(admin.ModelAdmin):
-#     list_display = ['link_id', 'section_id']
+@admin.register(models.SectionLink)
+class SectionLinkAdmin(admin.ModelAdmin):
+    list_display = ['name', 'icon', 'address', 'index', 'section']
