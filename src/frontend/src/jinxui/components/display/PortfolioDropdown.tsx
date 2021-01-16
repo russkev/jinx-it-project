@@ -19,6 +19,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import PaletteIcon from "@material-ui/icons/Palette";
 import ShareIcon from "@material-ui/icons/Share";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
 import {
@@ -32,9 +33,7 @@ import {
   SnackbarAlert,
 } from "jinxui";
 
-import {
-  Tuuid
-} from "jinxui/types";
+import { Tuuid } from "jinxui/types";
 
 const DivWrapper = styled.div`
   height: 100%;
@@ -225,19 +224,20 @@ type TShareMenuItem = {
   rest_disabled: boolean;
 };
 const ShareMenuItem = React.forwardRef((props: TShareMenuItem, ref: any) => {
-const { isPrivate } = usePortfolio();
-return(
-  <MenuItem
-    ref={ref}
-    onClick={props.handleShareLink}
-    disabled={props.rest_disabled || isPrivate()}
-  >
-    <ListItemIcon>
-      <ShareIcon />
-    </ListItemIcon>
-    <ListItemText primary="Copy Link" />
-  </MenuItem>
-)});
+  const { isPrivate } = usePortfolio();
+  return (
+    <MenuItem
+      ref={ref}
+      onClick={props.handleShareLink}
+      disabled={props.rest_disabled || isPrivate()}
+    >
+      <ListItemIcon>
+        <ShareIcon />
+      </ListItemIcon>
+      <ListItemText primary="Copy Link" />
+    </MenuItem>
+  );
+});
 
 type TPrivateMenuItem = {
   setOpen: any;
@@ -271,7 +271,7 @@ const PrivacyMenuItem = React.forwardRef(
       props.setOpen(false);
       makePortfolioPrivate(userData.portfolioId)
         .then((response: any) => {
-          setSuccessMessage("Portfolio is now private")
+          setSuccessMessage("Portfolio is now private");
         })
         .catch((error: any) => {
           setErrorMessage(
@@ -280,7 +280,7 @@ const PrivacyMenuItem = React.forwardRef(
           console.log(error);
         });
     };
-    
+
     return (
       <MenuItem
         ref={ref}
@@ -295,6 +295,40 @@ const PrivacyMenuItem = React.forwardRef(
     );
   }
 );
+
+type TLogoutMenuItem = {
+  setOpen: any;
+};
+const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
+  const { logout } = useUser();
+  const { resetFullPortfolio } = usePortfolio();
+  const [redirect, setRedirect] = useState(false);
+
+  const handleLogout = () => {
+    props.setOpen(false);
+    setRedirect(true);
+    logout()
+      .then(() => {
+        resetFullPortfolio();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  if (redirect) {
+    return <Redirect to={Routes.LOGIN} />;
+  } else {
+    return (
+      <MenuItem ref={ref} onClick={handleLogout}>
+        <ListItemIcon>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </MenuItem>
+    );
+  }
+});
 
 type TPortfolioMenu = {
   isUserView?: boolean;
@@ -414,6 +448,9 @@ const PortfolioDropdown = React.forwardRef(
               <PrivacyMenuItem
                 setOpen={setOpen}
                 rest_disabled={rest_disabled}
+              />
+              <LogoutMenuItem
+                setOpen={setOpen}
               />
             </PrimaryMenu>
           </ClickAwayListener>
