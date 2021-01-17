@@ -263,37 +263,43 @@ export const useUser = () => {
     return result;
   }
 
-  async function setTheme(portfolioId: Tuuid, theme_name: string) {
-    async function savePortfolioTheme(theme: string) {
-      try {
-        await updateState({theme: theme});
-      } catch (e) {
-        throw e;
-      }
+  function themePreview(theme_name: string) {
+    try {
+      updateState({theme: theme_name});
+    } catch (e) {
+      throw e;
     }
+  }
+
+  async function themePreviewCancel(portfolioId: Tuuid) {
+    try {
+      const path = PORTFOLIOS_PATH + "/" + portfolioId;
+      const response = await API.get(
+        path,
+        state.config
+      );
+      updateState({theme: response.data.theme})
+    } catch (e) {
+      throw e;
+    }
+  } 
+
+  async function setTheme(portfolioId: Tuuid) {
 
     const path = PORTFOLIOS_PATH + "/" + portfolioId;
-    API.get(path, state.config)
-      .then((response: any) => {
-        const result = API.put(
-          path,
-          {
-            name: response.data.name,
-            theme: theme_name,
-          },
-          state.config
-        ).then((response: any) => {
-          savePortfolioTheme(response.data.theme)
-        }).catch((error: any) => {
-          console.log(error);
-          throw error;
-        });
-        return result;
-      })
-      .catch((error: any) => {
-        console.log(error);
-        throw error;
-      });
+    try {
+      const response = await API.patch(
+        path,
+        {
+          theme: state.theme,
+        },
+        state.config
+      )
+      updateState({theme: response.data.theme})
+      return response
+    } catch (e) {
+      throw e
+    }
   }
 
   const getConfig = () => {
@@ -383,6 +389,8 @@ export const useUser = () => {
     getAccountDetails,
     getAccountDetailsFromUsername,
     handleError,
+    themePreview,
+    themePreviewCancel,
     setTheme,
     getConfig,
     setSuccessMessage,

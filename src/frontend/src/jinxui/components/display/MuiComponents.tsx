@@ -160,7 +160,7 @@ export function PortfolioHeader({ subtitle }: { subtitle?: string }) {
   );
 }
 
-const themeColors = (theme: Theme, index: number) => {
+export const themeColors = (theme: Theme, index: number) => {
   const colors = theme.portfolio?.section?.colors || null;
   const [backgroundColor, textColor, isFullHeight] = colors
     ? colors({ theme: theme, index: index })

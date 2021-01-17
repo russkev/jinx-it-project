@@ -29,6 +29,7 @@ export { default as HeaderButton } from "./components/header/HeaderButton";
 export { default as HeaderBarSpacer } from "./components/header/HeaderBarSpacer";
 export { default as PortfolioDropdown } from "./components/header/PortfolioDropdown";
 export { default as ShareDialog } from "./components/header/ShareDialog";
+export { default as ThemeDialog } from "./components/header/ThemeDialog";
 
 /* Account */
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
@@ -41,6 +42,7 @@ export { default as PageDiv } from "./components/display/PageDiv";
 export { default as OneColumnSectionDiv } from "./components/display/OneColumnSectionDiv";
 export { default as TwoColumnSectionDiv } from "./components/display/TwoColumnSectionDiv";
 export { default as DisplayLinks } from "./components/display/DisplayLinks"
+export { themeColors } from "./components/display/MuiComponents"
 
 /* Display Mui*/
 export {

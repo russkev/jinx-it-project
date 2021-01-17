@@ -31,6 +31,7 @@ import {
   PortfolioThemes,
   SnackbarAlert,
   ShareDialog,
+  ThemeDialog,
 } from "jinxui";
 
 import { Tuuid } from "jinxui/types";
@@ -171,89 +172,53 @@ const ThemeSelectorToggle = React.forwardRef(
   )
 );
 
-type TThemeMenuItems = {
-  themeOpen: any;
-  setOpen: any;
-};
-const ThemeMenuItems = React.forwardRef((props: TThemeMenuItems, ref: any) => (
-  <Collapse in={props.themeOpen} timeout="auto" unmountOnExit>
-    {Object.values(PortfolioThemes).map((theme: Theme) => (
-      <ThemeMenuItem
-        ref={ref}
-        key={theme.portfolio.theme.name}
-        theme={theme}
-        setOpen={props.setOpen}
-      />
-    ))}
-  </Collapse>
-));
+// type TThemeMenuItems = {
+//   themeOpen: any;
+//   setOpen: any;
+// };
+// const ThemeMenuItems = React.forwardRef((props: TThemeMenuItems, ref: any) => (
+//   <Collapse in={props.themeOpen} timeout="auto" unmountOnExit>
+//     {Object.values(PortfolioThemes).map((theme: Theme) => (
+//       <ThemeMenuItem
+//         ref={ref}
+//         key={theme.portfolio.theme.name}
+//         theme={theme}
+//         setOpen={props.setOpen}
+//       />
+//     ))}
+//   </Collapse>
+// ));
 
-type TThemeMenu = {
-  theme: Theme;
-  setOpen: any;
-};
-const ThemeMenuItem = React.forwardRef((props: TThemeMenu, ref: any) => {
-  const { setTheme, userData } = useUser();
+// type TThemeMenu = {
+//   theme: Theme;
+//   setOpen: any;
+// };
+// const ThemeMenuItem = React.forwardRef((props: TThemeMenu, ref: any) => {
+//   const { setTheme, userData } = useUser();
 
-  if (props.theme.portfolio.theme.name !== "Loading") {
-    return (
-      <MenuItem
-        ref={ref}
-        onClick={() => {
-          props.setOpen(false);
-          setTheme(userData.portfolioId, props.theme.portfolio.theme.name);
-        }}
-      >
-        <ListItemIcon style={{ paddingLeft: 20 }}>
-          {props.theme.portfolio.theme.name === userData.theme ? (
-            <PaletteIcon color="secondary" />
-          ) : (
-            <PaletteIcon />
-          )}
-        </ListItemIcon>
-        <ListItemText primary={props.theme.portfolio.theme.name} />
-      </MenuItem>
-    );
-  } else {
-    return null;
-  }
-});
-
-type TShareMenuItem = {
-  setMenuOpen: any;
-  handleShareLink: any;
-  restDisabled: boolean;
-};
-const ShareMenuItem = React.forwardRef((props: TShareMenuItem, ref: any) => {
-  const { isPrivate } = usePortfolio();
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-    props.setMenuOpen(false)
-  };
-
-  const handleClose = () => {
-    setDialogOpen(false)
-    // props.setMenuOpen(false)
-  }
-
-  return (
-    <>
-      {/* <MenuItem
-        ref={ref}
-        onClick={handleClickOpen}
-        disabled={props.restDisabled || isPrivate()}
-      >
-        <ListItemIcon>
-          <ShareIcon />
-        </ListItemIcon>
-        <ListItemText primary="Share" />
-      </MenuItem> */}
-      <ShareDialog setMenuOpen={props.setMenuOpen}/>
-    </>
-  );
-});
+//   if (props.theme.portfolio.theme.name !== "Loading") {
+//     return (
+//       <MenuItem
+//         ref={ref}
+//         onClick={() => {
+//           props.setOpen(false);
+//           setTheme(userData.portfolioId, props.theme.portfolio.theme.name);
+//         }}
+//       >
+//         <ListItemIcon style={{ paddingLeft: 20 }}>
+//           {props.theme.portfolio.theme.name === userData.theme ? (
+//             <PaletteIcon color="secondary" />
+//           ) : (
+//             <PaletteIcon />
+//           )}
+//         </ListItemIcon>
+//         <ListItemText primary={props.theme.portfolio.theme.name} />
+//       </MenuItem>
+//     );
+//   } else {
+//     return null;
+//   }
+// });
 
 type TPrivateMenuItem = {
   setOpen: any;
@@ -449,23 +414,16 @@ const PortfolioDropdown = React.forwardRef(
                 editDisabled={editDisabled}
               />
 
-              <ThemeSelectorToggle
+              <ThemeDialog setMenuOpen={setOpen} />
+              {/* <ThemeSelectorToggle
                 handleThemeToggle={handleThemeToggle}
                 rest_disabled={restDisabled}
                 themeOpen={themeOpen}
               />
 
-              <ThemeMenuItems themeOpen={themeOpen} setOpen={setOpen} />
-
-              <ShareMenuItem
-                setMenuOpen={setOpen}
-                restDisabled={restDisabled}
-                handleShareLink={handleShareLink}
-              />
-              <PrivacyMenuItem
-                setOpen={setOpen}
-                rest_disabled={restDisabled}
-              />
+              <ThemeMenuItems themeOpen={themeOpen} setOpen={setOpen} /> */}
+              <ShareDialog setMenuOpen={setOpen} />
+              <PrivacyMenuItem setOpen={setOpen} rest_disabled={restDisabled} />
               <LogoutMenuItem setOpen={setOpen} />
             </PrimaryMenu>
           </ClickAwayListener>

@@ -28,38 +28,38 @@ import { defaultPortfolioContext } from "jinxui/contexts";
 import { TuneOutlined } from "@material-ui/icons";
 import { string } from "yup";
 
-async function changePortfolioPrivacy(
-  portfolioId: Tuuid,
-  privacy: boolean,
-  config: any,
-  updateState: any
-) {
-  const path = PORTFOLIOS_PATH + "/" + portfolioId;
-  const outerResult = API.get(path, config)
-    .then((response: any) => {
-      const result = API.put(
-        path,
-        {
-          name: response.data.name,
-          private: privacy,
-        },
-        config
-      )
-        .then((response: any) => {
-          updateState({ private: response.data.private });
-        })
-        .catch((error: any) => {
-          console.log(error);
-          throw error;
-        });
-      return result;
-    })
-    .catch((error: any) => {
-      console.log(error);
-      throw error;
-    });
-  return outerResult;
-}
+// async function changePortfolioPrivacy(
+//   portfolioId: Tuuid,
+//   privacy: boolean,
+//   config: any,
+//   updateState: any
+// ) {
+//   const path = PORTFOLIOS_PATH + "/" + portfolioId;
+//   const outerResult = API.get(path, config)
+//     .then((response: any) => {
+//       const result = API.put(
+//         path,
+//         {
+//           name: response.data.name,
+//           private: privacy,
+//         },
+//         config
+//       )
+//         .then((response: any) => {
+//           updateState({ private: response.data.private });
+//         })
+//         .catch((error: any) => {
+//           console.log(error);
+//           throw error;
+//         });
+//       return result;
+//     })
+//     .catch((error: any) => {
+//       console.log(error);
+//       throw error;
+//     });
+//   return outerResult;
+// }
 
 // Note the $s in the function name. Use this if you want to get all of a user's portfolios
 // eslint-disable-next-line
@@ -188,6 +188,33 @@ export const usePortfolio = () => {
     }
   }
 
+  async function saveFullPortfolio(isNew: boolean) {
+    setSaving(true);
+    if (state) {
+      try {
+        await commitPageDeletions();
+        await savePortfolio(isNew);
+        const pages = getPagesIndexedCopy();
+        const allSections = getSectionsIndexedCopyAll();
+
+        for (var [index, page] of pages.entries()) {
+          if (!page.toDelete) {
+            page.sections = allSections[page.id];
+            page.index = index;
+            await savePage(state.id, page);
+          }
+        }
+
+        await setSuccessMessage("Portfolio saved");
+      } catch (e) {
+        setErrorMessage(e.message);
+        throw e;
+      } finally {
+        setSaving(false);
+      }
+    }
+  }
+
   function portfolioIsFetched() {
     return state.id != defaultPortfolioContext.id;
   }
@@ -264,48 +291,39 @@ export const usePortfolio = () => {
     }
   }
 
-  async function saveFullPortfolio(isNew: boolean) {
-    setSaving(true);
-    if (state) {
-      try {
-        await commitPageDeletions();
-        await savePortfolio(isNew);
-        const pages = getPagesIndexedCopy();
-        const allSections = getSectionsIndexedCopyAll();
-
-        for (var [index, page] of pages.entries()) {
-          if (!page.toDelete) {
-            page.sections = allSections[page.id];
-            page.index = index;
-            await savePage(state.id, page);
-          }
-        }
-
-        await setSuccessMessage("Portfolio saved");
-      } catch (e) {
-        setErrorMessage(e.message);
-        throw e;
-      } finally {
-        setSaving(false);
-      }
+  async function changePortfolioPrivacy(
+    portfolioId: Tuuid,
+    privacySetting: boolean
+  ) {
+    try {
+      const path = PORTFOLIOS_PATH + "/" + portfolioId
+      const response = await API.patch(
+        path,
+        { private: privacySetting },
+        getConfig(),
+      )
+      updateState({ private: response.data.private });
+      return response;
+    } catch (e) {
+      throw e;
     }
   }
 
   async function makePortfolioPublic(portfolioId: Tuuid) {
     return await changePortfolioPrivacy(
       portfolioId,
-      false,
-      getConfig(),
-      updateState
+      false
+      // getConfig(),
+      // updateState
     );
   }
 
   async function makePortfolioPrivate(portfolioId: Tuuid) {
     return await changePortfolioPrivacy(
       portfolioId,
-      true,
-      getConfig(),
-      updateState
+      true
+      // getConfig(),
+      // updateState
     );
   }
 
@@ -371,8 +389,8 @@ export const usePortfolio = () => {
     // resetPortfolioLinks();
   }
 
-  function logPortfolioState(){
-    console.log(state)
+  function logPortfolioState() {
+    console.log(state);
   }
 
   return {
