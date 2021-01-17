@@ -170,7 +170,6 @@ export const usePortfolio = () => {
       setPages(pages);
       setSections(sections);
 
-      console.log(state);
       return portfolioDetails;
     } catch (e) {
       throw e;

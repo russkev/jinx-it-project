@@ -251,7 +251,6 @@ export const useSection = () => {
     sectionId: string,
     link: TLink
   ) {
-    console.log(link)
     const links = getFetchedSectionLinks(pageId, sectionId);
     const index = sectionIndex(pageId, sectionId);
     const linkIndex = sectionLinkIndex(links, link.id);

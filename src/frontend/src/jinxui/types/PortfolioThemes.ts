@@ -11,6 +11,8 @@ declare module '@material-ui/core/styles/createMuiTheme' {
       headerBackground: {
         // Source of the background image file
         src: string
+        // 300 pixel width version of background image for theme selector
+        src300: string
         // The RGBA color to overlay the image
         overlayColor?: string
         // Header height will be minimum of this number and 100% view height
@@ -57,6 +59,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
     portfolio: {
       headerBackground?: {
         src?: string
+        src300?: string
         overlayColor?: string
         maxHeight?: number
         isDark?: boolean

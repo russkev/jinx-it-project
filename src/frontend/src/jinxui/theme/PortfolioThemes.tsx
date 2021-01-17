@@ -20,16 +20,16 @@ import BackgroundColor from "./ThemeColors"
 
 const createTheme = (theme: any) => responsiveFontSizes(createMuiTheme(theme));
 
-const loading: Theme = createTheme({
-    portfolio: {
-        theme: {
-            name: "Loading"
-        },
-        headerBackground: {
-            src: require("images/backgrounds/bg_loading_01.webp"),
-        },
-    }
-})
+// const loading: Theme = createTheme({
+//     portfolio: {
+//         theme: {
+//             name: "Loading"
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/bg_loading_01.webp"),
+//         },
+//     }
+// })
 
 const magma: Theme = createTheme({
     breakpoints: {
@@ -76,6 +76,7 @@ const magma: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/magma_01.webp"),
+            src300: require("images/backgrounds/magma_01_300.jpg"),
         },
         section: {
             sectionGap: "4em",
@@ -116,6 +117,7 @@ const sunset: Theme = createTheme({
         headerBackground: {
             isDark: true,
             src: require("images/backgrounds/sunset_01.webp"),
+            src300: require("images/backgrounds/sunset_01_300.jpg"),
         },
         section: {
             colors: BackgroundColor.gradient,
@@ -155,6 +157,7 @@ const lilypad: Theme = createTheme({
         headerBackground: {
             colors: BackgroundColor.gradient,
             src: require("images/backgrounds/lilypad_01.webp"),
+            src300: require("images/backgrounds/lilypad_01_300.jpg"),
         },
     },
 });
@@ -190,6 +193,7 @@ const autumn: Theme = createTheme({
         headerBackground: {
             colors: BackgroundColor.gradient,
             src: require("images/backgrounds/autumn_01.webp"),
+            src300: require("images/backgrounds/autumn_01_300.jpg"),
         }
     },
 });
@@ -224,6 +228,7 @@ const cityscape: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/cityscape_01.webp"),
+            src300: require("images/backgrounds/cityscape_01_300.jpg"),
         },
         section: {
             colors: BackgroundColor.gradient,
@@ -273,7 +278,8 @@ const presentation: Theme = createTheme({
         headerBackground: {
             isDark: true,
             overlayColor: "0, 0, 0, 0.0",
-            src: require("images/backgrounds/jinx_logo_bg.svg")
+            src: require("images/backgrounds/jinx_logo_bg.svg"),
+            src300: require("images/backgrounds/jinx_logo_bg.svg"),
         },
         section: {
             sectionGap: "20rem",
@@ -306,6 +312,7 @@ const rainbow: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/rainbow_01.webp"),
+            src300: require("images/backgrounds/rainbow_01_300.jpg"),
         },
         section: {
             colors: BackgroundColor.rainbowStep,
@@ -338,6 +345,7 @@ const rainbowSmooth: Theme = createTheme({
         headerBackground: {
             isDark: true,
             src: require("images/backgrounds/rainbow_01.webp"),
+            src300: require("images/backgrounds/rainbow_01_300.jpg"),
         },
         section: {
             colors: BackgroundColor.rainbowGradient,
@@ -405,6 +413,7 @@ const arch: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/arch.jpg"),
+            src300: require("images/backgrounds/arch_300.jpg"),
             overlayColor: "255, 255, 255, 0.65",
             maxHeight: "700px",
         },
@@ -468,6 +477,7 @@ const mountains: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/mountains_03.jpg"),
+            src300: require("images/backgrounds/mountains_03_300.jpg"),
             maxHeight: "1000px",
             overlayColor: "48, 41, 77, 0.41",
         },
@@ -540,6 +550,7 @@ const sand: Theme = createTheme({
         },
         headerBackground: {
             src: require("images/backgrounds/black_sand.jpg"),
+            src300: require("images/backgrounds/black_sand_300.jpg"),
             maxHeight: "100vh",
             overlayColor: "46, 54, 84, 0.22",
             isDark: true,
@@ -562,7 +573,9 @@ const sand: Theme = createTheme({
 
 // Register your theme in here - this is the object you'll access it from
 const PortfolioThemes = {
-    loading: loading,
+    arch: arch,
+    mountains: mountains,
+    sand: sand,
     magma: magma,
     sunset: sunset,
     lilypad: lilypad,
@@ -571,9 +584,6 @@ const PortfolioThemes = {
     rainbow: rainbow,
     rainbowSmooth: rainbowSmooth,
     presentation: presentation,
-    arch: arch,
-    mountains: mountains,
-    sand: sand,
 }
 
 export default PortfolioThemes;

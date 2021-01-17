@@ -128,7 +128,8 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
     const subtitleColor = header?.useSecondaryForSubtitle
       ? props.theme.palette.secondary.main
       : titleColor;
-    const textColor = themeColors(props.theme, 0)[1];
+    const [backgroundColor, textColor, isFullHeight ] = themeColors(props.theme, 0);
+    console.log(backgroundColor)
     const BGOverlay = headerBG.overlayColor
       ? "rgb(" + headerBG.overlayColor + ")"
       : "";
@@ -140,10 +141,8 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
       header?.horizontalAlign !== undefined
         ? header.horizontalAlign
         : "flex-start";
+    const customCss = props.theme.portfolio?.section?.css || {};
 
-    const textAlign =
-      header?.textAlign !== undefined ? header.textAlign : "left";
-    // const classes = useStyles();
     return (
       <Grid item>
         <ThemeProvider theme={props.theme}>
@@ -154,7 +153,10 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
             }}
           >
             <Paper className={themeClasses.root} variant="outlined">
-              <CardHeader title={props.themeName} style={{textTransform: "none"}}/>
+              <CardHeader
+                title={props.themeName}
+                style={{ textTransform: "none" }}
+              />
 
               <Box
                 display="grid"
@@ -163,7 +165,7 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
               >
                 <Box gridRow="1 / span 1" gridColumn="1 / span 1">
                   <CardMedia
-                    image={props.theme.portfolio.headerBackground.src}
+                    image={props.theme.portfolio.headerBackground.src300}
                     className={themeClasses.media}
                   />
                 </Box>
@@ -208,6 +210,12 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                 display="grid"
                 gridTemplateRows="1fr"
                 gridTemplateColumns="1fr"
+                // bgcolor={backgroundColor}
+                // style={isFullHeight 
+                //   ? {...customCss}
+                //   : {background: backgroundColor, ...customCss}
+                // }
+                style={{background: backgroundColor}}
               >
                 <Box
                   gridRow="1 / span 1"
@@ -228,7 +236,7 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                       height="100%"
                       bgcolor={textColor}
                       borderRadius={5}
-                      style={{opacity: "50%"}}
+                      style={{ opacity: "50%" }}
                     />
                   </Box>
                 </Box>
@@ -265,13 +273,13 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                 {Object.values(PortfolioThemes).map((theme: Theme) => {
                   const themeName = theme.portfolio.theme.name;
                   return (
-                    <>
+                    <Box key={themeName}>
                       <ThemeCard
                         theme={theme}
                         themeName={themeName}
-                        key={themeName}
+                        
                       />
-                    </>
+                    </Box>
                   );
                 })}
               </Grid>
