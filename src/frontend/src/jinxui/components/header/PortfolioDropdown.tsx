@@ -11,7 +11,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import EditIcon from "@material-ui/icons/Edit";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import PersonalVideoIcon from "@material-ui/icons/PersonalVideo";
 import InvertColorsIcon from "@material-ui/icons/InvertColors";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -31,6 +30,7 @@ import {
   Routes,
   PortfolioThemes,
   SnackbarAlert,
+  ShareDialog,
 } from "jinxui";
 
 import { Tuuid } from "jinxui/types";
@@ -93,8 +93,8 @@ const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
 });
 
 type TViewMenuItem = {
-  view_disabled: boolean;
-  edit_disabled: boolean;
+  viewDisabled: boolean;
+  editDisabled: boolean;
 };
 
 const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
@@ -111,7 +111,7 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
     );
   };
 
-  if (props.view_disabled || props.edit_disabled) {
+  if (props.viewDisabled || props.editDisabled) {
     if (viewRedirect) {
       return onView();
     } else {
@@ -122,7 +122,7 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
             onClick={() => {
               setViewRedirect(true);
             }}
-            disabled={props.view_disabled}
+            disabled={props.viewDisabled}
           >
             <ListItemIcon>
               <VisibilityIcon />
@@ -220,22 +220,38 @@ const ThemeMenuItem = React.forwardRef((props: TThemeMenu, ref: any) => {
 });
 
 type TShareMenuItem = {
+  setMenuOpen: any;
   handleShareLink: any;
-  rest_disabled: boolean;
+  restDisabled: boolean;
 };
 const ShareMenuItem = React.forwardRef((props: TShareMenuItem, ref: any) => {
   const { isPrivate } = usePortfolio();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+    props.setMenuOpen(false)
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false)
+    // props.setMenuOpen(false)
+  }
+
   return (
-    <MenuItem
-      ref={ref}
-      onClick={props.handleShareLink}
-      disabled={props.rest_disabled || isPrivate()}
-    >
-      <ListItemIcon>
-        <ShareIcon />
-      </ListItemIcon>
-      <ListItemText primary="Copy Link" />
-    </MenuItem>
+    <>
+      {/* <MenuItem
+        ref={ref}
+        onClick={handleClickOpen}
+        disabled={props.restDisabled || isPrivate()}
+      >
+        <ListItemIcon>
+          <ShareIcon />
+        </ListItemIcon>
+        <ListItemText primary="Share" />
+      </MenuItem> */}
+      <ShareDialog setMenuOpen={props.setMenuOpen}/>
+    </>
   );
 });
 
@@ -397,9 +413,9 @@ const PortfolioDropdown = React.forwardRef(
       setSuccessMessage("Portfolio link copied to clipboard");
     };
 
-    const view_disabled = props.isUserView === true;
-    const edit_disabled = props.isUserEdit === true;
-    const rest_disabled =
+    const viewDisabled = props.isUserView === true;
+    const editDisabled = props.isUserEdit === true;
+    const restDisabled =
       props.isUserView !== true && props.isUserEdit !== true;
 
     return (
@@ -426,32 +442,31 @@ const PortfolioDropdown = React.forwardRef(
               onClose={handleClose}
               onKeyDown={handleListKeyDown}
             >
-              <EditMenuItem edit_disabled={edit_disabled} />
+              <EditMenuItem edit_disabled={editDisabled} />
 
               <ViewMenuItem
-                view_disabled={view_disabled}
-                edit_disabled={edit_disabled}
+                viewDisabled={viewDisabled}
+                editDisabled={editDisabled}
               />
 
               <ThemeSelectorToggle
                 handleThemeToggle={handleThemeToggle}
-                rest_disabled={rest_disabled}
+                rest_disabled={restDisabled}
                 themeOpen={themeOpen}
               />
 
               <ThemeMenuItems themeOpen={themeOpen} setOpen={setOpen} />
 
               <ShareMenuItem
-                rest_disabled={rest_disabled}
+                setMenuOpen={setOpen}
+                restDisabled={restDisabled}
                 handleShareLink={handleShareLink}
               />
               <PrivacyMenuItem
                 setOpen={setOpen}
-                rest_disabled={rest_disabled}
+                rest_disabled={restDisabled}
               />
-              <LogoutMenuItem
-                setOpen={setOpen}
-              />
+              <LogoutMenuItem setOpen={setOpen} />
             </PrimaryMenu>
           </ClickAwayListener>
         </DivWrapper>

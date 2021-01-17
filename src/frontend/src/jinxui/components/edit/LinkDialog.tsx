@@ -100,7 +100,6 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
   };
 
   const handleClose = () => {
-
     setOpen(false);
   };
 

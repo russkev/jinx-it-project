@@ -28,6 +28,7 @@ export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
 export { default as HeaderButton } from "./components/header/HeaderButton";
 export { default as HeaderBarSpacer } from "./components/header/HeaderBarSpacer";
 export { default as PortfolioDropdown } from "./components/header/PortfolioDropdown";
+export { default as ShareDialog } from "./components/header/ShareDialog";
 
 /* Account */
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
@@ -51,9 +52,6 @@ export {
   ScreenBlock,
   PortfolioHeader,
 } from "./components/display/MuiComponents";
-
-
-
 
 /* Edit */
 export { default as PaperSection } from "./components/edit/PaperSection"
