@@ -18,44 +18,42 @@ type TInputImageText = {
 };
 
 const InputImageText = (props: TInputImageText) => {
-  // const {
-  //   getFetchedSections,
-  //   handleTitleChange,
-  //   handleContentChange,
-  // } = useSection();
+  const {
+    getFetchedSections,    
+  } = useSection();
 
-  // const index = getFetchedSections(props.pageId).findIndex(
-  //   (p: TSection) => p.id === props.section.id
-  // );
+  const index = getFetchedSections(props.pageId).findIndex(
+    (p: TSection) => p.id === props.section.id
+  );
 
-  // return (
-  //   <>
-  //     {index === 0 && (
-  //       <NewSectionMenu
-  //         pageId={props.pageId}
-  //         section={props.section}
-  //         placeAbove={true}
-  //       />
-  //     )}
-  //     <PaperSection
-  //       pageId={props.pageId}
-  //       section={props.section}
-  //       handleTitleChange={handleTitleChange}
-  //     >
-  //       <TwoColumnSectionDiv>
-  //         <TextFieldSubSection
-  //           pageId={props.pageId}
-  //           section={props.section}
-  //           handleChange={handleContentChange}
-  //           rows={15}
-  //         />
-  //         <UploadImageSubSection section={props.section} />
-  //       </TwoColumnSectionDiv>
-  //     </PaperSection>
-  //     <NewSectionMenu pageId={props.pageId} section={props.section} />
-  //   </>
-  // );
-  return <> </>;
+  return (
+    <>
+      {index === 0 && (
+        <NewSectionMenu
+          pageId={props.pageId}
+          section={props.section}
+          placeAbove={true}
+        />
+      )}
+      <PaperSection
+        pageId={props.pageId}
+        section={props.section}
+      >
+        <TwoColumnSectionDiv>
+          <InputComponentTextField
+            pageId={props.pageId}
+            section={props.section}
+            rows={15}
+          />
+          <InputComponentUploadImage
+            pageId={props.pageId}
+            section={props.section}
+          />
+        </TwoColumnSectionDiv>
+      </PaperSection>
+      <NewSectionMenu pageId={props.pageId} section={props.section} />
+    </>
+  );
 };
 
 export default InputImageText;

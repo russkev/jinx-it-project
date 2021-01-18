@@ -37,16 +37,6 @@ urlpatterns = [
         name='section_detail',
     ),
     path(
-        'images',
-        views.ImageList.as_view(),
-        name = 'image_list',
-    ),
-    path(
-        'images/<uuid:image_id>',
-        views.ImageDetail.as_view(),
-        name = 'image_detail',
-    ),
-    path(
         'portfolios/<uuid:portfolio_id>/links',
         views.PortfolioLinkList.as_view(),
         name='portfolio_link_list'
@@ -66,9 +56,14 @@ urlpatterns = [
         views.SectionLinkDetail.as_view(),
         name = 'section_link_detail',
     ),
-    # path(
-    #     'links/<uuid:link_id>',
-    #     views.LinkDetail.as_view(),
-    #     name = 'link_detail'
-    # )
+    path(
+        'images',
+        views.ImageList.as_view(),
+        name='image_list',
+    ),
+    path(
+        'images/<uuid:image_id>',
+        views.ImageDetail.as_view(),
+        name='image_detail',
+    ),
 ]

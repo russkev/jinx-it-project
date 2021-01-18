@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
-import { useUser, StyledUserImage } from "jinxui";
-import { TSection, TImage } from "jinxui/types";
+import { useUser, useSection, StyledUserImage } from "jinxui";
+import { TSection, TImage, Tuuid } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
 const StyledInput = styled.input`
@@ -51,11 +51,13 @@ const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
 `;
 
 type TInputComponentUploadImage = {
+  pageId: Tuuid;
   section: TSection;
 };
 
 const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   // const [imagePath, setImagePath] = useState(FRONT_END_URL + "blank_image.svg");
+  const { onSectionChange } = useSection();
   const [imageExists, setImageExists] = useState(false);
   const { fetchImage, uploadImage } = useUser();
   // const [imageResponse, setImageResponse] = useState({ path: "", id: "null" });
@@ -106,8 +108,14 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                   //   name: response.data.name,
                   //   path: response.data.path,
                   // };
-                  setLocalImage(response.data);
-                  setImageExists(true)
+                  // !!! Need to set section data
+                  setLocalImage(() => {
+                    onSectionChange(props.pageId, props.section.id, {
+                      image: response.data.id,
+                    });
+                    return response.data;
+                  });
+                  setImageExists(true);
                 })
                 .catch((error) => {
                   console.log(error);

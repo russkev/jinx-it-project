@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { TSection, TSections, Tuuid } from "jinxui/types";
-import { v4 as uuidv4 } from "uuid";
 
 export const defaultSectionContext: TSection = {
   id: "0-0-0-0-0",
@@ -13,14 +12,13 @@ export const defaultSectionContext: TSection = {
   links: [],
 };
 
-
-
 export const SectionContext = React.createContext<[TSections, any, any, any]>([
   {}, 
   () => {}, 
   () => {},
   () => {}
 ]);
+
 
 type TSectionContextProvider = {
   children: any;
@@ -36,14 +34,6 @@ export const SectionContextProvider = (props: TSectionContextProvider) => {
     if (!(pageId in state)) {
       throw Error("Sections for page " + pageId + " not found.")
     }
-    const newState = {
-      ...state,
-      [pageId]: [
-        ...state[pageId].slice(0, index),
-        { ...state[pageId][index], ...fieldsToUpdate },
-        ...state[pageId].slice(index + 1),
-      ],
-    };
     setState({
       ...state,
         [pageId]: [

@@ -30,7 +30,10 @@ const InputImage = (props: TInputImage) => {
       )}
       <PaperSection pageId={props.pageId} section={props.section}>
         <OneColumnSectionDiv>
-          <InputComponentUploadImage section={props.section} />
+          <InputComponentUploadImage
+            pageId={props.pageId}
+            section={props.section}
+          />
         </OneColumnSectionDiv>
       </PaperSection>
       <NewSectionMenu pageId={props.pageId} section={props.section} />

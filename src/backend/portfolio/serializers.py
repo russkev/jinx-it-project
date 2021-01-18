@@ -13,11 +13,24 @@ from . import models
 # be converted to native python datatypes. From there, the data can be
 # easily rendered into JSON, XML, etc. to suit our needs
 
+
+
+################################################################################
+# IMAGE
+################################################################################
+
+
+class ImageSerializer(
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = models.Image
+        fields = ['id', 'name', 'path']
+
+
 ################################################################################
 # SECTION LINK
 ################################################################################
-
-
 class SectionLinkSerializer(
     UniqueFieldsMixin,
     serializers.ModelSerializer
@@ -31,8 +44,6 @@ class SectionLinkSerializer(
 ################################################################################
 # PORTFOLIO LINK
 ################################################################################
-
-
 class PortfolioLinkSerializer(
     UniqueFieldsMixin,
     serializers.ModelSerializer
@@ -77,11 +88,29 @@ class PageSerializer(
         model = models.Page
         fields = ['id', 'name', 'index', 'sections']
 
+    def delete_unused_images(self, owner):
+        user_images = models.Image.objects.filter(owner=owner)
+        for user_image in user_images:
+            image_id = user_image.id
+            print(image_id)
+            image_is_for_deletion = True
+            try:
+                models.Section.objects.get(image=image_id)
+                print("IMAGE FOUND")
+                image_is_for_deletion = False
+            except models.Section.DoesNotExist:
+                pass
+            if image_is_for_deletion:
+                user_image.delete()
+
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        self.delete_unused_images(instance.owner)
+        return instance
+
 ################################################################################
 # PORTFOLIO
 ################################################################################
-
-
 class PortfolioSerializer(
     NestedCreateMixin,
     NestedUpdateMixin,
@@ -96,16 +125,4 @@ class PortfolioSerializer(
         fields = ['id', 'owner', 'name', 'subtitle', 'pages', 'links',
                   'private', 'theme', 'background']
 
-################################################################################
-# IMAGE
-################################################################################
 
-
-class ImageSerializer(
-    serializers.ModelSerializer
-):
-    owner = serializers.ReadOnlyField(source='owner.id')
-
-    class Meta:
-        model = models.Image
-        fields = ['id', 'owner', 'name', 'path']

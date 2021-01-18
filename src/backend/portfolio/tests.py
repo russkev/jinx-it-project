@@ -933,7 +933,8 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
             image.save(f, 'PNG')
         test_image = open(f.name, mode='rb')
         data = {
-            'name': 'test_image',
+            'id': str(uuid.uuid4()),
+            'name': 'test_image_2',
             'path': test_image,
         }
         response = self.client.post(
@@ -942,10 +943,11 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
             ),
             data=data
         )
-
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(models.Image.objects.all()), 11)
         self.assertEqual(response.data['name'], data['name'])
+        self.assertEqual(response.data['id'], data['id'])
+        self.assertEqual(models.Image.objects.get(id = data['id']).name, data['name'])
 
     def test_image_validation(self):
         name = 'a' * 101
@@ -969,7 +971,6 @@ class ImageTest(UserMixin, PortfolioMixin, APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(self.image.id), response.data['id'])
-        self.assertEqual(self.portfolio.owner.id, response.data['owner'])
         self.assertEqual(self.image.name, response.data['name'])
 
     def test_image_update(self):
