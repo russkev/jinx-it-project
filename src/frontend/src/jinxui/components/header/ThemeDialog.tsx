@@ -4,11 +4,9 @@ import styled from "styled-components";
 
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Dialog from "@material-ui/core/Dialog";
 import MenuItem from "@material-ui/core/MenuItem";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Drawer from "@material-ui/core/Drawer";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
@@ -18,14 +16,10 @@ import {
   ThemeProvider,
   useTheme,
 } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import Button from "@material-ui/core/Button";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Grid, { GridSpacing } from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 
@@ -38,8 +32,7 @@ import {
   SecondaryButton,
   themeColors,
 } from "jinxui";
-import { setSyntheticLeadingComments } from "typescript";
-// import { createStyles } from "@material-ui/core";
+
 
 const PublishCancelDiv = styled.div`
   display: flex;
@@ -50,16 +43,17 @@ const PublishCancelDiv = styled.div`
   margin: 5px;
   padding: 5px;
   width: 100%;
+  max-width: 600px;
 `;
 
 const ThemeIconLayout = styled.div`
   display: flex;
   flex-direction: row;
   overflow: auto;
-  &::before ,
+  &::before,
   &::after {
-    content:'';
-    flex:1
+    content: "";
+    flex: 1;
   }
 `;
 
@@ -112,10 +106,6 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
     themePreview(themeName);
   }
 
-  // const handleThemeClick = (themeName: string) => {
-  //   console.log("Theme clicked");
-  // };
-
   const handleOkClick = () => {
     setDialogOpen(false);
     props.setMenuOpen(false);
@@ -128,6 +118,8 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
     themePreviewCancel(userData.portfolioId);
   };
 
+  // Individual theme card. 
+  // Automatically customised according to theme settings
   type TThemeCard = {
     theme: Theme;
     themeName: string;
@@ -166,19 +158,19 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
 
     return (
       <>
-      {/* <Grid item> */}
-        {/* <Button onClick={handleThemeClick}> */}
         <Button
           onClick={() => {
             handleThemeClick(props.themeName);
           }}
-          style={{ padding: "0px 16px" }}
+          style={{
+            padding: "16px",
+            borderRadius: cardBorderRadius,
+          }}
         >
           <ThemeProvider theme={props.theme}>
             <Paper
               className={themeClasses.root}
               elevation={0}
-              // variant="outlined"
               style={
                 props.themeName === userData.theme
                   ? {
@@ -277,7 +269,6 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
             </Paper>
           </ThemeProvider>
         </Button>
-      {/* </Grid> */}
       </>
     );
   };
@@ -290,22 +281,13 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
         </ListItemIcon>
         <ListItemText>Choose Theme</ListItemText>
       </MenuItem>
-      {/* <Dialog
-        ref={ref}
-        open={dialogOpen}
-        onClose={handleClose}
-        aria-labelledby="Share dialog"
-        maxWidth="lg"
-        // className={classes.dialog}
-        classes={{ paper: classes.dialog }}
-      > */}
       <Drawer anchor="bottom" open={dialogOpen} onClose={handleClose}>
-        <DialogTitle id="theme-dialog-title">Choose Theme</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="theme-dialog-title" style={{ textAlign: "center" }}>
+          Choose Theme
+        </DialogTitle>
+        <DialogContent style={{ padding: "0px" }}>
           <Box width="100%" height="10px" />
-          {/* <Grid container justify="center" wrap="nowrap"> */}
-            <ThemeIconLayout>
-
+          <ThemeIconLayout>
             {Object.values(PortfolioThemes).map((theme: Theme) => {
               const themeName = theme.portfolio.theme.name;
               return (
@@ -314,10 +296,9 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                 </Box>
               );
             })}
-              </ThemeIconLayout>
-          {/* </Grid> */}
+          </ThemeIconLayout>
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{ justifyContent: "center" }}>
           <PublishCancelDiv>
             <div>
               <PrimaryButton onClick={handleOkClick}>OK</PrimaryButton>
@@ -330,7 +311,6 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
           </PublishCancelDiv>
         </DialogActions>
       </Drawer>
-      {/* </Dialog> */}
     </>
   );
 });
