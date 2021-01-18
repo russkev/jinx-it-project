@@ -576,14 +576,14 @@ const PortfolioThemes = {
     arch: arch,
     mountains: mountains,
     sand: sand,
-    magma: magma,
-    sunset: sunset,
-    lilypad: lilypad,
-    autumn: autumn,
-    cityscape: cityscape,
-    rainbow: rainbow,
-    rainbowSmooth: rainbowSmooth,
-    presentation: presentation,
+    // magma: magma,
+    // sunset: sunset,
+    // lilypad: lilypad,
+    // autumn: autumn,
+    // cityscape: cityscape,
+    // rainbow: rainbow,
+    // rainbowSmooth: rainbowSmooth,
+    // presentation: presentation,
 }
 
 export default PortfolioThemes;

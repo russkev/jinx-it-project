@@ -40,3 +40,6 @@ Pillow==7.2.0
 
 ## Debugging
 ptvsd==4.3.2
+
+## Django Plugins
+drf_writable_nested==0.6.2

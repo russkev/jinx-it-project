@@ -1,4 +1,5 @@
 import React, { forwardRef, useState } from "react";
+
 import styled from "styled-components";
 
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -9,11 +10,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Drawer from "@material-ui/core/Drawer";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import {
   makeStyles,
   createStyles,
   ThemeProvider,
+  useTheme,
 } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -49,6 +52,17 @@ const PublishCancelDiv = styled.div`
   width: 100%;
 `;
 
+const ThemeIconLayout = styled.div`
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  &::before ,
+  &::after {
+    content:'';
+    flex:1
+  }
+`;
+
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     dialog: {
@@ -80,6 +94,7 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
     themePreview,
     themePreviewCancel,
   } = useUser();
+  const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
   const themeClasses = useStylesThemes();
@@ -103,11 +118,13 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
 
   const handleOkClick = () => {
     setDialogOpen(false);
+    props.setMenuOpen(false);
     setTheme(userData.portfolioId);
   };
 
   const handleCancelClick = () => {
     setDialogOpen(false);
+    props.setMenuOpen(false);
     themePreviewCancel(userData.portfolioId);
   };
 
@@ -128,8 +145,10 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
     const subtitleColor = header?.useSecondaryForSubtitle
       ? props.theme.palette.secondary.main
       : titleColor;
-    const [backgroundColor, textColor, isFullHeight ] = themeColors(props.theme, 0);
-    console.log(backgroundColor)
+    const [backgroundColor, textColor, isFullHeight] = themeColors(
+      props.theme,
+      0
+    );
     const BGOverlay = headerBG.overlayColor
       ? "rgb(" + headerBG.overlayColor + ")"
       : "";
@@ -142,17 +161,33 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
         ? header.horizontalAlign
         : "flex-start";
     const customCss = props.theme.portfolio?.section?.css || {};
+    const editThemeSecondaryColor = theme.palette.secondary.main;
+    const cardBorderRadius = "10px";
 
     return (
-      <Grid item>
-        <ThemeProvider theme={props.theme}>
-          {/* <Button onClick={handleThemeClick}> */}
-          <Button
-            onClick={() => {
-              handleThemeClick(props.themeName);
-            }}
-          >
-            <Paper className={themeClasses.root} variant="outlined">
+      <>
+      {/* <Grid item> */}
+        {/* <Button onClick={handleThemeClick}> */}
+        <Button
+          onClick={() => {
+            handleThemeClick(props.themeName);
+          }}
+          style={{ padding: "0px 16px" }}
+        >
+          <ThemeProvider theme={props.theme}>
+            <Paper
+              className={themeClasses.root}
+              elevation={0}
+              // variant="outlined"
+              style={
+                props.themeName === userData.theme
+                  ? {
+                      border: "2px solid " + editThemeSecondaryColor,
+                      borderRadius: cardBorderRadius,
+                    }
+                  : { borderRadius: cardBorderRadius }
+              }
+            >
               <CardHeader
                 title={props.themeName}
                 style={{ textTransform: "none" }}
@@ -210,12 +245,10 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                 display="grid"
                 gridTemplateRows="1fr"
                 gridTemplateColumns="1fr"
-                // bgcolor={backgroundColor}
-                // style={isFullHeight 
-                //   ? {...customCss}
-                //   : {background: backgroundColor, ...customCss}
-                // }
-                style={{background: backgroundColor}}
+                style={{ background: backgroundColor }}
+                borderRadius={
+                  "0px 0px " + cardBorderRadius + " " + cardBorderRadius
+                }
               >
                 <Box
                   gridRow="1 / span 1"
@@ -242,9 +275,10 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
                 </Box>
               </Box>
             </Paper>
-          </Button>
-        </ThemeProvider>
-      </Grid>
+          </ThemeProvider>
+        </Button>
+      {/* </Grid> */}
+      </>
     );
   };
 
@@ -256,7 +290,7 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
         </ListItemIcon>
         <ListItemText>Choose Theme</ListItemText>
       </MenuItem>
-      <Dialog
+      {/* <Dialog
         ref={ref}
         open={dialogOpen}
         onClose={handleClose}
@@ -264,27 +298,24 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
         maxWidth="lg"
         // className={classes.dialog}
         classes={{ paper: classes.dialog }}
-      >
+      > */}
+      <Drawer anchor="bottom" open={dialogOpen} onClose={handleClose}>
         <DialogTitle id="theme-dialog-title">Choose Theme</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Grid container justify="center" spacing={4}>
-                {Object.values(PortfolioThemes).map((theme: Theme) => {
-                  const themeName = theme.portfolio.theme.name;
-                  return (
-                    <Box key={themeName}>
-                      <ThemeCard
-                        theme={theme}
-                        themeName={themeName}
-                        
-                      />
-                    </Box>
-                  );
-                })}
-              </Grid>
-            </Grid>
-          </Grid>
+          <Box width="100%" height="10px" />
+          {/* <Grid container justify="center" wrap="nowrap"> */}
+            <ThemeIconLayout>
+
+            {Object.values(PortfolioThemes).map((theme: Theme) => {
+              const themeName = theme.portfolio.theme.name;
+              return (
+                <Box key={themeName}>
+                  <ThemeCard theme={theme} themeName={themeName} />
+                </Box>
+              );
+            })}
+              </ThemeIconLayout>
+          {/* </Grid> */}
         </DialogContent>
         <DialogActions>
           <PublishCancelDiv>
@@ -298,7 +329,8 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
             </div>
           </PublishCancelDiv>
         </DialogActions>
-      </Dialog>
+      </Drawer>
+      {/* </Dialog> */}
     </>
   );
 });

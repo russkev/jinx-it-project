@@ -55,3 +55,11 @@ We use a hybrid of Styled Components and Material UI.
 If you're working on the portfolio display or edit pages, please use Material UI theming to style any components that should update with the user's selected portfolio theme.
 
 Otherwise, you're welcome to use whichever library you're most comfortable with.
+
+## Adding packages
+
+In order to add packages, the easiest way is to install them locally using:
+```
+npm install <package_name> --save-dev
+```
+This will add the package to `package.json` in the development section. Move it to the `dependencies` section if required in production.
