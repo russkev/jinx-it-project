@@ -9,6 +9,7 @@ export type TPortfolio = {
   id: Tuuid;
   owner: number;
   name: string;
+  subtitle: string;
   pages: Tuuid[];
   links: TLink[];
   private: boolean;

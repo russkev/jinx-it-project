@@ -7,6 +7,7 @@ export const defaultPortfolioContext: TPortfolio = {
   id: "0-0-0-0-0",
   owner: 0,
   name: "",
+  subtitle: "",
   pages: [],
   links: [],
   private: true,

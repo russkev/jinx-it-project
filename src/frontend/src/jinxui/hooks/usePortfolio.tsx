@@ -9,7 +9,6 @@ import {
   listDelete,
   listMoveUp,
   listMoveDown,
-  listAdd,
   PORTFOLIOS_PATH,
 } from "jinxui";
 import API from "../../API";
@@ -19,47 +18,13 @@ import {
   TPortfolioData,
   TPage,
   TSections,
-  TSection,
   TLink,
   Tuuid,
 } from "jinxui/types";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { defaultPortfolioContext } from "jinxui/contexts";
-import { TuneOutlined } from "@material-ui/icons";
-import { string } from "yup";
 
-// async function changePortfolioPrivacy(
-//   portfolioId: Tuuid,
-//   privacy: boolean,
-//   config: any,
-//   updateState: any
-// ) {
-//   const path = PORTFOLIOS_PATH + "/" + portfolioId;
-//   const outerResult = API.get(path, config)
-//     .then((response: any) => {
-//       const result = API.put(
-//         path,
-//         {
-//           name: response.data.name,
-//           private: privacy,
-//         },
-//         config
-//       )
-//         .then((response: any) => {
-//           updateState({ private: response.data.private });
-//         })
-//         .catch((error: any) => {
-//           console.log(error);
-//           throw error;
-//         });
-//       return result;
-//     })
-//     .catch((error: any) => {
-//       console.log(error);
-//       throw error;
-//     });
-//   return outerResult;
-// }
+
 
 // Note the $s in the function name. Use this if you want to get all of a user's portfolios
 // eslint-disable-next-line

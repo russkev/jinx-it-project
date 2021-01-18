@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextField, Box, Button } from "@material-ui/core";
 import { useSection, LinksDisplay, LinkDialog } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
-import { cpuUsage } from "process";
-
 
 type TTextFieldSubSection = {
   pageId: Tuuid;
