@@ -20,16 +20,16 @@ export { PrimaryButton } from "./components/button/Button";
 export { SecondaryButton } from "./components/button/Button";
 
 /* Header */
-export { default as HeaderDiv } from "./components/header/HeaderDiv";
-export { default as SiteHeader } from "./components/header/SiteHeader";
+export { default as HeaderDiv } from "./components/header/StyledHeaderDiv";
+export { default as SiteHeader } from "./components/header/StyledSiteHeader";
 export { default as LogoLink } from "./components/header/LogoLink";
-export { default as HeaderTitle } from "./components/header/HeaderTitle";
+export { default as HeaderTitle } from "./components/header/StyledHeaderTitle";
 export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
-export { default as HeaderButton } from "./components/header/HeaderButton";
-export { default as HeaderBarSpacer } from "./components/header/HeaderBarSpacer";
-export { default as PortfolioDropdown } from "./components/header/PortfolioDropdown";
-export { default as ShareDialog } from "./components/header/ShareDialog";
-export { default as ThemeDialog } from "./components/header/ThemeDialog";
+export { default as HeaderButton } from "./components/header/StyledHeaderButton";
+export { default as HeaderBarSpacer } from "./components/header/StyledHeaderBarSpacer";
+export { default as DropdownPortfolio } from "./components/header/DropdownPortfolio";
+export { default as DialogShare } from "./components/header/DialogShare";
+export { default as DialogTheme } from "./components/header/DialogTheme";
 
 /* Account */
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";

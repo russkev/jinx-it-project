@@ -12,7 +12,7 @@ import {
   LightHeaderGrad,
   DarkHeaderGrad,
   LogoLink,
-  PortfolioDropdown,
+  DropdownPortfolio,
   useUser,
   SecondaryButton,
   Routes,
@@ -144,7 +144,7 @@ const HeaderBar = (props: HeaderBarProps) => {
                     <StyledLogin>Login</StyledLogin>
                   </StyledLink>
                 )}
-                <PortfolioDropdown
+                <DropdownPortfolio
                   isUserView={props.isUserView}
                   isUserEdit={props.isUserEdit}
                 />

@@ -13,10 +13,10 @@ import LinkIcon from "@material-ui/icons/Link";
 
 import { useUser } from "jinxui"
 
-type TShareDialog = {
+type TDialogShare = {
   setMenuOpen: any;
 };
-const ShareDialog = forwardRef((props: TShareDialog, ref: any) => {
+const DialogShare = forwardRef((props: TDialogShare, ref: any) => {
   const { userData, setSuccessMessage } = useUser();
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -69,4 +69,4 @@ const ShareDialog = forwardRef((props: TShareDialog, ref: any) => {
   );
 });
 
-export default ShareDialog;
+export default DialogShare;

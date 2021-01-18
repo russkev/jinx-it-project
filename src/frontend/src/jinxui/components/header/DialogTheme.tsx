@@ -77,10 +77,10 @@ const useStylesThemes = makeStyles((theme: Theme) => {
   });
 });
 
-type TThemeDialog = {
+type TDialogTheme = {
   setMenuOpen: any;
 };
-const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
+const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
   const {
     userData,
     setSuccessMessage,
@@ -315,4 +315,4 @@ const ShareDialog = forwardRef((props: TThemeDialog, ref: any) => {
   );
 });
 
-export default ShareDialog;
+export default DialogTheme;

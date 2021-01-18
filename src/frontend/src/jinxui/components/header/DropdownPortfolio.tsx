@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import styled from "styled-components";
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Link from "@material-ui/core/Link";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
 import MenuItem from "@material-ui/core/MenuItem";
 import EditIcon from "@material-ui/icons/Edit";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -16,8 +13,6 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-import PaletteIcon from "@material-ui/icons/Palette";
-import ShareIcon from "@material-ui/icons/Share";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
@@ -28,10 +23,9 @@ import {
   HeaderMediaWidth,
   PrimaryMenu,
   Routes,
-  PortfolioThemes,
   SnackbarAlert,
-  ShareDialog,
-  ThemeDialog,
+  DialogShare,
+  DialogTheme,
 } from "jinxui";
 
 import { Tuuid } from "jinxui/types";
@@ -172,54 +166,6 @@ const ThemeSelectorToggle = React.forwardRef(
   )
 );
 
-// type TThemeMenuItems = {
-//   themeOpen: any;
-//   setOpen: any;
-// };
-// const ThemeMenuItems = React.forwardRef((props: TThemeMenuItems, ref: any) => (
-//   <Collapse in={props.themeOpen} timeout="auto" unmountOnExit>
-//     {Object.values(PortfolioThemes).map((theme: Theme) => (
-//       <ThemeMenuItem
-//         ref={ref}
-//         key={theme.portfolio.theme.name}
-//         theme={theme}
-//         setOpen={props.setOpen}
-//       />
-//     ))}
-//   </Collapse>
-// ));
-
-// type TThemeMenu = {
-//   theme: Theme;
-//   setOpen: any;
-// };
-// const ThemeMenuItem = React.forwardRef((props: TThemeMenu, ref: any) => {
-//   const { setTheme, userData } = useUser();
-
-//   if (props.theme.portfolio.theme.name !== "Loading") {
-//     return (
-//       <MenuItem
-//         ref={ref}
-//         onClick={() => {
-//           props.setOpen(false);
-//           setTheme(userData.portfolioId, props.theme.portfolio.theme.name);
-//         }}
-//       >
-//         <ListItemIcon style={{ paddingLeft: 20 }}>
-//           {props.theme.portfolio.theme.name === userData.theme ? (
-//             <PaletteIcon color="secondary" />
-//           ) : (
-//             <PaletteIcon />
-//           )}
-//         </ListItemIcon>
-//         <ListItemText primary={props.theme.portfolio.theme.name} />
-//       </MenuItem>
-//     );
-//   } else {
-//     return null;
-//   }
-// });
-
 type TPrivateMenuItem = {
   setOpen: any;
   rest_disabled: boolean;
@@ -311,12 +257,12 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   }
 });
 
-type TPortfolioMenu = {
+type TDropdownPortfolio = {
   isUserView?: boolean;
   isUserEdit?: boolean;
 };
-const PortfolioDropdown = React.forwardRef(
-  (props: TPortfolioMenu, ref: any) => {
+const DropdownPortfolio = React.forwardRef(
+  (props: TDropdownPortfolio, ref: any) => {
     const [open, setOpen] = React.useState(false);
     const [themeOpen, themeSetOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -325,10 +271,6 @@ const PortfolioDropdown = React.forwardRef(
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleThemeToggle = () => {
-      themeSetOpen((themePrevOpen) => !themePrevOpen);
     };
 
     const handleClose = (event: React.MouseEvent<EventTarget>) => {
@@ -414,15 +356,8 @@ const PortfolioDropdown = React.forwardRef(
                 editDisabled={editDisabled}
               />
 
-              <ThemeDialog setMenuOpen={setOpen} />
-              {/* <ThemeSelectorToggle
-                handleThemeToggle={handleThemeToggle}
-                rest_disabled={restDisabled}
-                themeOpen={themeOpen}
-              />
-
-              <ThemeMenuItems themeOpen={themeOpen} setOpen={setOpen} /> */}
-              <ShareDialog setMenuOpen={setOpen} />
+              <DialogTheme setMenuOpen={setOpen} />
+              <DialogShare setMenuOpen={setOpen} />
               <PrivacyMenuItem setOpen={setOpen} rest_disabled={restDisabled} />
               <LogoutMenuItem setOpen={setOpen} />
             </PrimaryMenu>
@@ -433,4 +368,4 @@ const PortfolioDropdown = React.forwardRef(
   }
 );
 
-export default PortfolioDropdown;
+export default DropdownPortfolio;
