@@ -3,11 +3,6 @@ import { TextField, Box, Button } from "@material-ui/core";
 import { useSection, LinksDisplay, LinkDialog } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
 
-type TTextFieldSubSection = {
-  pageId: Tuuid;
-  section: TSection;
-  rows: number;
-};
 
 // Material ui text field
 //  - variant="outlined" ensures that there is an outline that makes it easy
@@ -15,8 +10,12 @@ type TTextFieldSubSection = {
 //  - placeholder will disappear as soon as a user starts writing something
 //      preferrable to default value so the user doesn't have to erase
 //      text before starting to write something of their own.
-
-const TextFieldSubSection = (props: TTextFieldSubSection) => {
+type TInputComponentTextField = {
+  pageId: Tuuid;
+  section: TSection;
+  rows: number;
+};
+const InputComponentTextField = (props: TInputComponentTextField) => {
   const {
     onSectionChange,
     logState,
@@ -75,4 +74,4 @@ const TextFieldSubSection = (props: TTextFieldSubSection) => {
   );
 };
 
-export default TextFieldSubSection;
+export default InputComponentTextField;

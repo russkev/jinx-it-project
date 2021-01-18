@@ -1,15 +1,15 @@
 import React from "react";
-import { PaperSection, TextFieldSubSection, OneColumnSectionDiv } from "jinxui";
+import { PaperSection, InputComponentTextField, OneColumnSectionDiv } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
 import { NewSectionMenu, useSection } from "jinxui";
 
-type TTextSectionProps = {
+type TInputText = {
   key: string;
   pageId: Tuuid,
   section: TSection;
 };
 
-const TextSectionInput = (props: TTextSectionProps) => {
+const InputText = (props: TInputText) => {
   const { sectionIndex } = useSection();
 
   const index = sectionIndex(props.pageId, props.section.id)
@@ -28,12 +28,9 @@ const TextSectionInput = (props: TTextSectionProps) => {
 
       {/* Main content */}
 
-      <PaperSection
-        pageId={props.pageId}
-        section={props.section}
-      >
+      <PaperSection pageId={props.pageId} section={props.section}>
         <OneColumnSectionDiv>
-          <TextFieldSubSection
+          <InputComponentTextField
             pageId={props.pageId}
             section={props.section}
             rows={15}
@@ -43,12 +40,9 @@ const TextSectionInput = (props: TTextSectionProps) => {
 
       {/* Add section menu */}
 
-      <NewSectionMenu
-        pageId={props.pageId}
-        section={props.section}
-      />
+      <NewSectionMenu pageId={props.pageId} section={props.section} />
     </>
   );
 };
 
-export default TextSectionInput;
+export default InputText;

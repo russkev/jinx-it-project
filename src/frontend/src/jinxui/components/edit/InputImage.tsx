@@ -2,22 +2,22 @@ import React from "react";
 import {
   PaperSection,
   OneColumnSectionDiv,
-  UploadImageSubSection,
+  InputComponentUploadImage,
   NewSectionMenu,
   useSection,
 } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
 
-type TImageSection = {
+type TInputImage = {
   key: string;
   pageId: Tuuid;
   section: TSection;
 };
-const ImageSectionInput = (props: TImageSection) => {
+const InputImage = (props: TInputImage) => {
   const { sectionIndex } = useSection();
-  const index = props.section.id 
+  const index = props.section.id
     ? sectionIndex(props.pageId, props.section.id)
-    : 0
+    : 0;
 
   return (
     <>
@@ -28,20 +28,14 @@ const ImageSectionInput = (props: TImageSection) => {
           placeAbove={true}
         />
       )}
-      <PaperSection
-        pageId={props.pageId}
-        section={props.section}
-      >
+      <PaperSection pageId={props.pageId} section={props.section}>
         <OneColumnSectionDiv>
-          <UploadImageSubSection section={props.section} />
+          <InputComponentUploadImage section={props.section} />
         </OneColumnSectionDiv>
       </PaperSection>
-      <NewSectionMenu
-        pageId={props.pageId}
-        section={props.section}
-      />
+      <NewSectionMenu pageId={props.pageId} section={props.section} />
     </>
   );
 };
 
-export default ImageSectionInput;
+export default InputImage;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Box from "@material-ui/core/Box";
 
-import { PaperSectionBase, SkeletonLinks } from "jinxui";
+import { StyledPaperSectionBase, LinksSkeleton } from "jinxui";
 
 const ButtonsSkeletonDiv = styled.div`
   display: grid;
@@ -15,7 +15,7 @@ const ButtonsSkeletonDiv = styled.div`
   padding-right: 10px;
 `;
 
-const SkeletonSectionInput = () => {
+const InputSkeleton = () => {
   return (
     <>
       <Box display="flex" justifyContent="center">
@@ -35,9 +35,9 @@ const SkeletonSectionInput = () => {
           <Skeleton variant="circle" width={30} height={30} />
         </ButtonsSkeletonDiv>
       </Box>
-      <PaperSectionBase elevation={3} variant="outlined" square>
+      <StyledPaperSectionBase elevation={3} variant="outlined" square>
         <Box width="100%" height={485} padding="30px" display="flex" flexDirection="column">
-          <SkeletonLinks />
+          <LinksSkeleton />
           <Box height="15px" />
           <Skeleton
             variant="rect"
@@ -46,7 +46,7 @@ const SkeletonSectionInput = () => {
             animation="wave"
           />
         </Box>
-      </PaperSectionBase>
+      </StyledPaperSectionBase>
       <Box height="30px" />
       <Box display="flex" justifyContent="center">
         <Skeleton variant="circle" width={48} height={48} />
@@ -55,4 +55,4 @@ const SkeletonSectionInput = () => {
   );
 };
 
-export default SkeletonSectionInput;
+export default InputSkeleton;

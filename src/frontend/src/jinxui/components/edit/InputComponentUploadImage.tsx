@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
-import { useUser, UserImage } from "jinxui";
+import { useUser, StyledUserImage } from "jinxui";
 import { TSection } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -50,11 +50,11 @@ const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
   z-index: 2;
 `;
 
-type TUploadImageSubSection = {
+type TInputComponentUploadImage = {
   section: TSection;
 };
 
-const UploadImageSubSection = (props: TUploadImageSubSection) => {
+const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const [imagePath, setImagePath] = useState(FRONT_END_URL + "blank_image.svg");
   const [imageExists, setImageExists] = useState(false);
   const { uploadImage } = useUser();
@@ -152,4 +152,4 @@ const UploadImageSubSection = (props: TUploadImageSubSection) => {
   )
 };
 
-export default UploadImageSubSection;
+export default InputComponentUploadImage;

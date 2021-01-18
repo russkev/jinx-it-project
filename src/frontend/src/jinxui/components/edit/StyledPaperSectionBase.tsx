@@ -4,7 +4,7 @@ import { LightShadowColour } from "jinxui"
 
 // Base styled paper for use on all sections\
 
-const PaperSectionBase = styled(Paper)`
+const StyledPaperSectionBase = styled(Paper)`
   padding: 10px;
   box-shadow: 0px 0px 0px 0px rgba(${() => LightShadowColour}, 0);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -13,4 +13,4 @@ const PaperSectionBase = styled(Paper)`
   }
 `;
 
-export default PaperSectionBase
+export default StyledPaperSectionBase

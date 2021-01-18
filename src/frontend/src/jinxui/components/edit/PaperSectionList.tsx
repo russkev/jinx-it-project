@@ -9,11 +9,11 @@ import {
   usePortfolio,
   usePage,
   useSection,
-  TextSectionInput,
-  ImageSectionInput,
-  ImageTextSectionInput,
-  PaperSectionPage,
-  SkeletonSectionInput,
+  InputText,
+  InputImage,
+  InputImageText,
+  InputPortfolio,
+  InputSkeleton,
   PageEdit,
 } from "jinxui";
 
@@ -31,7 +31,7 @@ const PaperSectionsDisplay = () => {
       <Backdrop open={isSaving()} style={{ zIndex: 2000 }}>
         <CircularProgress color="secondary" />
       </Backdrop>
-      <PaperSectionPage />
+      <InputPortfolio />
       {getFetchedPages().map(
         // Map over pages
         (page: TPage, index: number) => {
@@ -45,10 +45,10 @@ const PaperSectionsDisplay = () => {
                     // Map over sections
                     (section: TSection) => {
                       if (section.type === "skeleton" && section.id) {
-                        return <SkeletonSectionInput key={section.id} />;
+                        return <InputSkeleton key={section.id} />;
                       } else if (section.type === "text" && section.id) {
                         return (
-                          <TextSectionInput
+                          <InputText
                             key={section.id}
                             pageId={page.id}
                             section={section}
@@ -56,7 +56,7 @@ const PaperSectionsDisplay = () => {
                         );
                       } else if (section.type === "image" && section.id) {
                         return (
-                          <ImageSectionInput
+                          <InputImage
                             key={section.id}
                             pageId={page.id}
                             section={section}
@@ -64,7 +64,7 @@ const PaperSectionsDisplay = () => {
                         );
                       } else if (section.type === "image_text" && section.id) {
                         return (
-                          <ImageTextSectionInput
+                          <InputImageText
                             key={section.id}
                             pageId={page.id}
                             section={section}
@@ -92,7 +92,7 @@ const PaperSectionsDisplay = () => {
   //     <Backdrop open={isSaving()} style={{ zIndex: 2000 }}>
   //       <CircularProgress color="secondary" />
   //     </Backdrop>
-  //     <PaperSectionPage />
+  //     <InputPortfolio />
   //     {getFetchedPages().map(
   //       // Map over pages
   //       (page: TPage, index: number) => {
@@ -104,7 +104,7 @@ const PaperSectionsDisplay = () => {
   //               <PageEdit pageIndex={index} />
   //               {sections.map((section: TSection) => {
   //                 return (
-  //                   <TextSectionInput
+  //                   <InputText
   //                     key={section.id}
   //                     pageId={page.id}
   //                     section={section}
@@ -112,7 +112,7 @@ const PaperSectionsDisplay = () => {
   //                 );
   //               })}
 
-  //               <SkeletonSectionInput />
+  //               <InputSkeleton />
   //             </Box>
   //           );
   //         }

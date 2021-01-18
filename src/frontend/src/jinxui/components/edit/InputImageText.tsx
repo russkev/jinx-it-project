@@ -2,22 +2,22 @@ import React from "react";
 
 import {
   PaperSection,
-  UploadImageSubSection,
+  InputComponentUploadImage,
   TwoColumnSectionDiv,
-  TextFieldSubSection,
+  InputComponentTextField,
   NewSectionMenu,
   useSection,
 } from "jinxui";
 
 import { TSection, Tuuid } from "jinxui/types";
 
-type TImageTextSectionInput = {
+type TInputImageText = {
   key: string;
   pageId: Tuuid;
   section: TSection;
 };
 
-const ImageTextSectionInput = (props: TImageTextSectionInput) => {
+const InputImageText = (props: TInputImageText) => {
   // const {
   //   getFetchedSections,
   //   handleTitleChange,
@@ -55,7 +55,7 @@ const ImageTextSectionInput = (props: TImageTextSectionInput) => {
   //     <NewSectionMenu pageId={props.pageId} section={props.section} />
   //   </>
   // );
-  return (<> </>)
+  return <> </>;
 };
 
-export default ImageTextSectionInput;
+export default InputImageText;

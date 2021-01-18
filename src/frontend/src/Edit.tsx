@@ -12,7 +12,7 @@ import {
   Routes,
   PrimaryColumnDiv,
   PaperSectionsDisplay,
-  EditHeader,
+  HeaderEditAddition,
 } from "jinxui";
 
 const FormTitle = styled.h2`
@@ -88,7 +88,7 @@ const Edit = (props: any) => {
   return (
     <>
       <ThemeProvider theme={getLightTheme()}>
-        <EditHeader />
+        <HeaderEditAddition />
         <CssBaseline />
         <PrimaryColumnDiv>
           <div></div>

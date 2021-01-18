@@ -23,10 +23,10 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import {
   LinkIconMenu,
   PrimaryButton,
-  SecondaryButton,
   usePortfolio,
   useSection,
   LinkIconEnum,
+  SecondaryButton,
 } from "jinxui";
 import { TLink } from "jinxui/types";
 
@@ -126,14 +126,11 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
       );
     } else {
       return (
-        <Tooltip title="Add new external link" arrow>
-          <IconButton
-            onClick={handleClickOpen}
-            color="primary"
-          >
-            <AddCircleIcon />
-          </IconButton>
-        </Tooltip>
+        //<Tooltip title="Add new external link" arrow>
+          <SecondaryButton onClick={handleClickOpen} style={{width: "auto"}}>
+            Add Link
+          </SecondaryButton>
+        //</Tooltip>
       );
     }
   };

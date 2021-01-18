@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const PaperSectionTitle = styled.h3`
+const StyledPaperSectionHeading = styled.h3`
   font-weight: 300;
   margin-bottom: 0px;
   margin-left: 0px;
@@ -9,4 +9,4 @@ const PaperSectionTitle = styled.h3`
   font-size: 20px;
 `;
 
-export default PaperSectionTitle
+export default StyledPaperSectionHeading

@@ -7,8 +7,8 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import SaveSharpIcon from "@material-ui/icons/SaveSharp";
 import {
-  PaperSectionBase,
-  PaperSectionDiv,
+  StyledPaperSectionBase,
+  StyledPaperSectionDiv,
   useUser,
   usePortfolio,
   useSection,
@@ -59,7 +59,6 @@ type TPaperSection = {
   children: any;
   hideEditButtons?: boolean;
 };
-
 const PaperSection = (props: TPaperSection) => {
   const { isSaving } = useUser();
   const { saveFullPortfolio } = usePortfolio();
@@ -116,7 +115,7 @@ const PaperSection = (props: TPaperSection) => {
   }
 
   return (
-    <PaperSectionDiv id={props.section.id}>
+    <StyledPaperSectionDiv id={props.section.id}>
       <StyledDivOuter>
         <StyledDivLeft>
           {/* Title */}
@@ -193,10 +192,10 @@ const PaperSection = (props: TPaperSection) => {
           </Tooltip>
         </StyledDivRight>
       </StyledDivOuter>
-      <PaperSectionBase elevation={3} variant="outlined" square>
+      <StyledPaperSectionBase elevation={3} variant="outlined" square>
         {props.children}
-      </PaperSectionBase>
-    </PaperSectionDiv>
+      </StyledPaperSectionBase>
+    </StyledPaperSectionDiv>
   );
 };
 

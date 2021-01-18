@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import { useUser, HeaderBar } from "jinxui";
 
-const EditHeader = () => {
+const HeaderEditAddition = () => {
   const { switchLightThemeMode, getSavedLightThemeMode } = useUser();
 
   return (
@@ -39,4 +39,4 @@ const EditHeader = () => {
   );
 };
 
-export default EditHeader;
+export default HeaderEditAddition;
