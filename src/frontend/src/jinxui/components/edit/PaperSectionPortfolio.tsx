@@ -73,8 +73,8 @@ const PaperSectionPage = () => {
             </>
           ) : (
             <TextField
-              name={"portfolioName"}
-              label={"Portfolio Name"}
+              name={"portfolioTitle"}
+              label={"Portfolio Title"}
               onChange={onTitleChange}
               value={localTitle}
               id="standard-full-width"

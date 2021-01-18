@@ -65,8 +65,8 @@ class Portfolio(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='portfolios')
     # Portfolio name e.g. professional, art
-    name = models.CharField(max_length=100, null=True)
-    subtitle = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, blank=True)
+    subtitle = models.CharField(max_length=100, blank=True)
 
     private = models.BooleanField(default=True)
 
