@@ -52,8 +52,15 @@ export type TSection = {
   type: string;
   index: number;
   text?: string;
+  image?: Tuuid;
   page: Tuuid;
   links: TLink[];
+}
+
+export type TImage = {
+  id: Tuuid;
+  name: string;
+  path: string;
 }
 
 // export interface TEditSection extends TSection {

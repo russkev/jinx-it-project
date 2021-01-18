@@ -3,7 +3,7 @@ import { TPage, Tuuid } from "jinxui/types";
 
 export const defaultPageContext: TPage = {
   id: "0-0-0-0-0",
-  name: "Home",
+  name: "",
   index: 0,
   sections: [],
 };

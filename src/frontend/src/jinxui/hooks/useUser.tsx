@@ -173,6 +173,15 @@ export const useUser = () => {
     return result;
   }
 
+async function fetchImage(imageId: Tuuid) {
+  const path = IMAGES_PATH + "/" + imageId
+  try {
+    return await API.get(path, state.config)
+  } catch(error) {
+    throw(error)
+  }
+}
+
   /**
    * Update the logged in user's account details.
    * @param first_name
@@ -379,6 +388,7 @@ export const useUser = () => {
     signup,
     setAccountDetails,
     uploadImage,
+    fetchImage,
     isSaving,
     setSaving,
     isLoading,
