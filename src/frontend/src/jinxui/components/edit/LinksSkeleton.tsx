@@ -11,7 +11,7 @@ const LinksSkeletonDiv = styled.div`
   width: max-content;
 `;
 
-const SkeletonLinks = () => {
+const LinksSkeleton = () => {
   return (
     <LinksSkeletonDiv>
       <Box padding="6px 8px">
@@ -27,4 +27,4 @@ const SkeletonLinks = () => {
   );
 };
 
-export default SkeletonLinks
+export default LinksSkeleton

@@ -124,7 +124,7 @@ const PaperSection = (props: TPaperSection) => {
             name={props.section.id}
             onChange={onTitleChange}
             value={localTitle}
-            placeholder="Section Title"
+            placeholder="Section Heading"
             color="secondary"
             InputProps={{
               endAdornment: (
@@ -132,7 +132,6 @@ const PaperSection = (props: TPaperSection) => {
                   <CreateIcon />
                 </InputAdornment>
               ),
-              style: {fontSize: 18, fontWeight: 400},
             }}
           />
         </StyledDivLeft>

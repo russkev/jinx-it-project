@@ -113,6 +113,9 @@ class Section(models.Model):
     index = models.IntegerField(default=0)
     type = models.CharField(max_length=100, default='text')
     text = models.TextField(blank=True)
+    image = models.ForeignKey(
+        Image, null=True, on_delete=models.CASCADE, related_name='sections')
+
 
     # not a field for the same reasoning as Page's owner
     @property

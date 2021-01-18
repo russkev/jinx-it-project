@@ -28,7 +28,7 @@ class PageAdmin(admin.ModelAdmin):
 
 @admin.register(models.Section)
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'index', 'owner', 'id']
+    list_display = ['name', 'page', 'index', 'text', 'image', 'owner', 'id']
 
 @admin.register(models.PortfolioLink)
 class PortfolioLinkAdmin(admin.ModelAdmin):

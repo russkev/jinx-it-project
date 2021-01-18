@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
@@ -11,6 +13,10 @@ import CreateIcon from "@material-ui/icons/Create";
 
 import { useUser, usePortfolio, usePage } from "jinxui";
 import { TPage } from "jinxui/types";
+
+const StyledButton = styled(Button)`
+  width: 10px;
+`;
 
 type TPageEdit = {
   pageIndex?: number;
@@ -80,55 +86,79 @@ const PageEdit = (props: TPageEdit) => {
     <>
       <Box
         width="100vw"
-        height="40px"
+        height="100px"
         bgcolor="background.paper"
         position="absolute"
         left="0px"
+        borderTop="3px solid"
       />
-      <Box height="40px" marginY="15px" display="flex" position="relative">
+      <Box height="100px" marginY="15px" display="flex" position="relative">
         <Box></Box>
-        <TextField
-          name={props.page ? props.page.id : "end"}
-          onChange={onTitleChange}
-          value={localTitle}
-          placeholder="Title"
-          color="secondary"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <CreateIcon />
-              </InputAdornment>
-            ),
-            style: { fontSize: 18, fontWeight: 400 },
-          }}
-        />
-        <Box>
-          <Button onClick={handleAdd}>
-            <PostAddIcon />
-          </Button>
-        </Box>
-        <Box>
-          {props.pageIndex !== undefined ? (
-            <>
-              <Button
-                onClick={handleMoveDown}
-                disabled={props.pageIndex > getFetchedPages().length - 1}
-              >
-                <ArrowDownwardIcon />
-              </Button>
-              <Button onClick={handleMoveUp} disabled={props.pageIndex < 1}>
-                <ArrowUpwardIcon />
-              </Button>
-              <Button
-                onClick={handleDelete}
-                disabled={getFetchedPages().length < 2}
-              >
-                <DeleteOutlinedIcon />
-              </Button>
-            </>
-          ) : (
-            <></>
-          )}
+        <Box
+          display="grid"
+          gridTemplateColumns="1fr max-content 1fr"
+          alignContent="center"
+        >
+          <TextField
+            name={props.page ? props.page.id : "end"}
+            onChange={onTitleChange}
+            value={localTitle}
+            placeholder="Title"
+            color="secondary"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CreateIcon />
+                </InputAdornment>
+              ),
+              style: {
+                fontSize: 20,
+                fontWeight: 600,
+                marginRight: "15%",
+              },
+            }}
+          />
+          <Box>
+            <StyledButton
+              size="medium"
+              style={{ minWidth: 40 }}
+              onClick={handleAdd}
+            >
+              <PostAddIcon />
+            </StyledButton>
+          </Box>
+          <Box display="flex" justifyContent="end">
+            {props.pageIndex !== undefined ? (
+              <>
+                <StyledButton
+                  size="medium"
+                  style={{ minWidth: 40 }}
+                  onClick={handleMoveUp}
+                  disabled={props.pageIndex < 1}
+                >
+                  <ArrowUpwardIcon />
+                </StyledButton>
+                <StyledButton
+                  size="medium"
+                  style={{ minWidth: 40 }}
+                  onClick={handleMoveDown}
+                  disabled={props.pageIndex > getFetchedPages().length - 1}
+                >
+                  <ArrowDownwardIcon />
+                </StyledButton>
+                <StyledButton
+                  size="medium"
+                  style={{ minWidth: 40 }}
+                  onClick={handleDelete}
+                  disabled={getFetchedPages().length < 2}
+                >
+                  <DeleteOutlinedIcon />
+                </StyledButton>
+              </>
+            ) : (
+              <></>
+            )}
+          </Box>
         </Box>
       </Box>
     </>

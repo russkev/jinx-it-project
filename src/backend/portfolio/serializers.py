@@ -58,7 +58,8 @@ class SectionSerializer(
 
     class Meta:
         model = models.Section
-        fields = ['id', 'name', 'type', 'index', 'text', 'page', 'links']
+        fields = ['id', 'name', 'type', 'index',
+                  'text', 'image', 'page', 'links']
 
 
 ################################################################################

@@ -14,7 +14,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton"
+import IconButton from "@material-ui/core/IconButton";
 
 import CreateIcon from "@material-ui/icons/Create";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -57,7 +57,7 @@ const PublishCancelDiv = styled.div`
 type TLinkDialog = {
   link?: TLink;
   // section: TEditSection
-  pageId?: string,
+  pageId?: string;
   sectionId?: string;
   setAnchoEl?: any;
 };
@@ -66,8 +66,8 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
   const [linkIcon, setLinkIcon] = useState(
     props.link ? props.link.icon : LinkIconEnum.Disabled
   );
-  const { portfolioLinkUpdate, } = usePortfolio();
-  const { sectionLinkUpdate, } = useSection();
+  const { portfolioLinkUpdate } = usePortfolio();
+  const { sectionLinkUpdate } = useSection();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -89,9 +89,9 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
   const okayText = props.link ? "OK" : "ADD";
 
   // Add new link to list / update existing
-  const handleUpdate = () => {    
+  const handleUpdate = () => {
     if (props.sectionId && props.pageId) {
-      sectionLinkUpdate(props.pageId, props.sectionId, activeLink)
+      sectionLinkUpdate(props.pageId, props.sectionId, activeLink);
     } else {
       portfolioLinkUpdate(activeLink);
     }
@@ -111,7 +111,7 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
           onClick={() => {
             handleClickOpen();
             if (props.link) {
-              setLinkIcon(props.link.icon)
+              setLinkIcon(props.link.icon);
             }
             if (props.setAnchoEl) {
               props.setAnchoEl(null);
@@ -126,11 +126,9 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
       );
     } else {
       return (
-        //<Tooltip title="Add new external link" arrow>
-          <SecondaryButton onClick={handleClickOpen} style={{width: "auto"}}>
-            Add Link
-          </SecondaryButton>
-        //</Tooltip>
+        <SecondaryButton onClick={handleClickOpen} style={{ width: "auto" }}>
+          Add Link
+        </SecondaryButton>
       );
     }
   };

@@ -478,6 +478,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'name': 'polarised neptune',
                 'type': 'text',
                 'text': 'medial bodging committed unworthier',
+                'image': None,
                 'links': []
             })
             model['sections'].append({
@@ -485,6 +486,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'name': 'ostrich drainpipe',
                 'type': 'text',
                 'text': 'novices rehearing leafier stationer',
+                'image': None,
                 'links': [],
             })
             for i, sec in enumerate(model['sections']):
@@ -521,6 +523,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'type': 'text',
                 'text': 'possessive colonoscopies suburbans',
                 'links': [],
+                'image': None,
                 'page': str(self.page.id)
             })
             for i, sec in enumerate(model['sections']):
