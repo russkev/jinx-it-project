@@ -8,7 +8,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import {
   useUser,
   usePortfolio,
-  LinkDialog,
+  DialogLink,
   LinksDisplay,
   LinksSkeleton,
   OneColumnSectionDiv,
@@ -116,7 +116,7 @@ const InputPortfolio = () => {
               ) : (
                 <>
                   <LinksDisplay />
-                  <LinkDialog />
+                  <DialogLink />
                   <Button onClick={logPortfolioState}>
                     Log Portfolio State
                   </Button>

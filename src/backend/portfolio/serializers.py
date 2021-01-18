@@ -92,11 +92,9 @@ class PageSerializer(
         user_images = models.Image.objects.filter(owner=owner)
         for user_image in user_images:
             image_id = user_image.id
-            print(image_id)
             image_is_for_deletion = True
             try:
                 models.Section.objects.get(image=image_id)
-                print("IMAGE FOUND")
                 image_is_for_deletion = False
             except models.Section.DoesNotExist:
                 pass

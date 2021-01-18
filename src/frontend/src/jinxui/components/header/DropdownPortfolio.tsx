@@ -28,8 +28,6 @@ import {
   DialogTheme,
 } from "jinxui";
 
-import { Tuuid } from "jinxui/types";
-
 const DivWrapper = styled.div`
   height: 100%;
 `;
@@ -40,13 +38,6 @@ const StyledName = styled(HeaderButton)`
   padding-bottom: 0px;
   padding-left: 10px;
   padding-right: 10px;
-`;
-
-const StyledInnerName = styled.div`
-  margin-left: 10px;
-  @media (max-width: ${() => HeaderMediaWidth()}) {
-    display: none;
-  }
 `;
 
 type TEditMenuItem = {

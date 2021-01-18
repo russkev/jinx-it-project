@@ -20,13 +20,13 @@ export { PrimaryButton } from "./components/button/Button";
 export { SecondaryButton } from "./components/button/Button";
 
 /* Header */
-export { default as HeaderDiv } from "./components/header/StyledHeaderDiv";
-export { default as SiteHeader } from "./components/header/StyledSiteHeader";
+export { default as StyledHeaderDiv } from "./components/header/StyledHeaderDiv";
+export { default as StyledSiteHeader } from "./components/header/StyledSiteHeader";
 export { default as LogoLink } from "./components/header/LogoLink";
-export { default as HeaderTitle } from "./components/header/StyledHeaderTitle";
+export { default as StyledHeaderTitle } from "./components/header/StyledHeaderTitle";
 export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
 export { default as HeaderButton } from "./components/header/StyledHeaderButton";
-export { default as HeaderBarSpacer } from "./components/header/StyledHeaderBarSpacer";
+export { default as StyledHeaderBarSpacer } from "./components/header/StyledHeaderBarSpacer";
 export { default as DropdownPortfolio } from "./components/header/DropdownPortfolio";
 export { default as DialogShare } from "./components/header/DialogShare";
 export { default as DialogTheme } from "./components/header/DialogTheme";
@@ -69,7 +69,7 @@ export { default as StyledPaperSectionBase } from "./components/edit/StyledPaper
 export { default as StyledPaperSectionDiv } from "./components/edit/StyledPaperSectionDiv"
 export { default as StyledPaperSectionHeading } from "./components/edit/StyledPaperSectionHeading"
 export { default as LinkIconMenu } from "./components/edit/LinkIconMenu"
-export { default as LinkDialog } from "./components/edit/LinkDialog"
+export { default as DialogLink } from "./components/edit/DialogLink"
 export { default as LinkEditMenu } from "./components/edit/LinkEditMenu"
 export { default as LinksDisplay } from "./components/edit/LinksDisplay"
 export { default as PaperSectionsDisplay } from "./components/edit/PaperSectionList"

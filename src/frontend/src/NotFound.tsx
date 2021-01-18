@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import {
   HeaderBar,
-  HeaderBarSpacer,
+  StyledHeaderBarSpacer,
   LightTheme,
   SecondaryButton,
   SiteLayout,
@@ -35,7 +35,7 @@ const NotFound = ({ title, message }: NotFoundProps) => {
       <ThemeProvider theme={LightTheme}>
         <CssBaseline />
         <HeaderBar />
-        <HeaderBarSpacer />
+        <StyledHeaderBarSpacer />
         <Layout>
           <Typography variant="h3" component="h1" gutterBottom>
             {title}

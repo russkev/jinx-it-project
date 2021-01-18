@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const HeaderTitle = styled.h1`
+const StyledHeaderTitle = styled.h1`
   margin-top: 0px;
   margin-bottom: 0px;
   color: #eeeeee;
@@ -8,4 +8,4 @@ const HeaderTitle = styled.h1`
   position: relative;
 `;
 
-export default HeaderTitle;
+export default StyledHeaderTitle;

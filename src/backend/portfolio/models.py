@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from account.signals import account_created
 
 import uuid
-
+import os
 
 @receiver(account_created)
 def create_default_portfolio(sender, **kwargs):
@@ -35,6 +35,7 @@ def create_default_portfolio(sender, **kwargs):
     account.save()
 
 
+
 class Image(models.Model):
     #   Image upload tutorial
     #   https://medium.com/@emeruchecole9/uploading-images-to-rest-api-backend-in-react-js-b931376b5833
@@ -57,6 +58,31 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
+
+# Auto delete files from file system when not required
+# For more info, see here:
+# https://stackoverflow.com/questions/16041232/django-delete-filefield
+@receiver(models.signals.post_delete, sender=Image)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.path:
+        if os.path.isfile(instance.path.path):
+            os.remove(instance.path.path)
+
+@receiver(models.signals.pre_save, sender=Image)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.id:
+        return False
+    
+    try:
+        old_file = Image.objects.get(id=instance.id).path
+    except Image.DoesNotExist:
+        return False
+    
+    new_file = instance.file
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
+
 
 
 class Portfolio(models.Model):
