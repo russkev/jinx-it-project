@@ -18,7 +18,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(models.Portfolio)
 class PortfolioAdmin(admin.ModelAdmin):
-    list_display = ['name', 'private', 'owner', 'id', ]
+    list_display = ['name', 'subtitle', 'private', 'owner', 'id', ]
     inlines = [PageInline]
 
 @admin.register(models.Page)

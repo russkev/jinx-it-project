@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from drf_writable_nested.serializers import (
-    NestedUpdateMixin, 
+    NestedUpdateMixin,
     NestedCreateMixin,
     WritableNestedModelSerializer
 )
@@ -16,6 +16,8 @@ from . import models
 ################################################################################
 # SECTION LINK
 ################################################################################
+
+
 class SectionLinkSerializer(
     UniqueFieldsMixin,
     serializers.ModelSerializer
@@ -29,6 +31,8 @@ class SectionLinkSerializer(
 ################################################################################
 # PORTFOLIO LINK
 ################################################################################
+
+
 class PortfolioLinkSerializer(
     UniqueFieldsMixin,
     serializers.ModelSerializer
@@ -75,6 +79,8 @@ class PageSerializer(
 ################################################################################
 # PORTFOLIO
 ################################################################################
+
+
 class PortfolioSerializer(
     NestedCreateMixin,
     NestedUpdateMixin,
@@ -86,12 +92,14 @@ class PortfolioSerializer(
 
     class Meta:
         model = models.Portfolio
-        fields = ['id', 'owner', 'name', 'pages', 'links',
+        fields = ['id', 'owner', 'name', 'subtitle', 'pages', 'links',
                   'private', 'theme', 'background']
 
 ################################################################################
 # IMAGE
 ################################################################################
+
+
 class ImageSerializer(
     serializers.ModelSerializer
 ):
