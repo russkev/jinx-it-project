@@ -1,17 +1,9 @@
 import React from "react";
-import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
-import MenuItem from "@material-ui/core/MenuItem";
 import Tooltip from "@material-ui/core/Tooltip";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddIcon from "@material-ui/icons/Add";
-import SubjectSharp from "@material-ui/icons/SubjectSharp";
-import InsertPhotoSharp from "@material-ui/icons/InsertPhotoSharp";
-import VerticalSplitSharp from "@material-ui/icons/VerticalSplitSharp";
 
-import { v4 as uuidv4 } from "uuid"
-
-import { PrimaryMenu, useSection, defaultSectionContext } from "jinxui";
+import { useSection } from "jinxui";
 
 import { TSection, Tuuid, ESectionType } from "jinxui/types";
 
@@ -21,76 +13,27 @@ type TNewSectionMenu = {
   placeAbove?: boolean;
 };
 
-
-
 const NewSectionMenu = (props: TNewSectionMenu) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { handleSectionChange, sectionIndex, makeNewSection } = useSection();
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleAddImageTextSection = () => {
-    addSection(ESectionType.imageText);
-  };
 
   const handleAddTextSection = () => {
     addSection(ESectionType.text);
   };
 
-  const handleAddImageSection = () => {
-    addSection(ESectionType.image);
-  };
-
   const addSection = (sectionType: ESectionType) => {
-    setAnchorEl(null);
-
     const index = sectionIndex(props.pageId, props.section.id)
-
     const target_index = props.placeAbove ? index : index + 1;
     const newSection:TSection = makeNewSection(props.pageId, sectionType)
-
     handleSectionChange(props.pageId, target_index, newSection);
   };
 
   return (
     <div>
       <Tooltip title="Add new section" arrow>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleAddTextSection}>
         <AddIcon />
       </IconButton>
       </Tooltip>
-      <PrimaryMenu
-        id="new-section-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleAddTextSection}>
-          <ListItemIcon>
-            <SubjectSharp fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Text" />
-        </MenuItem>
-        <MenuItem onClick={handleAddImageSection}>
-          <ListItemIcon>
-            <InsertPhotoSharp fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Image" />
-        </MenuItem>
-        <MenuItem onClick={handleAddImageTextSection}>
-          <ListItemIcon>
-            <VerticalSplitSharp fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Image and text" />
-        </MenuItem>
-      </PrimaryMenu>
     </div>
   );
 };
