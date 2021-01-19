@@ -72,8 +72,6 @@ const Edit = (props: any) => {
     fetchPortfolio();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-
-
   return (
     <>
       <ThemeProvider theme={getLightTheme()}>
@@ -84,7 +82,7 @@ const Edit = (props: any) => {
           <div>
             <FormTitle>Enter your information</FormTitle>
             <form>
-              <SaveMobile history={props.history}/>
+              <SaveMobile history={props.history} />
               {PaperSectionsDisplay()}
               <PublishCancelDiv>
                 <TooltipDiv>

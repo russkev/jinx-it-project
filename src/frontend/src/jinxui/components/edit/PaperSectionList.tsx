@@ -14,7 +14,7 @@ import {
   InputImageText,
   InputPortfolio,
   InputVideo,
-  InputSkeleton,
+  SkeletonInput,
   PageEdit,
 } from "jinxui";
 
@@ -49,7 +49,7 @@ const PaperSectionsDisplay = () => {
                         section.type === ESectionType.skeleton &&
                         section.id
                       ) {
-                        return <InputSkeleton key={section.id} />;
+                        return <SkeletonInput key={section.id} />;
                       } else if (
                         section.type === ESectionType.text &&
                         section.id

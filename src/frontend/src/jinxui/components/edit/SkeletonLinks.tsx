@@ -9,9 +9,10 @@ const LinksSkeletonDiv = styled.div`
   grid-template-columns: repeat(3, auto);
   padding-left: 22px;
   width: max-content;
+  margin: 5px 0px;
 `;
 
-const LinksSkeleton = () => {
+const SkeletonLinks = () => {
   return (
     <LinksSkeletonDiv>
       <Box padding="6px 8px">
@@ -27,4 +28,4 @@ const LinksSkeleton = () => {
   );
 };
 
-export default LinksSkeleton
+export default SkeletonLinks

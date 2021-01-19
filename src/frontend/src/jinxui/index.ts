@@ -67,7 +67,7 @@ export { default as InputImage } from "./components/edit/InputImage"
 export { default as InputImageText } from "./components/edit/InputImageText"
 export { default as InputPortfolio } from "./components/edit/InputPortfolio"
 export { default as InputVideo } from "./components/edit/InputVideo"
-export { default as InputSkeleton } from "./components/edit/InputSkeleton"
+export { default as SkeletonInput } from "./components/edit/SkeletonInput"
 export { default as LinkIconMenu } from "./components/edit/LinkIconMenu"
 export { default as LinkDialog } from "./components/edit/LinkDialog"
 export { default as LinkEditMenu } from "./components/edit/LinkEditMenu"
@@ -76,7 +76,7 @@ export { default as NewSectionButton } from "./components/edit/NewSectionButton"
 export { default as PortfolioNameSectionInput } from "./components/edit/LinksDisplay"
 export { default as PaperSectionsDisplay } from "./components/edit/PaperSectionList"
 export { LinkIconEnum, LinkDisplayIcon } from "./components/edit/LinkDisplayIcon"
-export { default as LinksSkeleton } from "./components/edit/LinksSkeleton"
+export { default as SkeletonLinks } from "./components/edit/SkeletonLinks"
 export { default as PageEdit } from "./components/edit/PageEdit"
 export { default as SaveMobile } from "./components/edit/SaveMobile"
 export { default as SaveDesktop } from "./components/edit/SaveDesktop"
@@ -84,6 +84,7 @@ export { default as StyledUserImage } from "./components/edit/StyledUserImage";
 export { default as StyledPaperSectionBase } from "./components/edit/StyledPaperSectionBase"
 export { default as StyledPaperSectionDiv } from "./components/edit/StyledPaperSectionDiv"
 export { default as StyledPaperSectionHeading } from "./components/edit/StyledPaperSectionHeading"
+export { default as SkeletonEditAll } from "./components/edit/SkeletonEditAll"
 
 /* Home */
 export { default as HomeTemplates } from "./components/home/HomeTemplates";
@@ -162,10 +163,12 @@ export {
 };
 
 /* Sizes */
+const BOX_HEIGHT = "130px";
 const MAX_EDIT_HEADING_WIDTH = "550px"
 const MAX_EDIT_SECTION_WIDTH = "900px"
 const SAVE_DESKTOP_WIDTH = "1380px"
 export {
+  BOX_HEIGHT,
   MAX_EDIT_HEADING_WIDTH,
   MAX_EDIT_SECTION_WIDTH,
   SAVE_DESKTOP_WIDTH,

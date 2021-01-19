@@ -41,9 +41,7 @@ const InputComponentVideo = (props: TInputComponentVideo) => {
         height={0}
         overflow="hidden"
         marginBottom="15px"
-        // border="1px solid"
         style={{ background: "black" }}
-        // marginBottom="-15px"
       >
         <Box position="absolute" top={0} left={0} width="100%" height="100%">
           <ReactPlayer

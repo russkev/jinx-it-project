@@ -10,7 +10,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import CreateIcon from "@material-ui/icons/Create";
 
-import { useUser, usePortfolio, usePage, MAX_EDIT_HEADING_WIDTH } from "jinxui";
+import {
+  useUser,
+  usePortfolio,
+  usePage,
+  BOX_HEIGHT,
+  MAX_EDIT_HEADING_WIDTH,
+} from "jinxui";
 import { TPage } from "jinxui/types";
 
 type TPageEdit = {
@@ -32,8 +38,6 @@ const PageEdit = (props: TPageEdit) => {
     props.page ? props.page.name : ""
   );
 
-  const BOX_HEIGHT = "130px";
-
   const onTitleChange = (event: any) => {
     let newTitle = event.target.value;
     setLocalTitle(() => {
@@ -46,24 +50,23 @@ const PageEdit = (props: TPageEdit) => {
 
   function handleDelete() {
     if (props.pageIndex !== undefined) {
-      handlePageDelete(getFetchedPortfolio().id, props.pageIndex)
-        .then(() => {
-          setSuccessMessage("Page deleted");
-        })
-        .catch((error: any) => {
+      handlePageDelete(getFetchedPortfolio().id, props.pageIndex).catch(
+        (error: any) => {
           setErrorMessage(error.message);
-        });
+        }
+      );
     }
   }
 
   function handleAdd() {
-    if (props.pageIndex !== undefined) {
-      try {
+    try {
+      if (props.pageIndex !== undefined) {
         handlePageAdd(props.pageIndex);
-        setSuccessMessage("New page added");
-      } catch (e) {
-        setErrorMessage(e.message);
+      } else {
+        handlePageAdd(getFetchedPages().length);
       }
+    } catch (e) {
+      setErrorMessage(e.message);
     }
   }
 
@@ -88,10 +91,13 @@ const PageEdit = (props: TPageEdit) => {
         position="absolute"
         left="0px"
         borderTop="3px solid"
-        />
+        marginTop={props.pageIndex !== undefined ? "0px" : "30px"}
+      />
       <Box
         height={BOX_HEIGHT}
-        marginY="30px"
+        marginBottom="30px"
+        // marginTop={props.pageIndex !== undefined ? "30px" : "0px"}
+        marginTop="30px"
         display="flex"
         flexDirection="column"
         justifyContent="space-evenly"
@@ -113,29 +119,29 @@ const PageEdit = (props: TPageEdit) => {
           gridTemplateColumns="auto min-content"
           alignContent="center"
         >
-          <TextField
-            name={props.page ? props.page.id : "end"}
-            onChange={onTitleChange}
-            value={localTitle}
-            placeholder="Title"
-            color="secondary"
-            fullWidth
-            style={{maxWidth: MAX_EDIT_HEADING_WIDTH}}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <CreateIcon />
-                </InputAdornment>
-              ),
-              style: {
-                fontSize: 20,
-                fontWeight: 600,
-              },
-            }}
-          />
-          <Box display="flex" justifyContent="end">
-            {props.pageIndex !== undefined ? (
-              <>
+          {props.pageIndex !== undefined ? (
+            <>
+              <TextField
+                name={props.page ? props.page.id : "end"}
+                onChange={onTitleChange}
+                value={localTitle}
+                placeholder="Title"
+                color="secondary"
+                fullWidth
+                style={{ maxWidth: MAX_EDIT_HEADING_WIDTH }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <CreateIcon />
+                    </InputAdornment>
+                  ),
+                  style: {
+                    fontSize: 20,
+                    fontWeight: 600,
+                  },
+                }}
+              />
+              <Box display="flex" justifyContent="end">
                 <Button
                   size="medium"
                   style={{ minWidth: 40 }}
@@ -160,11 +166,11 @@ const PageEdit = (props: TPageEdit) => {
                 >
                   <DeleteOutlinedIcon />
                 </Button>
-              </>
-            ) : (
-              <></>
-            )}
-          </Box>
+              </Box>
+            </>
+          ) : (
+            <></>
+          )}
         </Box>
       </Box>
     </>
