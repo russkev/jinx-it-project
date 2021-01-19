@@ -1,7 +1,7 @@
 import React from "react";
 import { PaperSection, InputComponentTextField, OneColumnSectionDiv } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
-import { NewSectionMenu, useSection } from "jinxui";
+import { NewSectionButton, useSection } from "jinxui";
 
 type TInputText = {
   key: string;
@@ -19,7 +19,7 @@ const InputText = (props: TInputText) => {
       {/* Add another section menu above the section if at the top */}
 
       {index === 0 && (
-        <NewSectionMenu
+        <NewSectionButton
           pageId={props.pageId}
           section={props.section}
           placeAbove={true}
@@ -40,7 +40,7 @@ const InputText = (props: TInputText) => {
 
       {/* Add section menu */}
 
-      <NewSectionMenu pageId={props.pageId} section={props.section} />
+      <NewSectionButton pageId={props.pageId} section={props.section} />
     </>
   );
 };

@@ -7,13 +7,13 @@ import { useSection } from "jinxui";
 
 import { TSection, Tuuid, ESectionType } from "jinxui/types";
 
-type TNewSectionMenu = {
+type TNewSectionButton = {
   pageId: Tuuid;
   section: any;
   placeAbove?: boolean;
 };
 
-const NewSectionMenu = (props: TNewSectionMenu) => {
+const NewSectionButton = (props: TNewSectionButton) => {
   const { handleSectionChange, sectionIndex, makeNewSection } = useSection();
 
   const handleAddTextSection = () => {
@@ -38,4 +38,4 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
   );
 };
 
-export default NewSectionMenu;
+export default NewSectionButton;

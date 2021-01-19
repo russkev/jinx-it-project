@@ -13,6 +13,7 @@ import {
   InputImage,
   InputImageText,
   InputPortfolio,
+  InputVideo,
   InputSkeleton,
   PageEdit,
 } from "jinxui";
@@ -44,9 +45,15 @@ const PaperSectionsDisplay = () => {
                   sections.map(
                     // Map over sections
                     (section: TSection) => {
-                      if (section.type === ESectionType.skeleton && section.id) {
+                      if (
+                        section.type === ESectionType.skeleton &&
+                        section.id
+                      ) {
                         return <InputSkeleton key={section.id} />;
-                      } else if (section.type === ESectionType.text && section.id) {
+                      } else if (
+                        section.type === ESectionType.text &&
+                        section.id
+                      ) {
                         return (
                           <InputText
                             key={section.id}
@@ -54,7 +61,10 @@ const PaperSectionsDisplay = () => {
                             section={section}
                           />
                         );
-                      } else if (section.type === ESectionType.image && section.id) {
+                      } else if (
+                        section.type === ESectionType.image &&
+                        section.id
+                      ) {
                         return (
                           <InputImage
                             key={section.id}
@@ -62,9 +72,23 @@ const PaperSectionsDisplay = () => {
                             section={section}
                           />
                         );
-                      } else if (section.type === ESectionType.imageText && section.id) {
+                      } else if (
+                        section.type === ESectionType.imageText &&
+                        section.id
+                      ) {
                         return (
                           <InputImageText
+                            key={section.id}
+                            pageId={page.id}
+                            section={section}
+                          />
+                        );
+                      } else if (
+                        section.type === ESectionType.video &&
+                        section.id
+                      ) {
+                        return (
+                          <InputVideo
                             key={section.id}
                             pageId={page.id}
                             section={section}

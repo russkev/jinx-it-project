@@ -8,6 +8,7 @@ export const defaultSectionContext: TSection = {
   index: 0,
   text: "",
   image: undefined,
+  video: "",
   page: "0-0-0-0-0",
   links: [],
 };

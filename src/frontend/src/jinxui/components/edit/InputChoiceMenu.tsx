@@ -6,6 +6,7 @@ import Subject from "@material-ui/icons/Subject";
 import InsertPhoto from "@material-ui/icons/InsertPhoto";
 import VerticalSplit from "@material-ui/icons/VerticalSplit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 
@@ -62,24 +63,40 @@ const InputChoiceMenu = (props: TInputChoice) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Typography align="center" variant="h6">Section Type</Typography>
-        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.text)}>
+        <Typography align="center" variant="h6">
+          Section Type
+        </Typography>
+        <MenuItem 
+          onClick={() => handleSectionTypeUpdate(ESectionType.text)}
+        >
           <ListItemIcon>
             <Subject fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Text" />
         </MenuItem>
-        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.image)}>
+        <MenuItem 
+          onClick={() => handleSectionTypeUpdate(ESectionType.image)}
+        >
           <ListItemIcon>
             <InsertPhoto fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Image" />
         </MenuItem>
-        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.imageText)}>
+        <MenuItem
+          onClick={() => handleSectionTypeUpdate(ESectionType.imageText)}
+        >
           <ListItemIcon>
             <VerticalSplit fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Image Text" />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleSectionTypeUpdate(ESectionType.video)}
+        >
+          <ListItemIcon>
+            <OndemandVideoIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Embedded Video" />
         </MenuItem>
       </PrimaryMenu>
     </>

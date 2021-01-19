@@ -5,7 +5,7 @@ import {
   InputComponentUploadImage,
   TwoColumnSectionDiv,
   InputComponentTextField,
-  NewSectionMenu,
+  NewSectionButton,
   useSection,
 } from "jinxui";
 
@@ -29,7 +29,7 @@ const InputImageText = (props: TInputImageText) => {
   return (
     <>
       {index === 0 && (
-        <NewSectionMenu
+        <NewSectionButton
           pageId={props.pageId}
           section={props.section}
           placeAbove={true}
@@ -51,7 +51,7 @@ const InputImageText = (props: TInputImageText) => {
           />
         </TwoColumnSectionDiv>
       </PaperSection>
-      <NewSectionMenu pageId={props.pageId} section={props.section} />
+      <NewSectionButton pageId={props.pageId} section={props.section} />
     </>
   );
 };

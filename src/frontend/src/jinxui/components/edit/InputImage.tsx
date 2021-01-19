@@ -3,7 +3,7 @@ import {
   PaperSection,
   OneColumnSectionDiv,
   InputComponentUploadImage,
-  NewSectionMenu,
+  NewSectionButton,
   useSection,
 } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
@@ -22,7 +22,7 @@ const InputImage = (props: TInputImage) => {
   return (
     <>
       {index === 0 && (
-        <NewSectionMenu
+        <NewSectionButton
           pageId={props.pageId}
           section={props.section}
           placeAbove={true}
@@ -36,7 +36,7 @@ const InputImage = (props: TInputImage) => {
           />
         </OneColumnSectionDiv>
       </PaperSection>
-      <NewSectionMenu pageId={props.pageId} section={props.section} />
+      <NewSectionButton pageId={props.pageId} section={props.section} />
     </>
   );
 };

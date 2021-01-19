@@ -33,6 +33,7 @@ export type TSection = {
   index: number;
   text?: string;
   image?: Tuuid;
+  video?: string;
   page: Tuuid;
   links: TLink[];
 }
@@ -59,5 +60,6 @@ export enum ESectionType {
   text = "text",
   image = "image",
   imageText = "image_text",
+  video = "video",
   skeleton = "skeleton,"
 }
