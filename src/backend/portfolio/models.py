@@ -78,7 +78,7 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     except Image.DoesNotExist:
         return False
     
-    new_file = instance.file
+    new_file = instance.path
     if not old_file == new_file:
         if os.path.isfile(old_file.path):
             os.remove(old_file.path)
@@ -141,6 +141,7 @@ class Section(models.Model):
     text = models.TextField(blank=True)
     image = models.ForeignKey(
         Image, null=True, on_delete=models.CASCADE, related_name='sections')
+    video = models.CharField(blank=True, max_length=200)
 
 
     # not a field for the same reasoning as Page's owner
