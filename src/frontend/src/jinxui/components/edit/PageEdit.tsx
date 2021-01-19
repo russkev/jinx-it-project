@@ -9,6 +9,7 @@ import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import CreateIcon from "@material-ui/icons/Create";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import {
   useUser,
@@ -19,12 +20,17 @@ import {
 } from "jinxui";
 import { TPage } from "jinxui/types";
 
+// Required for disabled buttons
+const TooltipDiv = styled.div`
+  display: flex;
+`;
+
 type TPageEdit = {
   pageIndex?: number;
   page?: TPage;
 };
 const PageEdit = (props: TPageEdit) => {
-  const { setSuccessMessage, setErrorMessage } = useUser();
+  const { setErrorMessage } = useUser();
   const { getFetchedPortfolio } = usePortfolio();
   const {
     handlePageDelete,
@@ -96,7 +102,6 @@ const PageEdit = (props: TPageEdit) => {
       <Box
         height={BOX_HEIGHT}
         marginBottom="30px"
-        // marginTop={props.pageIndex !== undefined ? "30px" : "0px"}
         marginTop="30px"
         display="flex"
         flexDirection="column"
@@ -104,15 +109,17 @@ const PageEdit = (props: TPageEdit) => {
         position="relative"
       >
         <Box>
-          <Button
-            size="medium"
-            style={{
-              minWidth: 40,
-            }}
-            onClick={handleAdd}
-          >
-            <PostAddIcon />
-          </Button>
+          <Tooltip title="Add new collection" arrow>
+            <Button
+              size="medium"
+              style={{
+                minWidth: 40,
+              }}
+              onClick={handleAdd}
+            >
+              <PostAddIcon />
+            </Button>
+          </Tooltip>
         </Box>
         <Box
           display="grid"
@@ -142,30 +149,42 @@ const PageEdit = (props: TPageEdit) => {
                 }}
               />
               <Box display="flex" justifyContent="end">
-                <Button
-                  size="medium"
-                  style={{ minWidth: 40 }}
-                  onClick={handleMoveUp}
-                  disabled={props.pageIndex < 1}
-                >
-                  <ArrowUpwardIcon />
-                </Button>
-                <Button
-                  size="medium"
-                  style={{ minWidth: 40 }}
-                  onClick={handleMoveDown}
-                  disabled={props.pageIndex > getFetchedPages().length - 1}
-                >
-                  <ArrowDownwardIcon />
-                </Button>
-                <Button
-                  size="medium"
-                  style={{ minWidth: 40 }}
-                  onClick={handleDelete}
-                  disabled={getFetchedPages().length < 2}
-                >
-                  <DeleteOutlinedIcon />
-                </Button>
+                <Tooltip title="Move collection up" arrow>
+                  <TooltipDiv>
+                    <Button
+                      size="medium"
+                      style={{ minWidth: 40 }}
+                      onClick={handleMoveUp}
+                      disabled={props.pageIndex < 1}
+                    >
+                      <ArrowUpwardIcon />
+                    </Button>
+                  </TooltipDiv>
+                </Tooltip>
+                <Tooltip title="Move collection down" arrow>
+                  <TooltipDiv>
+                    <Button
+                      size="medium"
+                      style={{ minWidth: 40 }}
+                      onClick={handleMoveDown}
+                      disabled={props.pageIndex > getFetchedPages().length - 1}
+                    >
+                      <ArrowDownwardIcon />
+                    </Button>
+                  </TooltipDiv>
+                </Tooltip>
+                <Tooltip title="Delete collection" arrow>
+                  <TooltipDiv>
+                    <Button
+                      size="medium"
+                      style={{ minWidth: 40 }}
+                      onClick={handleDelete}
+                      disabled={getFetchedPages().length < 2}
+                    >
+                      <DeleteOutlinedIcon />
+                    </Button>
+                  </TooltipDiv>
+                </Tooltip>
               </Box>
             </>
           ) : (

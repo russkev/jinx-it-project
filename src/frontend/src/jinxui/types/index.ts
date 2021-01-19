@@ -3,6 +3,7 @@ export type {
   TPage,
   TSection,
   TSections,
+  TSectionInfo,
   TLink,
   TImage,
   Tuuid,

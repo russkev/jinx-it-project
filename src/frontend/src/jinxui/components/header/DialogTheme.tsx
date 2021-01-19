@@ -57,14 +57,6 @@ const ThemeIconLayout = styled.div`
   }
 `;
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
-    dialog: {
-      background: theme.palette.background.default,
-    },
-  });
-});
-
 const useStylesThemes = makeStyles((theme: Theme) => {
   return createStyles({
     root: {
@@ -83,14 +75,12 @@ type TDialogTheme = {
 const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
   const {
     userData,
-    setSuccessMessage,
     setTheme,
     themePreview,
     themePreviewCancel,
   } = useUser();
   const theme = useTheme();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const classes = useStyles();
   const themeClasses = useStylesThemes();
 
   const handleClickOpen = () => {

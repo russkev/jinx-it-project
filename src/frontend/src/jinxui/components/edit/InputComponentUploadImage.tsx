@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
 import { useUser, useSection, StyledUserImage } from "jinxui";
-import { TSection, TImage, Tuuid } from "jinxui/types";
+import { TImage, TSectionInfo } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
 const StyledInput = styled.input`
@@ -50,12 +50,7 @@ const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
   z-index: 2;
 `;
 
-type TInputComponentUploadImage = {
-  pageId: Tuuid;
-  section: TSection;
-};
-
-const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
+const InputComponentUploadImage = (props: TSectionInfo) => {
   // const [imagePath, setImagePath] = useState(FRONT_END_URL + "blank_image.svg");
   const { onSectionChange } = useSection();
   const [imageExists, setImageExists] = useState(false);
@@ -81,7 +76,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
           throw error;
         });
     }
-  }, [props.section]);
+  }, [props.section, fetchImage]);
 
   return (
     <>
@@ -102,13 +97,6 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                 setProgress
               )
                 .then((response) => {
-                  // setImageResponse(response.data);
-                  // const newImage: TImage = {
-                  //   id: response.data.id,
-                  //   name: response.data.name,
-                  //   path: response.data.path,
-                  // };
-                  // !!! Need to set section data
                   setLocalImage(() => {
                     onSectionChange(props.pageId, props.section.id, {
                       image: response.data.id,
@@ -168,7 +156,6 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
       </label>
     </>
   );
-  return <></>;
 };
 
 export default InputComponentUploadImage;

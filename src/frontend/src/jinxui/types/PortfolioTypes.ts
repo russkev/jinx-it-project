@@ -42,6 +42,11 @@ export interface TSections {
   [pageId: string]: TSection[]
 }
 
+export type TSectionInfo = {
+  pageId: Tuuid;
+  section: TSection;
+}
+
 export type TLink = {
   id: Tuuid;
   name?: string;

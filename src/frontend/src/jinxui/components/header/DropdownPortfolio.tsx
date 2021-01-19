@@ -14,13 +14,13 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import {
   HeaderButton,
   useUser,
   usePortfolio,
-  HeaderMediaWidth,
   PrimaryMenu,
   Routes,
   SnackbarAlert,
@@ -32,7 +32,7 @@ const DivWrapper = styled.div`
   height: 100%;
 `;
 
-const StyledName = styled(HeaderButton)`
+const StyledHeaderButton = styled(HeaderButton)`
   text-transform: none;
   padding-top: 0px;
   padding-bottom: 0px;
@@ -313,22 +313,23 @@ const DropdownPortfolio = React.forwardRef(
 
     const viewDisabled = props.isUserView === true;
     const editDisabled = props.isUserEdit === true;
-    const restDisabled =
-      props.isUserView !== true && props.isUserEdit !== true;
+    const restDisabled = props.isUserView !== true && props.isUserEdit !== true;
 
     return (
       <>
         <SnackbarAlert />
         <DivWrapper>
           {userData.username ? (
-            <StyledName
-              ref={anchorRef}
-              aria-controls={open ? "menu-list-grow" : undefined}
-              aria-haspopup="true"
-              onClick={handleToggle}
-            >
-              <MenuRoundedIcon />
-            </StyledName>
+            <Tooltip title="Options">
+              <StyledHeaderButton
+                ref={anchorRef}
+                aria-controls={open ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
+              >
+                <MoreVertIcon />
+              </StyledHeaderButton>
+            </Tooltip>
           ) : null}
           <ClickAwayListener onClickAway={handleClose}>
             <PrimaryMenu

@@ -6,14 +6,10 @@ import {
   NewSectionButton,
   useSection,
 } from "jinxui";
-import { TSection, Tuuid } from "jinxui/types";
+import { TSectionInfo } from "jinxui/types";
 
-type TInputImage = {
-  key: string;
-  pageId: Tuuid;
-  section: TSection;
-};
-const InputImage = (props: TInputImage) => {
+
+const InputImage = (props: TSectionInfo) => {
   const { sectionIndex } = useSection();
   const index = props.section.id
     ? sectionIndex(props.pageId, props.section.id)

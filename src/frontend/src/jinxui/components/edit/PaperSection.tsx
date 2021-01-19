@@ -5,12 +5,9 @@ import Button from "@material-ui/core/Button";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import SaveSharpIcon from "@material-ui/icons/SaveSharp";
 import {
-  useUser,
-  usePortfolio,
   useSection,
-  InputChoiceMenu,
+  ContentChoiceMenu,
   StyledPaperSectionBase,
   StyledPaperSectionDiv,
   MAX_EDIT_HEADING_WIDTH,
@@ -30,12 +27,6 @@ const StyledDivLeft = styled.div`
   padding-left: 0px;
   display: flex;
   align-items: center;
-`;
-
-const StyledDivCenter = styled.div`
-  display: flex;
-  justify-content: center;
-  align-self: center;
 `;
 
 const StyledDivRight = styled.div`
@@ -59,8 +50,6 @@ type TPaperSection = {
   hideEditButtons?: boolean;
 };
 const PaperSection = (props: TPaperSection) => {
-  const { isSaving } = useUser();
-  const { saveFullPortfolio } = usePortfolio();
   const {
     getFetchedSections,
     handleSectionDelete,
@@ -170,7 +159,7 @@ const PaperSection = (props: TPaperSection) => {
               </Button>
             </TooltipDiv>
           </Tooltip>
-          <InputChoiceMenu pageId={props.pageId} section={props.section} />
+          <ContentChoiceMenu pageId={props.pageId} section={props.section} />
         </StyledDivRight>
       </StyledDivOuter>
       <StyledPaperSectionBase elevation={3} variant="outlined" square>

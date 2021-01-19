@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { InputAdornment, TextField, Button } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
 import Box from "@material-ui/core/Box";
 import CreateIcon from "@material-ui/icons/Create";
 
@@ -10,7 +9,6 @@ import {
   usePortfolio,
   LinkDialog,
   LinksDisplay,
-  SkeletonLinks,
   OneColumnSectionDiv,
   SkeletonEditAll,
   StyledPaperSectionBase,
@@ -26,7 +24,6 @@ const LinksDiv = styled.div`
 const InputPortfolio = () => {
   const { isLoading } = useUser();
   const {
-    setPortfolioName,
     logPortfolioState,
     getFetchedPortfolio,
   } = usePortfolio();

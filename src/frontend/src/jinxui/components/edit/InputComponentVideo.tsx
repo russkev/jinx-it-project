@@ -7,19 +7,12 @@ import CreateIcon from "@material-ui/icons/Create";
 
 import {
   useSection,
-  NewSectionButton,
-  OneColumnSectionDiv,
-  PaperSection,
-  InputComponentTextField,
 } from "jinxui";
-import { Tuuid, TSection } from "jinxui/types";
+import { TSectionInfo } from "jinxui/types";
 
-type TInputComponentVideo = {
-  pageId: Tuuid;
-  section: TSection;
-};
-const InputComponentVideo = (props: TInputComponentVideo) => {
-  const { sectionIndex, onSectionChange } = useSection();
+
+const InputComponentVideo = (props: TSectionInfo) => {
+  const { onSectionChange } = useSection();
   const [localVideo, setLocalVideo] = useState<string>(
     props.section.video ? props.section.video : ""
   );

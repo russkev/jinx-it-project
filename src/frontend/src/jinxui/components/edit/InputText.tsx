@@ -1,15 +1,10 @@
 import React from "react";
 import { PaperSection, InputComponentTextField, OneColumnSectionDiv } from "jinxui";
-import { TSection, Tuuid } from "jinxui/types";
+import { TSectionInfo } from "jinxui/types";
 import { NewSectionButton, useSection } from "jinxui";
 
-type TInputText = {
-  key: string;
-  pageId: Tuuid,
-  section: TSection;
-};
 
-const InputText = (props: TInputText) => {
+const InputText = (props: TSectionInfo) => {
   const { sectionIndex } = useSection();
 
   const index = sectionIndex(props.pageId, props.section.id)

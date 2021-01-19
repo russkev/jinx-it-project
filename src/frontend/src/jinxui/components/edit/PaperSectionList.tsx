@@ -1,12 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   useUser,
-  usePortfolio,
   usePage,
   useSection,
   InputText,
@@ -19,11 +17,9 @@ import {
 } from "jinxui";
 
 import { TSection, TPage, ESectionType } from "jinxui/types";
-import { defaultSectionContext } from "jinxui/contexts";
 
 const PaperSectionsDisplay = () => {
   const { isSaving } = useUser();
-  const { saveFullPortfolio } = usePortfolio();
   const { getFetchedPages } = usePage();
   const { getFetchedSections } = useSection();
 

@@ -58,7 +58,7 @@ export {
 /* Edit */
 export { default as HeaderEditAddition } from "./components/edit/HeaderEditAddition"
 export { default as PaperSection } from "./components/edit/PaperSection"
-export { default as InputChoiceMenu } from "./components/edit/InputChoiceMenu"
+export { default as ContentChoiceMenu } from "./components/edit/ContentChoiceMenu"
 export { default as InputComponentTextField } from "./components/edit/InputComponentTextField"
 export { default as InputComponentUploadImage } from "./components/edit/InputComponentUploadImage"
 export { default as InputComponentVideo } from "./components/edit/InputComponentVideo"

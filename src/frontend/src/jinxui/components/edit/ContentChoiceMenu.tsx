@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -7,52 +7,43 @@ import InsertPhoto from "@material-ui/icons/InsertPhoto";
 import VerticalSplit from "@material-ui/icons/VerticalSplit";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
-import Button from "@material-ui/core/Button"
-import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
-import {
-  useSection,
-  PrimaryMenu,
-} from "jinxui"
+import { useSection, PrimaryMenu } from "jinxui";
 
-import {
-  Tuuid,
-  TSection,
-  ESectionType,
-} from "jinxui/types"
+import { ESectionType, TSectionInfo } from "jinxui/types";
 
-
-type TInputChoice = {
-  pageId: Tuuid;
-  section: TSection
-}
-const InputChoiceMenu = (props: TInputChoice) => {
+const ContentChoiceMenu = (props: TSectionInfo) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { handleSectionStateUpdate } = useSection();
 
   const handleSectionTypeUpdate = (type: ESectionType) => {
-    handleSectionStateUpdate(props.pageId, props.section.id, {type: type})
-  }
+    handleSectionStateUpdate(props.pageId, props.section.id, { type: type });
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   return (
     <>
-      <Button
-        size="medium"
-        style={{
-          minWidth: 40,
-        }}
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </Button>
+      <Tooltip title="Choose content type" arrow>
+        <Button
+          size="medium"
+          style={{
+            minWidth: 40,
+          }}
+          onClick={handleClick}
+        >
+          <MoreVertIcon />
+        </Button>
+      </Tooltip>
       <PrimaryMenu
         id="input-choice-menu"
         anchorEl={anchorEl}
@@ -64,19 +55,15 @@ const InputChoiceMenu = (props: TInputChoice) => {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Typography align="center" variant="h6">
-          Section Type
+          Content Type
         </Typography>
-        <MenuItem 
-          onClick={() => handleSectionTypeUpdate(ESectionType.text)}
-        >
+        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.text)}>
           <ListItemIcon>
             <Subject fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Text" />
         </MenuItem>
-        <MenuItem 
-          onClick={() => handleSectionTypeUpdate(ESectionType.image)}
-        >
+        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.image)}>
           <ListItemIcon>
             <InsertPhoto fontSize="small" />
           </ListItemIcon>
@@ -90,9 +77,7 @@ const InputChoiceMenu = (props: TInputChoice) => {
           </ListItemIcon>
           <ListItemText primary="Image Text" />
         </MenuItem>
-        <MenuItem
-          onClick={() => handleSectionTypeUpdate(ESectionType.video)}
-        >
+        <MenuItem onClick={() => handleSectionTypeUpdate(ESectionType.video)}>
           <ListItemIcon>
             <OndemandVideoIcon fontSize="small" />
           </ListItemIcon>
@@ -101,6 +86,6 @@ const InputChoiceMenu = (props: TInputChoice) => {
       </PrimaryMenu>
     </>
   );
-}
+};
 
-export default InputChoiceMenu
+export default ContentChoiceMenu;

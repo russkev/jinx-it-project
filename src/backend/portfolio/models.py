@@ -16,7 +16,7 @@ def create_default_portfolio(sender, **kwargs):
     portfolio = Portfolio.objects.create(
         owner=account.user,
         name='My Portfolio',
-        theme="Magma",
+        theme="Arch",
     )
     page = Page.objects.create(
         portfolio=portfolio,

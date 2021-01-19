@@ -9,22 +9,14 @@ import {
   useSection,
 } from "jinxui";
 
-import { TSection, Tuuid } from "jinxui/types";
+import { TSectionInfo } from "jinxui/types";
 
-type TInputImageText = {
-  key: string;
-  pageId: Tuuid;
-  section: TSection;
-};
-
-const InputImageText = (props: TInputImageText) => {
+const InputImageText = (props: TSectionInfo) => {
   const {
-    getFetchedSections,    
+    sectionIndex,   
   } = useSection();
 
-  const index = getFetchedSections(props.pageId).findIndex(
-    (p: TSection) => p.id === props.section.id
-  );
+  const index = sectionIndex(props.pageId, props.section.id)
 
   return (
     <>

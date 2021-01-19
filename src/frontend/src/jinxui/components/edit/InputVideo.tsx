@@ -1,10 +1,4 @@
 import React, { useState } from "react";
-import ReactPlayer from "react-player";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment"
-import CreateIcon from "@material-ui/icons/Create";
-
 
 import {
   useSection,
@@ -14,27 +8,12 @@ import {
   InputComponentVideo,
 } from "jinxui";
 
-import { Tuuid, TSection } from "jinxui/types";
+import { TSectionInfo } from "jinxui/types";
 
-type TInputVideo = {
-  key: string;
-  pageId: Tuuid;
-  section: TSection;
-};
-const InputVideo = (props: TInputVideo) => {
-  const { sectionIndex, onSectionChange } = useSection();
-  const [localVideo, setLocalVideo] = useState<string>(
-    props.section.video ? props.section.video : "" 
-  )
+
+const InputVideo = (props: TSectionInfo) => {
+  const { sectionIndex } = useSection();
   const index = sectionIndex(props.pageId, props.section.id);
-
-  const onUrlChange = (event: any) => {
-    const newValue = event.target.value;
-    setLocalVideo(() => {
-      onSectionChange(props.pageId, props.section.id, {video: newValue})
-      return newValue
-    });
-  }
 
   return (
     <>
