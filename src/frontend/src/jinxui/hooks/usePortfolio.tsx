@@ -9,6 +9,7 @@ import {
   listDelete,
   listMoveUp,
   listMoveDown,
+  Routes,
   PORTFOLIOS_PATH,
 } from "jinxui";
 import API from "../../API";
@@ -82,6 +83,7 @@ export const usePortfolio = () => {
   // const [successMessage, setSuccessMessage] = useState("");
   const [state, updateState, resetState] = useContext(PortfolioContext);
   const {
+    userData,
     getConfig,
     getSavedPortfolioId,
     getSavedLightThemeMode,
@@ -179,6 +181,29 @@ export const usePortfolio = () => {
     }
   }
 
+  /* Save the currently edited page to backend and redirect to display page. */
+  const handlePublishAndRedirect = (history: any) => {
+    saveFullPortfolio(false).then(() => {
+      makePortfolioPublic(getFetchedPortfolio().id)
+        .then(() => {
+          history.push(
+            Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username
+          );
+        })
+        .catch(() => {
+          setErrorMessage("Something went wrong");
+        });
+    });
+  };
+
+  
+  const handleSave = () => {
+    saveFullPortfolio(false).catch((error: any) => {
+      console.log(error);
+      throw error;
+    });
+  };
+
   function portfolioIsFetched() {
     return state.id != defaultPortfolioContext.id;
   }
@@ -260,12 +285,12 @@ export const usePortfolio = () => {
     privacySetting: boolean
   ) {
     try {
-      const path = PORTFOLIOS_PATH + "/" + portfolioId
+      const path = PORTFOLIOS_PATH + "/" + portfolioId;
       const response = await API.patch(
         path,
         { private: privacySetting },
-        getConfig(),
-      )
+        getConfig()
+      );
       updateState({ private: response.data.private });
       return response;
     } catch (e) {
@@ -367,6 +392,8 @@ export const usePortfolio = () => {
     setPortfolioTheme,
     setPortfolio,
     saveFullPortfolio,
+    handlePublishAndRedirect,
+    handleSave,
     makePortfolioPublic,
     makePortfolioPrivate,
     portfolioIsFetched,

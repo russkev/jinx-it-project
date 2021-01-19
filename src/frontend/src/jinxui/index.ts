@@ -79,7 +79,8 @@ export { default as InputSkeleton } from "./components/edit/InputSkeleton"
 export { LinkIconEnum, LinkDisplayIcon } from "./components/edit/LinkDisplayIcon"
 export { default as LinksSkeleton } from "./components/edit/LinksSkeleton"
 export { default as PageEdit } from "./components/edit/PageEdit"
-
+export { default as SaveMobile } from "./components/edit/SaveMobile"
+export { default as SaveDesktop } from "./components/edit/SaveDesktop"
 /* Home */
 export { default as HomeTemplates } from "./components/home/HomeTemplates";
 export { UploadIcon, FormIcon, LogoTextIcon } from "./components/home/HomeIcons";
@@ -155,3 +156,11 @@ export {
   IMAGES_PATH,
   PORTFOLIOS_PATH,
 };
+
+/* Sizes */
+const MAX_EDIT_SECTION_WIDTH = "900px"
+const SAVE_DESKTOP_WIDTH = "1380px"
+export {
+  MAX_EDIT_SECTION_WIDTH,
+  SAVE_DESKTOP_WIDTH,
+}

@@ -13,6 +13,8 @@ import {
   PrimaryColumnDiv,
   PaperSectionsDisplay,
   HeaderEditAddition,
+  SaveMobile,
+  SaveDesktop,
 } from "jinxui";
 
 const FormTitle = styled.h2`
@@ -70,20 +72,7 @@ const Edit = (props: any) => {
     fetchPortfolio();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* Save the currently edited page to backend and redirect to display page. */
-  const handlePublishAndRedirect = () => {
-    saveFullPortfolio(false).then(() => {
-      makePortfolioPublic(getFetchedPortfolio().id)
-        .then(() => {
-          props.history.push(
-            Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username
-          );
-        })
-        .catch(() => {
-          setErrorMessage("Something went wrong");
-        });
-    });
-  };
+
 
   return (
     <>
@@ -95,20 +84,9 @@ const Edit = (props: any) => {
           <div>
             <FormTitle>Enter your information</FormTitle>
             <form>
+              <SaveMobile history={props.history}/>
               {PaperSectionsDisplay()}
               <PublishCancelDiv>
-                <Tooltip title="Save, make public, and display portfolio" arrow>
-                  <TooltipDiv>
-                    <PrimaryButton
-                      disabled={isSaving()}
-                      onClick={() => {
-                        handlePublishAndRedirect();
-                      }}
-                    >
-                      PUBLISH
-                    </PrimaryButton>
-                  </TooltipDiv>
-                </Tooltip>
                 <TooltipDiv>
                   <Tooltip title="Cancel, go back to Jinx home page" arrow>
                     <a href={Routes.HOME}>
@@ -119,7 +97,9 @@ const Edit = (props: any) => {
               </PublishCancelDiv>
             </form>
           </div>
-          <div></div>
+          <div>
+            <SaveDesktop history={props.history} />
+          </div>
         </PrimaryColumnDiv>
       </ThemeProvider>
     </>

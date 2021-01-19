@@ -107,12 +107,6 @@ const PaperSection = (props: TPaperSection) => {
     handleSectionMoveDown(props.pageId, index);
   }
 
-  const handleSave = () => {
-    saveFullPortfolio(false).catch((error: any) => {
-      console.log(error);
-      throw(error);
-    })
-  }
 
   return (
     <StyledPaperSectionDiv id={props.section.id}>
@@ -140,7 +134,7 @@ const PaperSection = (props: TPaperSection) => {
         {/* Modify section list buttons */}
 
         <StyledDivRight>
-          <Tooltip title="Save portfolio" arrow>
+          {/* <Tooltip title="Save portfolio" arrow>
             <TooltipDiv>
               <StyledButton
                 size="medium"
@@ -151,7 +145,7 @@ const PaperSection = (props: TPaperSection) => {
                 <SaveSharpIcon />
               </StyledButton>
             </TooltipDiv>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title="Move section up" arrow>
             <TooltipDiv>
               <StyledButton
