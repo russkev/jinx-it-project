@@ -37,10 +37,9 @@ const useStyles = makeStyles((theme: Theme) => {
       height: 380,
       transform: "translateZ(0px)",
       flexGrow: 1,
-      display: "none",
     },
     speedDial: {
-      position: "absolute",
+      position: "fixed",
       bottom: theme.spacing(2),
       right: theme.spacing(2),
     },

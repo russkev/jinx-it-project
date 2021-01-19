@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
@@ -11,12 +10,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import TextField from "@material-ui/core/TextField";
 import CreateIcon from "@material-ui/icons/Create";
 
-import { useUser, usePortfolio, usePage } from "jinxui";
+import { useUser, usePortfolio, usePage, MAX_EDIT_HEADING_WIDTH } from "jinxui";
 import { TPage } from "jinxui/types";
-
-const StyledButton = styled(Button)`
-  width: 10px;
-`;
 
 type TPageEdit = {
   pageIndex?: number;
@@ -36,6 +31,8 @@ const PageEdit = (props: TPageEdit) => {
   const [localTitle, setLocalTitle] = useState<string>(
     props.page ? props.page.name : ""
   );
+
+  const BOX_HEIGHT = "130px";
 
   const onTitleChange = (event: any) => {
     let newTitle = event.target.value;
@@ -86,17 +83,34 @@ const PageEdit = (props: TPageEdit) => {
     <>
       <Box
         width="100vw"
-        height="100px"
+        height={BOX_HEIGHT}
         bgcolor="background.paper"
         position="absolute"
         left="0px"
         borderTop="3px solid"
-      />
-      <Box height="100px" marginY="15px" display="flex" position="relative">
-        <Box></Box>
+        />
+      <Box
+        height={BOX_HEIGHT}
+        marginY="30px"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-evenly"
+        position="relative"
+      >
+        <Box>
+          <Button
+            size="medium"
+            style={{
+              minWidth: 40,
+            }}
+            onClick={handleAdd}
+          >
+            <PostAddIcon />
+          </Button>
+        </Box>
         <Box
           display="grid"
-          gridTemplateColumns="1fr max-content 1fr"
+          gridTemplateColumns="auto min-content"
           alignContent="center"
         >
           <TextField
@@ -105,6 +119,8 @@ const PageEdit = (props: TPageEdit) => {
             value={localTitle}
             placeholder="Title"
             color="secondary"
+            fullWidth
+            style={{maxWidth: MAX_EDIT_HEADING_WIDTH}}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -114,46 +130,36 @@ const PageEdit = (props: TPageEdit) => {
               style: {
                 fontSize: 20,
                 fontWeight: 600,
-                marginRight: "15%",
               },
             }}
           />
-          <Box>
-            <StyledButton
-              size="medium"
-              style={{ minWidth: 40 }}
-              onClick={handleAdd}
-            >
-              <PostAddIcon />
-            </StyledButton>
-          </Box>
           <Box display="flex" justifyContent="end">
             {props.pageIndex !== undefined ? (
               <>
-                <StyledButton
+                <Button
                   size="medium"
                   style={{ minWidth: 40 }}
                   onClick={handleMoveUp}
                   disabled={props.pageIndex < 1}
                 >
                   <ArrowUpwardIcon />
-                </StyledButton>
-                <StyledButton
+                </Button>
+                <Button
                   size="medium"
                   style={{ minWidth: 40 }}
                   onClick={handleMoveDown}
                   disabled={props.pageIndex > getFetchedPages().length - 1}
                 >
                   <ArrowDownwardIcon />
-                </StyledButton>
-                <StyledButton
+                </Button>
+                <Button
                   size="medium"
                   style={{ minWidth: 40 }}
                   onClick={handleDelete}
                   disabled={getFetchedPages().length < 2}
                 >
                   <DeleteOutlinedIcon />
-                </StyledButton>
+                </Button>
               </>
             ) : (
               <></>

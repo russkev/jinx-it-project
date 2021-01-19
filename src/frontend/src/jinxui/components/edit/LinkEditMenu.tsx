@@ -17,7 +17,7 @@ import LaunchIcon from "@material-ui/icons/Launch";
 import {
   LinkDisplayIcon,
   PrimaryMenu,
-  DialogLink,
+  LinkDialog,
   usePortfolio,
   useSection,
 } from "jinxui";
@@ -115,14 +115,14 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
         onClose={handleClose}
       >
         {props.sectionId && props.pageId ? (
-          <DialogLink
+          <LinkDialog
             link={props.link}
             setAnchoEl={setAnchorEl}
             pageId={props.pageId}
             sectionId={props.sectionId}
           />
         ) : (
-          <DialogLink link={props.link} setAnchoEl={setAnchorEl} />
+          <LinkDialog link={props.link} setAnchoEl={setAnchorEl} />
         )}
 
         {props.link.address && props.link.address !== "" ? (

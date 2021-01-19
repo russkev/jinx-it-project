@@ -16,7 +16,6 @@ import API from "../../API";
 import { v4 as uuidv4, validate } from "uuid";
 import {
   TPortfolio,
-  TPortfolioData,
   TPage,
   TSections,
   TLink,
@@ -27,15 +26,15 @@ import { defaultPortfolioContext } from "jinxui/contexts";
 
 
 
-// Note the $s in the function name. Use this if you want to get all of a user's portfolios
-// eslint-disable-next-line
-async function getPortfolios(config: any) {
-  const path = PORTFOLIOS_PATH;
-  const result = await API.get(path, config).then(
-    (response: any) => response.data
-  );
-  return result;
-}
+// // Note the $s in the function name. Use this if you want to get all of a user's portfolios
+// // eslint-disable-next-line
+// async function getPortfolios(config: any) {
+//   const path = PORTFOLIOS_PATH;
+//   const result = await API.get(path, config).then(
+//     (response: any) => response.data
+//   );
+//   return result;
+// }
 
 // Use this if you want to get a specific portfolio
 async function getPortfolio(portfolioId: Tuuid, config: any) {
@@ -49,7 +48,7 @@ async function getPortfolio(portfolioId: Tuuid, config: any) {
   return result;
 }
 
-async function postPortfolio(data: TPortfolioData, config: any) {
+async function postPortfolio(data: TPortfolio, config: any) {
   if (!data) {
     throw Error("Portfolio data is null");
   }
@@ -181,6 +180,16 @@ export const usePortfolio = () => {
     }
   }
 
+  async function savePortfolio(isNew: boolean) {
+    try {
+      return isNew
+        ? await postPortfolio(state, getConfig())
+        : await putPortfolio(state, getConfig());
+    } catch (e) {
+      throw e;
+    }
+  }
+
   /* Save the currently edited page to backend and redirect to display page. */
   const handlePublishAndRedirect = (history: any) => {
     saveFullPortfolio(false).then(() => {
@@ -265,16 +274,6 @@ export const usePortfolio = () => {
   async function setPortfolio(portfolio: TPortfolio) {
     try {
       await updateState(portfolio);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async function savePortfolio(isNew: boolean) {
-    try {
-      return isNew
-        ? await postPortfolio(state, getConfig())
-        : await putPortfolio(state, getConfig());
     } catch (e) {
       throw e;
     }

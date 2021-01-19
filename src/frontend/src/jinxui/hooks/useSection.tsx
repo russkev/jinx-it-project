@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import {
   SectionContext,
   useUser,
-  PORTFOLIOS_PATH,
   listDelete,
   listMoveUp,
   listMoveDown,
@@ -11,12 +10,11 @@ import {
 import API from "../../API";
 import { v4 as uuidv4, validate } from "uuid";
 import {
-  TPage,
-  TEditPage,
   TSection,
   TSections,
   TLink,
   Tuuid,
+  ESectionType
 } from "../types/PortfolioTypes";
 import { defaultSectionContext, defaultPageContext } from "jinxui/contexts";
 
@@ -81,7 +79,7 @@ export const useSection = () => {
     return allSections;
   }
 
-  function makeNewSection(pageId: Tuuid, sectionType: string): TSection {
+  function makeNewSection(pageId: Tuuid, sectionType: ESectionType): TSection {
     const newSection: TSection = JSON.parse(
       JSON.stringify(defaultSectionContext)
     );
@@ -109,8 +107,13 @@ export const useSection = () => {
     state[pageId][index] = section;
   };
 
-  const handleContentChange = (text: string, pageId: Tuuid, index: number) => {
-    updateState(pageId, index, { text: text });
+  const handleSectionStateUpdate = (
+    pageId: Tuuid, 
+    sectionId: Tuuid,
+    fieldsToUpdate: Partial<TSection>
+  ) => {
+    const index = sectionIndex(pageId, sectionId)
+    updateState(pageId, index, fieldsToUpdate);
   };
 
   function handleSectionChange(
@@ -132,7 +135,7 @@ export const useSection = () => {
     if (pageId in state) {
       throw Error("Tried to add new page with an existing page ID");
     } else {
-      const newSection = makeNewSection(pageId, "text");
+      const newSection = makeNewSection(pageId, ESectionType.text);
       setState({ ...state, [pageId]: [newSection] });
     }
   }
@@ -278,7 +281,7 @@ export const useSection = () => {
     makeNewSection,
     setSections,
     onSectionChange,
-    handleContentChange,
+    handleSectionStateUpdate,
     handleSectionChange,
     handleSectionAddPage,
     handleSectionDelete,

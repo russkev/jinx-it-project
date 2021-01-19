@@ -26,30 +26,10 @@ export type TPage = {
   toDelete?: boolean;
 };
 
-export interface TEditPage extends TPage {
-  uid: string;
-  isNew: boolean;
-}
-
-// export type TSectionData = {
-//   name: string;
-//   content: string;
-//   media?: string;
-//   image?: number | null;
-//   path?: string;
-//   alt?: string;
-// };
-
-// export interface TSection extends TSectionData {
-//   id?: number;
-//   type: string;
-//   number: number;
-// }
-
 export type TSection = {
   id: Tuuid;
   name: string;
-  type: string;
+  type: ESectionType;
   index: number;
   text?: string;
   image?: Tuuid;
@@ -57,36 +37,9 @@ export type TSection = {
   links: TLink[];
 }
 
-export type TImage = {
-  id: Tuuid;
-  name: string;
-  path: string;
-}
-
-// export interface TEditSection extends TSection {
-//   uid?: string
-//   links: TLink[]
-// };
-
-// export interface TSendSection extends TSection {
-//   links: TSectionLink[]
-// }
-
 export interface TSections {
   [pageId: string]: TSection[]
 }
-
-export type TPortfolioData = {
-  name: string;
-  number?: number;
-};
-
-export type TPageData = {
-  name: string;
-  number?: number;
-};
-
-
 
 export type TLink = {
   id: Tuuid;
@@ -96,13 +49,15 @@ export type TLink = {
   number: number;
 };
 
-export type TPageLink = {
-  page: number;
-  link: TLink;
+export type TImage = {
+  id: Tuuid;
+  name: string;
+  path: string;
 }
 
-export type TSectionLink = {
-  section: number;
-  link: TLink;
+export enum ESectionType {
+  text = "text",
+  image = "image",
+  imageText = "image_text",
+  skeleton = "skeleton,"
 }
-

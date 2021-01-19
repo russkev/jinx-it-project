@@ -54,14 +54,14 @@ const PublishCancelDiv = styled.div`
 /**
  *  Dialog for choosing or modifying a link / icon combination
  */
-type TDialogLink = {
+type TLinkDialog = {
   link?: TLink;
   // section: TEditSection
   pageId?: string;
   sectionId?: string;
   setAnchoEl?: any;
 };
-const DialogLink = React.forwardRef((props: TDialogLink, ref: any) => {
+const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
   const [open, setOpen] = useState(false);
   const [linkIcon, setLinkIcon] = useState(
     props.link ? props.link.icon : LinkIconEnum.Disabled
@@ -210,4 +210,4 @@ const DialogLink = React.forwardRef((props: TDialogLink, ref: any) => {
   );
 });
 
-export default DialogLink;
+export default LinkDialog;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Box, Button } from "@material-ui/core";
-import { useSection, LinksDisplay, DialogLink } from "jinxui";
+import { useSection, LinksDisplay, LinkDialog } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
 
 
@@ -41,7 +41,7 @@ const InputComponentTextField = (props: TInputComponentTextField) => {
         marginBottom="15px"
       >
         <LinksDisplay sectionId={props.section.id} pageId={props.pageId} />
-        <DialogLink sectionId={props.section.id} pageId={props.pageId} />
+        <LinkDialog sectionId={props.section.id} pageId={props.pageId} />
         <Button onClick={logState}>Log State</Button>
       </Box>
       <TextField

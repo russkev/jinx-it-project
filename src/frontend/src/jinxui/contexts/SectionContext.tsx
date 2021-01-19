@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { TSection, TSections, Tuuid } from "jinxui/types";
+import { TSection, TSections, Tuuid, ESectionType } from "jinxui/types";
 
 export const defaultSectionContext: TSection = {
   id: "0-0-0-0-0",
   name: "",
-  type: "skeleton",
+  type: ESectionType.skeleton,
   index: 0,
   text: "",
   image: undefined,

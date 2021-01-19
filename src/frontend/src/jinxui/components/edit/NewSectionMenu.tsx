@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { PrimaryMenu, useSection, defaultSectionContext } from "jinxui";
 
-import { TSection, Tuuid } from "jinxui/types";
+import { TSection, Tuuid, ESectionType } from "jinxui/types";
 
 type TNewSectionMenu = {
   pageId: Tuuid;
@@ -36,18 +36,18 @@ const NewSectionMenu = (props: TNewSectionMenu) => {
   };
 
   const handleAddImageTextSection = () => {
-    addSection("image_text");
+    addSection(ESectionType.imageText);
   };
 
   const handleAddTextSection = () => {
-    addSection("text");
+    addSection(ESectionType.text);
   };
 
   const handleAddImageSection = () => {
-    addSection("image");
+    addSection(ESectionType.image);
   };
 
-  const addSection = (sectionType: string) => {
+  const addSection = (sectionType: ESectionType) => {
     setAnchorEl(null);
 
     const index = sectionIndex(props.pageId, props.section.id)

@@ -7,11 +7,13 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import SaveSharpIcon from "@material-ui/icons/SaveSharp";
 import {
-  StyledPaperSectionBase,
-  StyledPaperSectionDiv,
   useUser,
   usePortfolio,
   useSection,
+  InputChoiceMenu,
+  StyledPaperSectionBase,
+  StyledPaperSectionDiv,
+  MAX_EDIT_HEADING_WIDTH,
 } from "jinxui";
 import { TSection, Tuuid } from "jinxui/types";
 import { InputAdornment } from "@material-ui/core";
@@ -20,7 +22,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 const StyledDivOuter = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto min-content;
   grid-template-rows: 46px;
 `;
 
@@ -49,9 +51,6 @@ const TooltipDiv = styled.div`
   display: flex;
 `;
 
-const StyledButton = styled(Button)`
-  width: 10px;
-`;
 
 type TPaperSection = {
   pageId: Tuuid;
@@ -70,17 +69,17 @@ const PaperSection = (props: TPaperSection) => {
     onSectionChange,
     sectionIndex,
   } = useSection();
-  const [localTitle, setLocalTitle] = useState<string>(props.section.name)
+  const [localTitle, setLocalTitle] = useState<string>(props.section.name);
 
   const onTitleChange = (event: any) => {
     let newTitle = event.target.value;
     setLocalTitle(() => {
-      onSectionChange(props.pageId, props.section.id, {name: newTitle})
-      return newTitle
-    })
-  }
+      onSectionChange(props.pageId, props.section.id, { name: newTitle });
+      return newTitle;
+    });
+  };
 
-  const index = sectionIndex(props.pageId, props.section.id)
+  const index = sectionIndex(props.pageId, props.section.id);
 
   let deleteDisabled = false;
   let upArrowDisabled = false;
@@ -105,8 +104,7 @@ const PaperSection = (props: TPaperSection) => {
 
   const handleMoveDown = () => {
     handleSectionMoveDown(props.pageId, index);
-  }
-
+  };
 
   return (
     <StyledPaperSectionDiv id={props.section.id}>
@@ -120,6 +118,8 @@ const PaperSection = (props: TPaperSection) => {
             value={localTitle}
             placeholder="Section Heading"
             color="secondary"
+            fullWidth
+            style={{maxWidth: MAX_EDIT_HEADING_WIDTH}}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -129,60 +129,48 @@ const PaperSection = (props: TPaperSection) => {
             }}
           />
         </StyledDivLeft>
-        <StyledDivCenter></StyledDivCenter>
 
         {/* Modify section list buttons */}
 
         <StyledDivRight>
-          {/* <Tooltip title="Save portfolio" arrow>
-            <TooltipDiv>
-              <StyledButton
-                size="medium"
-                style={{ minWidth: 40 }}
-                onClick={ handleSave }
-                disabled={ isSaving() }
-              >
-                <SaveSharpIcon />
-              </StyledButton>
-            </TooltipDiv>
-          </Tooltip> */}
           <Tooltip title="Move section up" arrow>
             <TooltipDiv>
-              <StyledButton
+              <Button
                 size="medium"
                 style={{ minWidth: 40 }}
                 disabled={upArrowDisabled}
                 onClick={handleMoveUp}
               >
                 <ArrowUpwardIcon />
-              </StyledButton>
+              </Button>
             </TooltipDiv>
           </Tooltip>
           <Tooltip title="Move section down" arrow>
             <TooltipDiv>
-              <StyledButton
+              <Button
                 size="medium"
                 style={{ minWidth: 40 }}
                 disabled={downArrowDisabled}
                 onClick={handleMoveDown}
               >
                 <ArrowDownwardIcon />
-              </StyledButton>
+              </Button>
             </TooltipDiv>
           </Tooltip>
 
           <Tooltip title="Delete this section" arrow>
             <TooltipDiv>
-              <StyledButton
+              <Button
                 size="medium"
                 style={{ minWidth: 40 }}
                 onClick={handleDelete}
                 disabled={deleteDisabled}
               >
                 <DeleteOutlinedIcon />
-              </StyledButton>
+              </Button>
             </TooltipDiv>
           </Tooltip>
+          <InputChoiceMenu pageId={props.pageId} section={props.section} />
         </StyledDivRight>
       </StyledDivOuter>
       <StyledPaperSectionBase elevation={3} variant="outlined" square>

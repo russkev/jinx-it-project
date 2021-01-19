@@ -56,31 +56,33 @@ export {
 } from "./components/display/MuiComponents";
 
 /* Edit */
+export { default as HeaderEditAddition } from "./components/edit/HeaderEditAddition"
 export { default as PaperSection } from "./components/edit/PaperSection"
-export { default as NewSectionMenu } from "./components/edit/NewSectionMenu"
-export { default as InputComponentUploadImage } from "./components/edit/InputComponentUploadImage"
+export { default as InputChoiceMenu } from "./components/edit/InputChoiceMenu"
 export { default as InputComponentTextField } from "./components/edit/InputComponentTextField"
-export { default as PortfolioNameSectionInput } from "./components/edit/LinksDisplay"
+export { default as InputComponentUploadImage } from "./components/edit/InputComponentUploadImage"
 export { default as InputText } from "./components/edit/InputText"
 export { default as InputImage } from "./components/edit/InputImage"
 export { default as InputImageText } from "./components/edit/InputImageText"
-export { default as StyledUserImage } from "./components/edit/StyledUserImage";
-export { default as StyledPaperSectionBase } from "./components/edit/StyledPaperSectionBase"
-export { default as StyledPaperSectionDiv } from "./components/edit/StyledPaperSectionDiv"
-export { default as StyledPaperSectionHeading } from "./components/edit/StyledPaperSectionHeading"
-export { default as LinkIconMenu } from "./components/edit/LinkIconMenu"
-export { default as DialogLink } from "./components/edit/DialogLink"
-export { default as LinkEditMenu } from "./components/edit/LinkEditMenu"
-export { default as LinksDisplay } from "./components/edit/LinksDisplay"
-export { default as PaperSectionsDisplay } from "./components/edit/PaperSectionList"
-export { default as HeaderEditAddition } from "./components/edit/HeaderEditAddition"
 export { default as InputPortfolio } from "./components/edit/InputPortfolio"
 export { default as InputSkeleton } from "./components/edit/InputSkeleton"
+export { default as LinkIconMenu } from "./components/edit/LinkIconMenu"
+export { default as LinkDialog } from "./components/edit/LinkDialog"
+export { default as LinkEditMenu } from "./components/edit/LinkEditMenu"
+export { default as LinksDisplay } from "./components/edit/LinksDisplay"
+export { default as NewSectionMenu } from "./components/edit/NewSectionMenu"
+export { default as PortfolioNameSectionInput } from "./components/edit/LinksDisplay"
+export { default as PaperSectionsDisplay } from "./components/edit/PaperSectionList"
 export { LinkIconEnum, LinkDisplayIcon } from "./components/edit/LinkDisplayIcon"
 export { default as LinksSkeleton } from "./components/edit/LinksSkeleton"
 export { default as PageEdit } from "./components/edit/PageEdit"
 export { default as SaveMobile } from "./components/edit/SaveMobile"
 export { default as SaveDesktop } from "./components/edit/SaveDesktop"
+export { default as StyledUserImage } from "./components/edit/StyledUserImage";
+export { default as StyledPaperSectionBase } from "./components/edit/StyledPaperSectionBase"
+export { default as StyledPaperSectionDiv } from "./components/edit/StyledPaperSectionDiv"
+export { default as StyledPaperSectionHeading } from "./components/edit/StyledPaperSectionHeading"
+
 /* Home */
 export { default as HomeTemplates } from "./components/home/HomeTemplates";
 export { UploadIcon, FormIcon, LogoTextIcon } from "./components/home/HomeIcons";
@@ -158,9 +160,11 @@ export {
 };
 
 /* Sizes */
+const MAX_EDIT_HEADING_WIDTH = "550px"
 const MAX_EDIT_SECTION_WIDTH = "900px"
 const SAVE_DESKTOP_WIDTH = "1380px"
 export {
+  MAX_EDIT_HEADING_WIDTH,
   MAX_EDIT_SECTION_WIDTH,
   SAVE_DESKTOP_WIDTH,
 }

@@ -41,6 +41,10 @@ const DarkTheme = createMuiTheme({
       fontWeight: 200,
       fontSize: "3rem",
     },
+    h6: {
+      fontWeight: 500,
+      fontSize: "1rem",
+    },
     button: {
       fontSize: "0.98rem",
       fontWeight: 400,
