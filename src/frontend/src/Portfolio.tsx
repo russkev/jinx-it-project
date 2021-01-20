@@ -14,6 +14,7 @@ import {
   DisplayCopyright,
   DisplayHeader,
   DisplaySectionList,
+  DisplayPageList,
 } from "jinxui";
 
 import {
@@ -146,7 +147,8 @@ const Portfolio = ({ username }: PortfolioProps) => {
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
             <DisplayHeader></DisplayHeader>
-            <DisplaySectionList sections={sections} />
+            {/* <DisplaySectionList sections={sections} /> */}
+            <DisplayPageList />
           </ThemeProvider>
           <DisplayCopyright text={author} />
         </ThemeProvider>

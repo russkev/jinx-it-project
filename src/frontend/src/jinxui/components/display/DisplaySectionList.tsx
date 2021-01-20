@@ -19,7 +19,7 @@ import {
   ThemeSectionColors,
   DisplaySection,
 } from "jinxui";
-import { TSection } from "jinxui/types";
+import { TSection, Tuuid } from "jinxui/types";
 
 // Markdown
 import ReactMarkdown from "react-markdown";
@@ -34,7 +34,7 @@ function CentredGrid({ components }: { components: JSX.Element[] }) {
   return (
     <Grid container spacing={0}>
       {components.map((component, index) => (
-        <Grid item xs={12} key={index}>
+        <Grid item xs={12} key={component.key}>
           {component}
         </Grid>
       ))}
@@ -43,21 +43,22 @@ function CentredGrid({ components }: { components: JSX.Element[] }) {
 }
 
 type TSectionGrid = {
-  sections: TSection[];
+  pageId: Tuuid;
 };
 const DisplaySectionList = (props: TSectionGrid) => {
   const theme = useTheme();
   const { getFetchedPages } = usePage();
   const { getFetchedSections } = useSection()
+  const sections = getFetchedSections(props.pageId)
   // var sections: TSection[] = []
 
-  const [sections, setSections] = useState<TSection[]>([])
+  // const [sections, setSections] = useState<TSection[]>([])
 
-  useEffect(() => {
-    if (getFetchedPages().length > 0) {
-      setSections(getFetchedSections(getFetchedPages()[0].id))
-    }
-  }, [getFetchedPages()])
+  // useEffect(() => {
+  //   if (getFetchedPages().length > 0) {
+  //     setSections(getFetchedSections(getFetchedPages()[0].id))
+  //   }
+  // }, [getFetchedPages()])
 
   // Add logic for mapping data to different section components (i.e. timeline) in here
   const layoutData = (data: TSection, index?: number) => {

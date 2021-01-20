@@ -36,8 +36,9 @@ export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
 export { default as DisplayCopyright } from "./components/display/DisplayCopyright"
 export { default as DisplayHeader } from "./components/display/DisplayHeader"
 export { default as DisplayLinks } from "./components/display/DisplayLinks"
-export { default as DisplaySectionList } from "./components/display/DisplaySectionList"
 export { default as DisplaySection } from "./components/display/DisplaySection"
+export { default as DisplaySectionList } from "./components/display/DisplaySectionList"
+export { default as DisplayPageList } from "./components/display/DisplayPageList"
 export { default as ThemeBackgroundColors } from "./components/display/ThemeBackgroundColors"
 export { default as ThemeSectionColors } from "./components/display/ThemeSectionColors"
 
