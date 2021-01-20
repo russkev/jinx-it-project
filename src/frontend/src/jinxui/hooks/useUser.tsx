@@ -350,6 +350,7 @@ async function fetchImage(imageId: Tuuid) {
   } 
 
   async function setTheme(portfolioId: Tuuid) {
+    console.log(state)
 
     const path = PORTFOLIOS_PATH + "/" + portfolioId;
     try {
@@ -365,6 +366,10 @@ async function fetchImage(imageId: Tuuid) {
     } catch (e) {
       throw e
     }
+  }
+
+  function setInitialThemeState(theme: string) {
+    updateState({theme: theme})
   }
 
   const getConfig = () => {
@@ -459,6 +464,7 @@ async function fetchImage(imageId: Tuuid) {
     themePreview,
     themePreviewCancel,
     setTheme,
+    setInitialThemeState,
     getConfig,
     setSuccessMessage,
     setErrorMessage,

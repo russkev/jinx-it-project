@@ -19,6 +19,7 @@ import {
   SecondaryButton,
   Routes,
   SnackbarAlert,
+  MAX_EDIT_SECTION_WIDTH,
 } from "jinxui";
 
 import {
@@ -41,6 +42,9 @@ const StyledDivOuter = styled.div`
   display: grid;
   grid-template-columns: 1fr max-content 1fr;
   grid-template-rows: minMax(46px, max-content);
+  align-self: center;
+  width: inherit;
+  max-width: ${() => MAX_EDIT_SECTION_WIDTH};
 `;
 
 //Left items

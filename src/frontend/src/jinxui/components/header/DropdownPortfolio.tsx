@@ -5,21 +5,9 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Link from "@material-ui/core/Link";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
-import EditIcon from "@material-ui/icons/Edit";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import InvertColorsIcon from "@material-ui/icons/InvertColors";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import LockIcon from "@material-ui/icons/Lock";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import ShareIcon from "@material-ui/icons/Share";
-import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -75,9 +63,6 @@ const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
           }}
           disabled={props.edit_disabled}
         >
-          {/* <ListItemIcon>
-            <EditIcon />
-          </ListItemIcon> */}
           <ListItemText primary="Edit Your Portfolio" />
         </MenuItem>
       </>
@@ -104,7 +89,6 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
             onClick={() => {
               setViewRedirect(true);
             }}
-            // disabled={props.viewDisabled}
           >
             {menuText}
           </PrimaryButton>
@@ -196,9 +180,6 @@ const PrivacyMenuItem = React.forwardRef(
         onClick={isPrivate() ? handleMakePublic : handleMakePrivate}
         disabled={props.rest_disabled}
       >
-        {/* <ListItemIcon>
-          {isPrivate() ? <LockIcon /> : <LockOpenIcon />}
-        </ListItemIcon> */}
         <ListItemText primary={isPrivate() 
           ? "Make Your Portfolio Public" 
           : "Make Your Portfolio Private"} 
@@ -233,9 +214,6 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   } else {
     return (
       <MenuItem ref={ref} onClick={handleLogout}>
-        {/* <ListItemIcon>
-          <ExitToAppIcon />
-        </ListItemIcon> */}
         <ListItemText primary="Logout" />
       </MenuItem>
     );
@@ -254,9 +232,6 @@ const ShareMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      {/* <ListItemIcon>
-                  <ShareIcon />
-                </ListItemIcon> */}
       <ListItemText>Share Your Portfolio</ListItemText>
     </MenuItem>
   );
@@ -270,9 +245,6 @@ const ThemeMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      {/* <ListItemIcon>
-                  <InvertColorsIcon />
-                </ListItemIcon> */}
       <ListItemText>Choose Your Theme</ListItemText>
     </MenuItem>
   );
@@ -286,9 +258,6 @@ const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      {/* <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon> */}
       <ListItemText>Account Settings</ListItemText>
     </MenuItem>
   );
@@ -304,10 +273,9 @@ type TDropdownPortfolio = {
 const DropdownPortfolio = React.forwardRef(
   (props: TDropdownPortfolio, ref: any) => {
     const [open, setOpen] = React.useState(false);
-    const [themeOpen, themeSetOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
     const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
-    const { userData, setSuccessMessage } = useUser();
+    const { userData } = useUser();
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -341,38 +309,21 @@ const DropdownPortfolio = React.forwardRef(
       } catch {}
     }, [open]);
 
-    // return focus to the button when we transitioned from !open -> open
-    const themePrevOpen = React.useRef(themeOpen);
-    React.useEffect(() => {
-      try {
-        if (themePrevOpen.current === true && themeOpen === false) {
-          themeAnchorRef.current!.focus();
-        }
+    // // return focus to the button when we transitioned from !open -> open
+    // const themePrevOpen = React.useRef(themeOpen);
+    // React.useEffect(() => {
+    //   try {
+    //     if (themePrevOpen.current === true && themeOpen === false) {
+    //       themeAnchorRef.current!.focus();
+    //     }
 
-        themePrevOpen.current = themeOpen;
-      } catch {}
-    }, [themeOpen]);
-
-    const handleShareLink = () => {
-      setOpen(false);
-      const path = process.env.REACT_APP_FRONT_URL + "u/" + userData.username;
-      navigator.clipboard.writeText(path);
-      setSuccessMessage("Portfolio link copied to clipboard");
-    };
+    //     themePrevOpen.current = themeOpen;
+    //   } catch {}
+    // }, [themeOpen]);
 
     const viewDisabled = props.isUserView === true;
     const editDisabled = props.isUserEdit === true;
     const restDisabled = props.isUserView !== true && props.isUserEdit !== true;
-
-    const onAccountClick = () => {
-      props.setAccountDialogOpen(true);
-      setOpen(false);
-    };
-
-    const onThemeClick = () => {
-      props.setThemeDialogOpen(true);
-      setOpen(false);
-    };
 
     return (
       <>

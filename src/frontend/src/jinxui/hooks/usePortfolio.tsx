@@ -88,6 +88,7 @@ export const usePortfolio = () => {
     setSaving,
     setErrorMessage,
     setSuccessMessage,
+    setInitialThemeState,
   } = useUser();
   const {
     resetPages,
@@ -115,6 +116,8 @@ export const usePortfolio = () => {
       portfolioDetails.pages = [];
 
       await updateState(portfolioDetails);
+      setInitialThemeState(portfolioDetails.theme)
+      
 
       var pages: TPage[] = [];
       var sections: TSections = {};

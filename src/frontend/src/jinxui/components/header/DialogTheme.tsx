@@ -1,10 +1,6 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef } from "react";
 
 import styled from "styled-components";
-
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MenuItem from "@material-ui/core/MenuItem";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -23,7 +19,6 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 
-import InvertColorsIcon from "@material-ui/icons/InvertColors";
 
 import {
   useUser,
@@ -138,7 +133,6 @@ const DialogTheme = forwardRef((props: TDialog, ref: any) => {
       header?.horizontalAlign !== undefined
         ? header.horizontalAlign
         : "flex-start";
-    const customCss = props.theme.portfolio?.section?.css || {};
     const editThemeSecondaryColor = theme.palette.secondary.main;
     const cardBorderRadius = "10px";
 
