@@ -13,6 +13,7 @@ import {
   HeaderBar,
   DisplayCopyright,
   DisplayHeader,
+  DisplaySectionList,
 } from "jinxui";
 
 import {
@@ -144,8 +145,8 @@ const Portfolio = ({ username }: PortfolioProps) => {
           {/* Portfolio theme */}
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
-            <DisplayHeader subtitle={author}></DisplayHeader>
-            {/* <SectionGrid sections={sections} /> */}
+            <DisplayHeader></DisplayHeader>
+            <DisplaySectionList sections={sections} />
           </ThemeProvider>
           <DisplayCopyright text={author} />
         </ThemeProvider>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
@@ -12,6 +12,8 @@ import {
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 import {
+  useSection,
+  usePage,
   usePortfolio,
   DisplayLinks,
   ThemeSectionColors,
@@ -25,11 +27,37 @@ import gfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
+/**
+ * Given a list of components as props, render them in a centred grid.
+ */
+function CentredGrid({ components }: { components: JSX.Element[] }) {
+  return (
+    <Grid container spacing={0}>
+      {components.map((component, index) => (
+        <Grid item xs={12} key={index}>
+          {component}
+        </Grid>
+      ))}
+    </Grid>
+  );
+}
+
 type TSectionGrid = {
   sections: TSection[];
 };
 const DisplaySectionList = (props: TSectionGrid) => {
   const theme = useTheme();
+  const { getFetchedPages } = usePage();
+  const { getFetchedSections } = useSection()
+  // var sections: TSection[] = []
+
+  const [sections, setSections] = useState<TSection[]>([])
+
+  useEffect(() => {
+    if (getFetchedPages().length > 0) {
+      setSections(getFetchedSections(getFetchedPages()[0].id))
+    }
+  }, [getFetchedPages()])
 
   // Add logic for mapping data to different section components (i.e. timeline) in here
   const layoutData = (data: TSection, index?: number) => {
@@ -67,32 +95,19 @@ const DisplaySectionList = (props: TSectionGrid) => {
     0
   );
 
-  return (
-    <Box style={isFullHeight ? { background: backgroundColor } : {}}>
-      <CentredGrid
-        components={props.sections.map((section, index) =>
-          applyColors(layoutData(section), index)
-        )}
-      />
-    </Box>
-  );
+  if (sections) {
+    return (
+      <Box style={isFullHeight ? { background: backgroundColor } : {}}>
+        <CentredGrid
+          components={sections.map((section, index) =>
+            applyColors(layoutData(section), index)
+          )}
+        />
+      </Box>
+    );
+  } else {
+    return <> </>;
+  }
 };
 
-/**
- * Given a list of components as props, render them in a centred grid.
- */
-function CentredGrid({ components }: { components: JSX.Element[] }) {
-  return (
-    <Grid container spacing={0}>
-      {components.map((component, index) => (
-        <Grid item xs={12} key={index}>
-          {component}
-        </Grid>
-      ))}
-    </Grid>
-  );
-}
-
-
-
-export default DisplaySectionList
+export default DisplaySectionList;

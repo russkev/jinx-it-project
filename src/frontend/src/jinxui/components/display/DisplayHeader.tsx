@@ -80,11 +80,11 @@ function BackgroundImage(props: any) {
   );
 }
 
-function DisplayHeader({ subtitle }: { subtitle?: string }) {
+function DisplayHeader() {
   const { getFetchedPortfolio } = usePortfolio();
   const title = getFetchedPortfolio().name;
+  const subtitle = getFetchedPortfolio().subtitle
   const theme = responsiveFontSizes(useTheme());
-
   // Set default values if not defined
   const header = theme.portfolio.header;
   const headerBG = theme.portfolio.headerBackground;
