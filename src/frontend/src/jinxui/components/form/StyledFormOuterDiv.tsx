@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const FormOuterDiv = styled.div`
+const StyledFormOuterDiv = styled.div`
   width: 100vw;
   display: flex;
   align-items: center;
@@ -11,4 +11,4 @@ const FormOuterDiv = styled.div`
   padding-top: 50px;
 `;
 
-export default FormOuterDiv
+export default StyledFormOuterDiv

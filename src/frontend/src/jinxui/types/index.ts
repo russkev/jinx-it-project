@@ -7,6 +7,7 @@ export type {
   TLink,
   TImage,
   Tuuid,
+  TDialog,
 } from "./PortfolioTypes";
 
 export { ESectionType } from "./PortfolioTypes"

@@ -16,23 +16,30 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ShareIcon from "@material-ui/icons/Share";
+import Divider from "@material-ui/core/Divider";
+import Box from "@material-ui/core/Box";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import {
-  HeaderButton,
   useUser,
   usePortfolio,
   PrimaryMenu,
+  SecondaryButton,
+  PrimaryButton,
   Routes,
   SnackbarAlert,
-  DialogShare,
-  DialogTheme,
+  MenuGap,
 } from "jinxui";
 
 const DivWrapper = styled.div`
   height: 100%;
 `;
 
-const StyledHeaderButton = styled(HeaderButton)`
+const StyledHeaderOptionsButton = styled(Button)`
+  height: 100%;
   text-transform: none;
   padding-top: 0px;
   padding-bottom: 0px;
@@ -68,10 +75,10 @@ const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
           }}
           disabled={props.edit_disabled}
         >
-          <ListItemIcon>
+          {/* <ListItemIcon>
             <EditIcon />
-          </ListItemIcon>
-          <ListItemText primary="Edit" />
+          </ListItemIcon> */}
+          <ListItemText primary="Edit Your Portfolio" />
         </MenuItem>
       </>
     );
@@ -86,6 +93,27 @@ type TViewMenuItem = {
 const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
   const { userData } = useUser();
   const [viewRedirect, setViewRedirect] = useState(false);
+  const menuText = "Your Portfolio";
+
+  const ViewMenuInner = () => {
+    if (!props.viewDisabled) {
+      return (
+        <Box margin="0px 30px">
+          <PrimaryButton
+            ref={ref}
+            onClick={() => {
+              setViewRedirect(true);
+            }}
+            // disabled={props.viewDisabled}
+          >
+            {menuText}
+          </PrimaryButton>
+        </Box>
+      );
+    } else {
+      return <SecondaryButton disabled={true}>{menuText}</SecondaryButton>;
+    }
+  };
 
   const onView = () => {
     return (
@@ -103,18 +131,7 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
     } else {
       return (
         <>
-          <MenuItem
-            ref={ref}
-            onClick={() => {
-              setViewRedirect(true);
-            }}
-            disabled={props.viewDisabled}
-          >
-            <ListItemIcon>
-              <VisibilityIcon />
-            </ListItemIcon>
-            <ListItemText primary="View" />
-          </MenuItem>
+          <ViewMenuInner />
         </>
       );
     }
@@ -125,37 +142,11 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
         underline="none"
         href={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <VisibilityIcon />
-          </ListItemIcon>
-          <ListItemText primary="View" />
-        </MenuItem>
+        <ViewMenuInner />
       </Link>
     );
   }
 });
-
-type TThemeSelectorToggle = {
-  rest_disabled: boolean;
-  handleThemeToggle: any;
-  themeOpen: boolean;
-};
-const ThemeSelectorToggle = React.forwardRef(
-  (props: TThemeSelectorToggle, ref: any) => (
-    <MenuItem
-      ref={ref}
-      onClick={props.handleThemeToggle}
-      disabled={props.rest_disabled}
-    >
-      <ListItemIcon>
-        <InvertColorsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Themes" />
-      {props.themeOpen ? <ExpandLess /> : <ExpandMore />}
-    </MenuItem>
-  )
-);
 
 type TPrivateMenuItem = {
   setOpen: any;
@@ -205,12 +196,15 @@ const PrivacyMenuItem = React.forwardRef(
         onClick={isPrivate() ? handleMakePublic : handleMakePrivate}
         disabled={props.rest_disabled}
       >
-        <ListItemIcon>
+        {/* <ListItemIcon>
           {isPrivate() ? <LockIcon /> : <LockOpenIcon />}
-        </ListItemIcon>
-        <ListItemText primary={isPrivate() ? "Make Public" : "Make Private"} />
+        </ListItemIcon> */}
+        <ListItemText primary={isPrivate() 
+          ? "Make Your Portfolio Public" 
+          : "Make Your Portfolio Private"} 
+        />
       </MenuItem>
-    );
+    );      
   }
 );
 
@@ -239,18 +233,73 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   } else {
     return (
       <MenuItem ref={ref} onClick={handleLogout}>
-        <ListItemIcon>
+        {/* <ListItemIcon>
           <ExitToAppIcon />
-        </ListItemIcon>
+        </ListItemIcon> */}
         <ListItemText primary="Logout" />
       </MenuItem>
     );
   }
 });
 
+type TDialogButton = {
+  setDialogOpen: any;
+  setOpen: any;
+};
+const ShareMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const onClick = () => {
+    props.setDialogOpen(true);
+    props.setOpen(false);
+  };
+
+  return (
+    <MenuItem ref={ref} onClick={onClick}>
+      {/* <ListItemIcon>
+                  <ShareIcon />
+                </ListItemIcon> */}
+      <ListItemText>Share Your Portfolio</ListItemText>
+    </MenuItem>
+  );
+});
+
+const ThemeMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const onClick = () => {
+    props.setDialogOpen(true);
+    props.setOpen(false);
+  };
+
+  return (
+    <MenuItem ref={ref} onClick={onClick}>
+      {/* <ListItemIcon>
+                  <InvertColorsIcon />
+                </ListItemIcon> */}
+      <ListItemText>Choose Your Theme</ListItemText>
+    </MenuItem>
+  );
+});
+
+const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const onClick = () => {
+    props.setDialogOpen(true);
+    props.setOpen(false);
+  };
+
+  return (
+    <MenuItem ref={ref} onClick={onClick}>
+      {/* <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon> */}
+      <ListItemText>Account Settings</ListItemText>
+    </MenuItem>
+  );
+});
+
 type TDropdownPortfolio = {
   isUserView?: boolean;
   isUserEdit?: boolean;
+  setAccountDialogOpen: any;
+  setShareDialogOpen: any;
+  setThemeDialogOpen: any;
 };
 const DropdownPortfolio = React.forwardRef(
   (props: TDropdownPortfolio, ref: any) => {
@@ -315,20 +364,31 @@ const DropdownPortfolio = React.forwardRef(
     const editDisabled = props.isUserEdit === true;
     const restDisabled = props.isUserView !== true && props.isUserEdit !== true;
 
+    const onAccountClick = () => {
+      props.setAccountDialogOpen(true);
+      setOpen(false);
+    };
+
+    const onThemeClick = () => {
+      props.setThemeDialogOpen(true);
+      setOpen(false);
+    };
+
     return (
       <>
         <SnackbarAlert />
         <DivWrapper>
           {userData.username ? (
             <Tooltip title="Options">
-              <StyledHeaderButton
+              <StyledHeaderOptionsButton
                 ref={anchorRef}
                 aria-controls={open ? "menu-list-grow" : undefined}
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <MoreVertIcon />
-              </StyledHeaderButton>
+                <AccountCircleIcon />
+                <ExpandMoreIcon fontSize="small" />
+              </StyledHeaderOptionsButton>
             </Tooltip>
           ) : null}
           <ClickAwayListener onClickAway={handleClose}>
@@ -341,16 +401,34 @@ const DropdownPortfolio = React.forwardRef(
               onClose={handleClose}
               onKeyDown={handleListKeyDown}
             >
-              <EditMenuItem edit_disabled={editDisabled} />
-
               <ViewMenuItem
                 viewDisabled={viewDisabled}
                 editDisabled={editDisabled}
               />
 
-              <DialogTheme setMenuOpen={setOpen} />
-              <DialogShare setMenuOpen={setOpen} />
+              <ShareMenuItem
+                setOpen={setOpen}
+                setDialogOpen={props.setShareDialogOpen}
+              />
+
+              <MenuGap />
+
+              <EditMenuItem edit_disabled={editDisabled} />
+
+              <ThemeMenuItem
+                setOpen={setOpen}
+                setDialogOpen={props.setThemeDialogOpen}
+              />
+
               <PrivacyMenuItem setOpen={setOpen} rest_disabled={restDisabled} />
+
+              <MenuGap />
+
+              <AccountMenuItem
+                setOpen={setOpen}
+                setDialogOpen={props.setAccountDialogOpen}
+              />
+
               <LogoutMenuItem setOpen={setOpen} />
             </PrimaryMenu>
           </ClickAwayListener>

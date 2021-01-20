@@ -31,7 +31,7 @@ const useStyles = makeStyles(() =>
       border: "1px solid",
       borderRadius: "5px",
       margin: "5px",
-      marginTop: "10p;",
+      marginTop: "10px;",
       marginBottom: "10px",
     },
   })

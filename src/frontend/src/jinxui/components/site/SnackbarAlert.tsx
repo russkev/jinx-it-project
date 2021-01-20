@@ -12,8 +12,17 @@ import {
   DarkTheme, 
 } from "jinxui/themes";
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+// function Alert(props: AlertProps) {
+//   return (
+//     <MuiAlert elevation={6} variant="filled" {...props} />
+//   );
+// }
+
+
+const Alert = (props: AlertProps) => {
+  return (
+    <MuiAlert elevation={6} variant="filled" {...props} />
+  );
 }
 
 const SnackbarAlert = () => {

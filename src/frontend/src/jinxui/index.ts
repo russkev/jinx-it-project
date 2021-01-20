@@ -1,19 +1,16 @@
 /* Form */
-export { default as ErrorMessage } from "./components/form/ErrorMessage";
-export { default as EntryTitle } from "./components/form/EntryTitle";
-export { default as FormDiv } from "./components/form/FormDiv";
-export { default as FormEntry } from "./components/form/FormEntry";
-export { default as SubmitButton } from "./components/form/SubmitButton";
-export { default as FormAlert } from "./components/form/FormAlert";
-export { default as FormOuterDiv } from "./components/form/FormOuterDiv";
-export { default as FormBottomButtonsDiv } from "./components/form/FormBottomButtonsDiv";
-export { default as FormSectionsDiv } from "./components/form/FormSectionDiv";
+export { default as StyledFormDiv } from "./components/form/StyledFormDiv";
+export { default as StyledFormAlert } from "./components/form/StyledFormAlert";
+export { default as StyledFormOuterDiv } from "./components/form/StyledFormOuterDiv";
+export { default as StyledFormBottomButtonsDiv } from "./components/form/StyledFormBottomButtonsDiv";
+export { default as StyledFormSectionsDiv } from "./components/form/StyledFormSectionDiv";
 
 /* Site */
 export { default as SiteLayout } from "./components/site/SiteLayout";
 export { default as PrimaryColumnDiv } from "./components/site/PrimaryColumnDiv";
 export { default as PrimaryMenu } from "./components/site/PrimaryMenu";
 export { default as SnackbarAlert } from "./components/site/SnackbarAlert";
+export { default as MenuGap } from "./components/site/MenuGap"
 
 /* Button */
 export { PrimaryButton } from "./components/site/Button";
@@ -22,10 +19,11 @@ export { SecondaryButton } from "./components/site/Button";
 /* Header */
 export { default as LogoLink } from "./components/header/LogoLink";
 export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
-export { default as HeaderButton } from "./components/header/StyledHeaderButton";
 export { default as DropdownPortfolio } from "./components/header/DropdownPortfolio";
+export { default as DialogAccount } from "./components/header/DialogAccount"
 export { default as DialogShare } from "./components/header/DialogShare";
 export { default as DialogTheme } from "./components/header/DialogTheme";
+export { default as StyledHeaderButton } from "./components/header/StyledHeaderButton";
 export { default as StyledHeaderDiv } from "./components/header/StyledHeaderDiv";
 export { default as StyledSiteHeader } from "./components/header/StyledSiteHeader";
 export { default as StyledHeaderTitle } from "./components/header/StyledHeaderTitle";
@@ -42,17 +40,6 @@ export { default as DisplaySectionList } from "./components/display/DisplaySecti
 export { default as DisplaySection } from "./components/display/DisplaySection"
 export { default as ThemeBackgroundColors } from "./components/display/ThemeBackgroundColors"
 export { default as ThemeSectionColors } from "./components/display/ThemeSectionColors"
-
-// /* Display Mui*/
-// export {
-//   DisplaySection as Section,
-//   SectionGrid,
-//   CentredGrid,
-//   BackgroundImage,
-//   Copyright,
-//   HeaderBlock as ScreenBlock,
-//   PortfolioHeader,
-// } from "./components/display/MuiComponents";
 
 /* Edit */
 export { default as HeaderEditAddition } from "./components/edit/HeaderEditAddition"
@@ -97,24 +84,6 @@ export { LoggedInRoute, LoggedOutRoute } from "./routes/ProtectedRoutes.js";
 export { PortfolioDisplay } from "./routes/PortfolioDisplay";
 export { Routes } from "./routes/Routes";
 
-// /* Context */
-// export {
-//   UserContextProvider,
-//   UserContext,
-//   defaultUserContext,
-//   storeUserData,
-//   retrieveUserData,
-//   PortfolioContextProvider,
-//   PortfolioContext,
-//   defaultPortfolioContext,
-//   PageContextProvider,
-//   PageContext,
-//   defaultPageContext,
-//   SectionContextProvider,
-//   SectionContext,
-//   defaultSectionContext,
-// } from "./contexts/index";
-
 /* Utils */
 export {
   listDelete,
@@ -130,10 +99,7 @@ export { useSection } from "./hooks/useSection";
 export { usePage } from "./hooks/usePage";
 
 
-
-// /* Portfolio themes */
-// export { PortfolioThemes, defaultColors } from "./theme/index";
-
+/* Constants */
 const LOGIN_PATH = "auth/token/login";
 const LOGOUT_PATH = "auth/token/logout";
 const ACCOUNT_PATH = "api/accounts";

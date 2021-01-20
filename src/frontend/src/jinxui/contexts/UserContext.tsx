@@ -7,6 +7,7 @@ export const defaultUserContext: IUserContext = {
   username: "",
   firstName: "",
   lastName: "",
+  email: "",
   token: "",
   portfolioId: "0-0-0-0-0",
   authenticated: false,

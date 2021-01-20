@@ -8,17 +8,17 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 
 import {
-  FormDiv,
   PrimaryButton,
   SecondaryButton,
   AccountPageDiv,
-  FormAlert,
   Routes,
   useUser,
   HeaderBar,
-  FormOuterDiv,
-  FormBottomButtonsDiv,
-  FormSectionsDiv,
+  StyledFormDiv,
+  StyledFormAlert,
+  StyledFormOuterDiv,
+  StyledFormSectionsDiv,
+  StyledFormBottomButtonsDiv,
 } from "jinxui";
 
 import {
@@ -78,9 +78,9 @@ const Login = () => {
           <CssBaseline />
           <AccountPageDiv>
               <HeaderBar title="Login" hideLogin={true} />
-              <FormOuterDiv>
+              <StyledFormOuterDiv>
                   <div />
-                  <FormDiv
+                  <StyledFormDiv
                     variant="elevation"
                     elevation={8}
                     style={{ background: LightTitleBGGrad }}
@@ -89,9 +89,9 @@ const Login = () => {
                       <Typography variant="h5">Enter Details</Typography>
                     </FormTitleDiv>
                     {submittionError ? (
-                      <FormAlert severity="error">
+                      <StyledFormAlert severity="error">
                         Error logging in: {submittionError}.
-                      </FormAlert>
+                      </StyledFormAlert>
                     ) : null}
                     <Formik
                       initialValues={{ username: "", password: "" }}
@@ -110,7 +110,7 @@ const Login = () => {
                     >
                       {({ isSubmitting }) => (
                         <Form>
-                          <FormSectionsDiv>
+                          <StyledFormSectionsDiv>
                             {/* Note: Validation handled automatically 
                             by Formik-Material-UI */}
                             <Field
@@ -132,7 +132,7 @@ const Login = () => {
                               color="primary"
                               fullWidth
                             />
-                            <FormBottomButtonsDiv>
+                            <StyledFormBottomButtonsDiv>
                               <PrimaryButton
                                 type="submit"
                                 disabled={isSubmitting}
@@ -140,19 +140,19 @@ const Login = () => {
                                 LOGIN
                               </PrimaryButton>
                               <SecondaryButton>Reset Password</SecondaryButton>
-                            </FormBottomButtonsDiv>
+                            </StyledFormBottomButtonsDiv>
                             <StyledLink href={Routes.SIGNUP}>
                               <Typography variant="button">
                                 Sign up for an account
                               </Typography>
                             </StyledLink>
-                          </FormSectionsDiv>
+                          </StyledFormSectionsDiv>
                         </Form>
                       )}
                     </Formik>
-                  </FormDiv>
+                  </StyledFormDiv>
                   <div />
-              </FormOuterDiv>
+              </StyledFormOuterDiv>
           </AccountPageDiv>
         </ThemeProvider>
       </>

@@ -36,6 +36,9 @@ import {
   PortfolioThemes,
 } from "jinxui/themes"
 
+import {
+  TDialog
+} from "jinxui/types"
 
 const PublishCancelDiv = styled.div`
   display: flex;
@@ -72,10 +75,8 @@ const useStylesThemes = makeStyles((theme: Theme) => {
   });
 });
 
-type TDialogTheme = {
-  setMenuOpen: any;
-};
-const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
+
+const DialogTheme = forwardRef((props: TDialog, ref: any) => {
   const {
     userData,
     setTheme,
@@ -83,16 +84,10 @@ const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
     themePreviewCancel,
   } = useUser();
   const theme = useTheme();
-  const [dialogOpen, setDialogOpen] = useState(false);
   const themeClasses = useStylesThemes();
 
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
-
   const handleClose = () => {
-    setDialogOpen(false);
-    props.setMenuOpen(false);
+    props.setOpen(false)
   };
 
   function handleThemeClick(themeName: string) {
@@ -100,14 +95,12 @@ const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
   }
 
   const handleOkClick = () => {
-    setDialogOpen(false);
-    props.setMenuOpen(false);
+    props.setOpen(false);
     setTheme(userData.portfolioId);
   };
 
   const handleCancelClick = () => {
-    setDialogOpen(false);
-    props.setMenuOpen(false);
+    props.setOpen(false);
     themePreviewCancel(userData.portfolioId);
   };
 
@@ -268,13 +261,7 @@ const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
 
   return (
     <>
-      <MenuItem ref={ref} onClick={handleClickOpen}>
-        <ListItemIcon>
-          <InvertColorsIcon />
-        </ListItemIcon>
-        <ListItemText>Choose Theme</ListItemText>
-      </MenuItem>
-      <Drawer anchor="bottom" open={dialogOpen} onClose={handleClose}>
+      <Drawer anchor="bottom" open={props.open} onClose={handleClose}>
         <DialogTitle id="theme-dialog-title" style={{ textAlign: "center" }}>
           Choose Theme
         </DialogTitle>

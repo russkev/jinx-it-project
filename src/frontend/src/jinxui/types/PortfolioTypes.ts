@@ -61,6 +61,11 @@ export type TImage = {
   path: string;
 }
 
+export type TDialog = {
+  open: boolean;
+  setOpen: any
+}
+
 export enum ESectionType {
   text = "text",
   image = "image",

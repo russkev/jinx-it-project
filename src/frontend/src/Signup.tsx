@@ -8,15 +8,15 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 
 import {
-  FormDiv,
   PrimaryButton,
   AccountPageDiv,
-  FormAlert,
   Routes,
   useUser,
   HeaderBar,
-  FormOuterDiv,
-  FormBottomButtonsDiv,
+  StyledFormDiv,
+  StyledFormAlert,
+  StyledFormOuterDiv,
+  StyledFormBottomButtonsDiv,
 } from "jinxui";
 
 import {
@@ -106,9 +106,9 @@ const Signup = () => {
         <CssBaseline />
         <AccountPageDiv>
           <HeaderBar title="Sign Up"></HeaderBar>
-          <FormOuterDiv>
+          <StyledFormOuterDiv>
             <div />
-            <FormDiv
+            <StyledFormDiv
               variant="elevation"
               elevation={8}
               style={{ background: LightTitleBGGrad}}
@@ -117,9 +117,9 @@ const Signup = () => {
                 <Typography variant="h5">Sign up for free!</Typography>
               </FormTitleDiv>
               {submittionError ? (
-                <FormAlert severity="error">
+                <StyledFormAlert severity="error">
                   Error logging in: {submittionError}.
-                </FormAlert>
+                </StyledFormAlert>
               ) : null}
               <Formik
                 initialValues={{
@@ -217,14 +217,15 @@ const Signup = () => {
                       type="password"
                       label="Confirm Password"
                     />
-                    <FormBottomButtonsDiv>
+                    <StyledFormBottomButtonsDiv>
 
                     <PrimaryButton 
                       type="submit" 
-                      disabled={isSubmitting}>
+                      disabled={isSubmitting}
+                    >
                       JOIN
                     </PrimaryButton>
-                      </FormBottomButtonsDiv>
+                      </StyledFormBottomButtonsDiv>
 
                     <StyledLink href={Routes.LOGIN}>
                       <Typography variant="subtitle2">Already have an account? Log In</Typography>
@@ -234,8 +235,8 @@ const Signup = () => {
                 )}
               </Formik>
               <div />
-            </FormDiv>
-          </FormOuterDiv>
+            </StyledFormDiv>
+          </StyledFormOuterDiv>
         </AccountPageDiv>
       </ThemeProvider>
     );

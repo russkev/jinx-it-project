@@ -1,5 +1,6 @@
 import React from "react";
 import Switch from "@material-ui/core/Switch";
+import Box from "@material-ui/core/Box"
 
 import NightsStayIcon from "@material-ui/icons/NightsStay";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -34,6 +35,7 @@ const HeaderEditAddition = () => {
           />
         </Tooltip>
         <NightsStayIcon />
+        <Box width="30px" />
       </HeaderBar>
     </>
   );

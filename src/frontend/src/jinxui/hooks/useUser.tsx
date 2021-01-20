@@ -57,6 +57,7 @@ export const useUser = () => {
           username: username,
           firstName: accDetails.first_name,
           lastName: accDetails.last_name,
+          email: accDetails.user.email,
           portfolioId: accDetails.primary_portfolio,
           theme: accDetails.theme,
           token: response.data["auth_token"],
@@ -72,6 +73,57 @@ export const useUser = () => {
     } catch (e) {
       throw handleError(e);
     }
+  }
+
+  type TUpdateAccount = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+  }
+  async function updateAccount(
+    accountDetails: TUpdateAccount
+  ) {
+    try {
+      const accountPath = ACCOUNT_PATH + "/me"
+      const passwordPath = SIGNUP_PATH + "/set_password"
+      if (accountDetails.newPassword.length > 0 
+        || accountDetails.oldPassword.length > 0
+        || accountDetails.newPasswordConfirm.length > 0) {
+          await API.post(
+            passwordPath,
+            {
+              current_password: accountDetails.oldPassword,
+              new_password: accountDetails.newPassword,
+            },
+            state.config
+          );
+        }
+
+      const accountResponse = await API.patch(
+        accountPath,
+        {
+          'first_name': accountDetails.firstName,
+          'last_name': accountDetails.lastName,
+          'user': {
+            'email': accountDetails.email
+          }
+        },
+        state.config 
+        )
+      updateState(
+        {
+          firstName: accountResponse.data.first_name,
+          lastName: accountResponse.data.last_name,
+          email: accountResponse.data.user.email,
+        })
+        return accountResponse
+    } catch (e) {
+      throw e;
+    }
+
   }
 
   async function savePortfolioId(id: number) {
@@ -386,6 +438,7 @@ async function fetchImage(imageId: Tuuid) {
   return {
     userData: state,
     login,
+    updateAccount,
     savePortfolioId,
     switchLightThemeMode,
     logout,

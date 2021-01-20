@@ -6,6 +6,7 @@ export interface IUserContext {
   username: string;
   firstName: string;
   lastName: string;
+  email: string;
   token: string;
   // Set true when user logged in; set false when token is invalid
   authenticated: boolean;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import {
@@ -10,9 +10,12 @@ import {
 } from "@material-ui/core";
 
 import {
+  useUser,
   LogoLink,
   DropdownPortfolio,
-  useUser,
+  DialogAccount,
+  DialogShare,
+  DialogTheme,
   SecondaryButton,
   Routes,
   SnackbarAlert,
@@ -95,6 +98,10 @@ type HeaderBarProps = {
 const HeaderBar = (props: HeaderBarProps) => {
   const { userData } = useUser();
   const trigger = useScrollTrigger();
+  const [accountDialogOpen, setAccountDialogOpen] = useState(false)
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false)
+  const [shareDialogOpen, setShareDialogOpen] = useState(false)
+
   const headerGrad =
     props.darkTheme === true ? DarkHeaderGrad : LightHeaderGrad;
 
@@ -150,6 +157,21 @@ const HeaderBar = (props: HeaderBarProps) => {
                 <DropdownPortfolio
                   isUserView={props.isUserView}
                   isUserEdit={props.isUserEdit}
+                  setAccountDialogOpen={setAccountDialogOpen}
+                  setThemeDialogOpen={setThemeDialogOpen}
+                  setShareDialogOpen={setShareDialogOpen}
+                />
+                <DialogAccount 
+                  open={accountDialogOpen} 
+                  setOpen={setAccountDialogOpen} 
+                />
+                <DialogTheme
+                  open={themeDialogOpen}
+                  setOpen={setThemeDialogOpen}
+                />
+                <DialogShare
+                  open={shareDialogOpen}
+                  setOpen={setShareDialogOpen}
                 />
               </StyledDivRight>
             </StyledDivOuter>
