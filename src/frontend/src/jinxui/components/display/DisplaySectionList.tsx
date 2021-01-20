@@ -60,10 +60,10 @@ const DisplaySectionList = (props: TSectionGrid) => {
   //   }
   // }, [getFetchedPages()])
 
-  // Add logic for mapping data to different section components (i.e. timeline) in here
-  const layoutData = (data: TSection, index?: number) => {
-    return <DisplaySection {...data} />;
-  };
+  // // Add logic for mapping data to different section components (i.e. timeline) in here
+  // const layoutData = (data: TSection, index?: number) => {
+  //   return <DisplaySection {...data} />;
+  // };
 
   const applyColors = (component: JSX.Element, index: number) => {
     const [backgroundColor, textColor, isFullHeight] = ThemeSectionColors(
@@ -99,11 +99,35 @@ const DisplaySectionList = (props: TSectionGrid) => {
   if (sections) {
     return (
       <Box style={isFullHeight ? { background: backgroundColor } : {}}>
-        <CentredGrid
+        {sections.map((section, index) => {
+
+          const [sectionBgColor, sectionTextColor,] 
+            = ThemeSectionColors(theme, index)
+          const customCss = theme.portfolio?.section?.css || {};
+
+          return (
+            <Box style={isFullHeight ? {} : { background: sectionBgColor}}>
+              <Container maxWidth="md">
+                <Box
+                  style={{
+                    ...customCss,
+                    color: sectionTextColor
+                  }}
+                >
+                  <Container disableGutters>
+                    <DisplaySection pageId={props.pageId} section={section}/>
+                  </Container>
+                </Box>
+              </Container>
+            </Box>
+          )
+        })}
+
+        {/* <CentredGrid
           components={sections.map((section, index) =>
             applyColors(layoutData(section), index)
           )}
-        />
+        /> */}
       </Box>
     );
   } else {

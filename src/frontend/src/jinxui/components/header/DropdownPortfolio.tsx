@@ -274,7 +274,7 @@ const DropdownPortfolio = React.forwardRef(
   (props: TDropdownPortfolio, ref: any) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
-    const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
+    // const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
     const { userData } = useUser();
 
     const handleToggle = () => {

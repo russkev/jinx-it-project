@@ -16,7 +16,7 @@ import {
   DisplayLinks,
   ThemeSectionColors,
 } from "jinxui";
-import { TSection } from "jinxui/types";
+import { TSection, TSectionInfo } from "jinxui/types";
 
 // Markdown
 import ReactMarkdown from "react-markdown";
@@ -31,7 +31,8 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
  * 2. Image only => centre aligned
  * 3. Text and image => Split left and right
  */
-const DisplaySection = (data: TSection) => {
+
+const DisplaySection = (props: TSectionInfo) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       img: {
@@ -86,13 +87,13 @@ const DisplaySection = (data: TSection) => {
   var border = false;
   switch (sectionTheme?.border) {
     case "first":
-      border = data.index === 0;
+      border = props.section.index === 0;
       break;
     case "odds":
-      border = data.index % 2 === 1;
+      border = props.section.index % 2 === 1;
       break;
     case "evens":
-      border = data.index % 2 === 0;
+      border = props.section.index % 2 === 0;
       break;
     case "all":
       border = true;
@@ -101,7 +102,7 @@ const DisplaySection = (data: TSection) => {
       border = false;
   }
 
-  const textColor = ThemeSectionColors(theme, data.index)[1];
+  const textColor = ThemeSectionColors(theme, props.section.index)[1];
   return (
     <>
       <Box textAlign="left" paddingTop={sectionGap} paddingBottom={sectionGap}>
@@ -115,7 +116,7 @@ const DisplaySection = (data: TSection) => {
           }
         >
           <Typography variant="h2" gutterBottom>
-            {data.name}
+            {props.section.name}
           </Typography>
           <Grid
             container
@@ -133,16 +134,16 @@ const DisplaySection = (data: TSection) => {
                 />
               </Grid>
             ) : null} */}
-            {data.text ? (
+            {props.section.text ? (
               <Grid item xs={12} sm={colsPerItem}>
                 <DisplayLinks
                   horizontalAlign="flex-start"
-                  sectionId={data.id}
+                  sectionId={props.section.id}
                   textColor={textColor}
                 />
                 <Typography variant="body1" component="span">
                   <ReactMarkdown plugins={[gfm]} renderers={renderers}>
-                    {data.text}
+                    {props.section.text}
                   </ReactMarkdown>
                 </Typography>
               </Grid>

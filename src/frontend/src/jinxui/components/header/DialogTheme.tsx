@@ -275,7 +275,7 @@ const DialogTheme = forwardRef((props: TDialog, ref: any) => {
         <DialogActions style={{ justifyContent: "center" }}>
           <PublishCancelDiv>
             <div>
-              <PrimaryButton onClick={handleOkClick}>OK</PrimaryButton>
+              <PrimaryButton onClick={handleOkClick}>APPLY</PrimaryButton>
             </div>
             <div>
               <SecondaryButton onClick={handleCancelClick}>
