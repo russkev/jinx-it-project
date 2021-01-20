@@ -9,8 +9,8 @@ import {
   usePortfolio,
   LinkDialog,
   LinksDisplay,
-  OneColumnSectionDiv,
   SkeletonEditAll,
+  StyledOneColumnSectionDiv,
   StyledPaperSectionBase,
   StyledPaperSectionDiv,
 } from "jinxui";
@@ -61,7 +61,7 @@ const InputPortfolio = () => {
       ) : (
         <StyledPaperSectionDiv>
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
-            <OneColumnSectionDiv>
+            <StyledOneColumnSectionDiv>
               <TextField
                 name={"portfolioTitle"}
                 label={"Portfolio Title"}
@@ -102,7 +102,7 @@ const InputPortfolio = () => {
                 <LinkDialog />
                 <Button onClick={logPortfolioState}>Log Portfolio State</Button>
               </LinksDiv>
-            </OneColumnSectionDiv>
+            </StyledOneColumnSectionDiv>
           </StyledPaperSectionBase>
         </StyledPaperSectionDiv>
       )}

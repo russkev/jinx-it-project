@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Paper from "@material-ui/core/Paper"
-import { LightShadowColour } from "jinxui"
+import { LightShadowColour } from "jinxui/themes"
 
 // Base styled paper for use on all sections\
 

@@ -1,13 +1,16 @@
 import React from "react";
-import { PaperSection, InputComponentTextField, OneColumnSectionDiv } from "jinxui";
+import {
+  PaperSection,
+  InputComponentTextField,
+  StyledOneColumnSectionDiv,
+} from "jinxui";
 import { TSectionInfo } from "jinxui/types";
 import { NewSectionButton, useSection } from "jinxui";
-
 
 const InputText = (props: TSectionInfo) => {
   const { sectionIndex } = useSection();
 
-  const index = sectionIndex(props.pageId, props.section.id)
+  const index = sectionIndex(props.pageId, props.section.id);
 
   return (
     <>
@@ -24,13 +27,13 @@ const InputText = (props: TSectionInfo) => {
       {/* Main content */}
 
       <PaperSection pageId={props.pageId} section={props.section}>
-        <OneColumnSectionDiv>
+        <StyledOneColumnSectionDiv>
           <InputComponentTextField
             pageId={props.pageId}
             section={props.section}
             rows={15}
           />
-        </OneColumnSectionDiv>
+        </StyledOneColumnSectionDiv>
       </PaperSection>
 
       {/* Add section menu */}

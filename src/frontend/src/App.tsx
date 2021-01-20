@@ -16,14 +16,17 @@ import {
 } from "react-router-dom";
 
 import {
-  UserContextProvider,
-  PortfolioContextProvider,
-  PageContextProvider,
-  SectionContextProvider,
   LoggedInRoute,
   PortfolioDisplay,
   Routes,
 } from "jinxui";
+
+import {
+  UserContextProvider,
+  PortfolioContextProvider,
+  PageContextProvider,
+  SectionContextProvider,
+} from "jinxui/contexts";
 
 const OverallDiv = styled.div`
   overflow-x: hidden;

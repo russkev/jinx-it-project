@@ -1,14 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { v4 as uuidv4, validate } from "uuid";
 import {
-  SectionContext,
   useUser,
   listDelete,
   listMoveUp,
   listMoveDown,
   listAdd,
 } from "jinxui";
-import API from "../../API";
-import { v4 as uuidv4, validate } from "uuid";
+
 import {
   TSection,
   TSections,
@@ -16,26 +15,15 @@ import {
   Tuuid,
   ESectionType
 } from "../types/PortfolioTypes";
-import { defaultSectionContext, defaultPageContext } from "jinxui/contexts";
-
-const sectionIsNotBlank = (section: TSection) => {
-  if (section.type === "text") {
-    return section.name !== "" || section.text !== "";
-    // } else if (section.type === "image") {
-    //   return section.name !== "" || section.path !== "";
-    // } else if (section.type === "image_text") {
-    //   return section.name !== "" || section.path !== "" || section.content !== "";
-  } else {
-    return true;
-  }
-};
+import {
+  SectionContext,
+  defaultSectionContext,
+  defaultPageContext,
+} from "jinxui/contexts";
 
 export const useSection = () => {
   const [state, updateState, setState, resetState] = useContext(SectionContext);
-  const { getConfig, isLoading } = useUser();
-  // const { linkIndex } = useLink();
-  const [updatedSections, setUpdatedSections] = useState<any>([]);
-  const [toSend, setToSend] = useState<any[]>([]);
+  const { isLoading } = useUser();
 
   function sectionIndex(pageId: Tuuid, sectionId: Tuuid) {
     if (sectionId === defaultSectionContext.id) {

@@ -3,7 +3,7 @@ import React from "react";
 import {
   PaperSection,
   InputComponentUploadImage,
-  TwoColumnSectionDiv,
+  StyledTwoColumnSectionDiv,
   InputComponentTextField,
   NewSectionButton,
   useSection,
@@ -31,7 +31,7 @@ const InputImageText = (props: TSectionInfo) => {
         pageId={props.pageId}
         section={props.section}
       >
-        <TwoColumnSectionDiv>
+        <StyledTwoColumnSectionDiv>
           <InputComponentTextField
             pageId={props.pageId}
             section={props.section}
@@ -41,7 +41,7 @@ const InputImageText = (props: TSectionInfo) => {
             pageId={props.pageId}
             section={props.section}
           />
-        </TwoColumnSectionDiv>
+        </StyledTwoColumnSectionDiv>
       </PaperSection>
       <NewSectionButton pageId={props.pageId} section={props.section} />
     </>

@@ -5,7 +5,7 @@ import Box from "@material-ui/core/Box";
 import {
   StyledPaperSectionDiv,
   StyledPaperSectionBase,
-  OneColumnSectionDiv,
+  StyledOneColumnSectionDiv,
   SkeletonLinks,
   SkeletonInput,
   BOX_HEIGHT,
@@ -30,7 +30,7 @@ const SkeletonPortfolioInput = () => {
   return (
     <StyledPaperSectionDiv>
       <StyledPaperSectionBase elevation={0} variant="outlined" square>
-        <OneColumnSectionDiv>
+        <StyledOneColumnSectionDiv>
           <Skeleton variant="text" height={14} width={100} />
           <Skeleton variant="text" height={40} animation="wave" />
           <Box width="100%" height="16px" />
@@ -40,7 +40,7 @@ const SkeletonPortfolioInput = () => {
           <LinksDiv>
             <SkeletonLinks />
           </LinksDiv>
-        </OneColumnSectionDiv>
+        </StyledOneColumnSectionDiv>
       </StyledPaperSectionBase>
     </StyledPaperSectionDiv>
   );

@@ -7,16 +7,18 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
 import {
-  LightTheme,
   useUser,
   usePortfolio,
   useSection,
   HeaderBar,
-  Copyright,
-  SectionGrid,
-  PortfolioHeader,
-  PortfolioThemes,
+  DisplayCopyright,
+  DisplayHeader,
 } from "jinxui";
+
+import {
+  LightTheme,
+  PortfolioThemes,
+} from "jinxui/themes"
 
 import NotFound from "./NotFound";
 const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
@@ -142,10 +144,10 @@ const Portfolio = ({ username }: PortfolioProps) => {
           {/* Portfolio theme */}
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
-            <PortfolioHeader subtitle={author}></PortfolioHeader>
+            <DisplayHeader subtitle={author}></DisplayHeader>
             {/* <SectionGrid sections={sections} /> */}
           </ThemeProvider>
-          <Copyright text={author} />
+          <DisplayCopyright text={author} />
         </ThemeProvider>
       </>
     );

@@ -1,19 +1,29 @@
 import { useContext } from "react";
+import API from "../../API";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { defaultPortfolioContext } from "jinxui/contexts";
+import { v4 as uuidv4, validate } from "uuid";
+
 import {
-  PortfolioContext,
   useUser,
   useSection,
   usePage,
-  LightTheme,
-  DarkTheme,
   listDelete,
   listMoveUp,
   listMoveDown,
   Routes,
   PORTFOLIOS_PATH,
 } from "jinxui";
-import API from "../../API";
-import { v4 as uuidv4, validate } from "uuid";
+
+import {
+  LightTheme,
+  DarkTheme,
+} from "jinxui/themes";
+
+import {
+  PortfolioContext
+} from "jinxui/contexts";
+
 import {
   TPortfolio,
   TPage,
@@ -21,20 +31,8 @@ import {
   TLink,
   Tuuid,
 } from "jinxui/types";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { defaultPortfolioContext } from "jinxui/contexts";
 
 
-
-// // Note the $s in the function name. Use this if you want to get all of a user's portfolios
-// // eslint-disable-next-line
-// async function getPortfolios(config: any) {
-//   const path = PORTFOLIOS_PATH;
-//   const result = await API.get(path, config).then(
-//     (response: any) => response.data
-//   );
-//   return result;
-// }
 
 // Use this if you want to get a specific portfolio
 async function getPortfolio(portfolioId: Tuuid, config: any) {

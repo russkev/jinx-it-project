@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 import {
   AppBar,
@@ -9,8 +10,6 @@ import {
 } from "@material-ui/core";
 
 import {
-  LightHeaderGrad,
-  DarkHeaderGrad,
   LogoLink,
   DropdownPortfolio,
   useUser,
@@ -19,7 +18,11 @@ import {
   SnackbarAlert,
 } from "jinxui";
 
-import styled from "styled-components";
+import {
+  LightHeaderGrad,
+  DarkHeaderGrad,
+} from "jinxui/themes"
+
 
 const HeaderMediaWidth = () => {
   return "800px";

@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-const OneColumnSectionDiv = styled.div`
+const StyledOneColumnSectionDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   margin: 30px;
@@ -8,4 +8,4 @@ const OneColumnSectionDiv = styled.div`
   direction: column;
 `;
 
-export default OneColumnSectionDiv
+export default StyledOneColumnSectionDiv

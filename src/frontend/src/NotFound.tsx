@@ -1,16 +1,21 @@
 import React from "react";
+import styled from "styled-components";
 import { ThemeProvider } from "@material-ui/core/styles";
-import {
-  HeaderBar,
-  StyledHeaderBarSpacer,
-  LightTheme,
-  SecondaryButton,
-  SiteLayout,
-} from "jinxui";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+
+import {
+  HeaderBar,
+  StyledHeaderBarSpacer,
+  SecondaryButton,
+  SiteLayout,
+} from "jinxui";
+
+import {
+  LightTheme,
+} from "jinxui/themes"
+
 
 const Layout = styled(SiteLayout)`
   padding-top: 10vh;

@@ -3,7 +3,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { LightTheme, UploadIcon, FormIcon, } from "jinxui";
+
+import { 
+  UploadIcon, 
+  FormIcon, 
+} from "jinxui";
+
+import {
+  LightTheme, 
+} from "jinxui/themes"
 
 // Primary outer div. Makes a grid for placing the rest of the objects
 const OuterDiv = styled.div`

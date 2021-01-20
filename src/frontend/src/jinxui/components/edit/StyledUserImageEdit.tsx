@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledUserImage = styled.img`
+const StyledUserImageEdit = styled.img`
   margin-right: 0px;
   margin-left: 0px;
   height: auto;
@@ -10,4 +10,4 @@ const StyledUserImage = styled.img`
   width: 100%;
 `;
 
-export default StyledUserImage;
+export default StyledUserImageEdit;

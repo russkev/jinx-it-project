@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import API from "../../API";
 import { AxiosRequestConfig } from "axios";
+
 import { 
-  UserContext,
   LOGIN_PATH,
   LOGOUT_PATH,
   ACCOUNT_PATH,
@@ -14,6 +14,10 @@ import {
 import {
   Tuuid
 } from "jinxui/types"
+
+import {
+  UserContext
+} from "jinxui/contexts"
 
 /**
  * The 'user' hook

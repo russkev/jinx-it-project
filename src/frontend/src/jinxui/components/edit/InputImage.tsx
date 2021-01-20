@@ -1,10 +1,10 @@
 import React from "react";
 import {
+  useSection,
   PaperSection,
-  OneColumnSectionDiv,
   InputComponentUploadImage,
   NewSectionButton,
-  useSection,
+  StyledOneColumnSectionDiv,
 } from "jinxui";
 import { TSectionInfo } from "jinxui/types";
 
@@ -25,12 +25,12 @@ const InputImage = (props: TSectionInfo) => {
         />
       )}
       <PaperSection pageId={props.pageId} section={props.section}>
-        <OneColumnSectionDiv>
+        <StyledOneColumnSectionDiv>
           <InputComponentUploadImage
             pageId={props.pageId}
             section={props.section}
           />
-        </OneColumnSectionDiv>
+        </StyledOneColumnSectionDiv>
       </PaperSection>
       <NewSectionButton pageId={props.pageId} section={props.section} />
     </>

@@ -4,7 +4,9 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { Formik, Form, Field } from "formik";
+import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
+
 import {
   FormDiv,
   PrimaryButton,
@@ -12,14 +14,16 @@ import {
   FormAlert,
   Routes,
   useUser,
-  LightTheme,
   HeaderBar,
   FormOuterDiv,
-  LightTitleBGGrad,
   FormBottomButtonsDiv,
 } from "jinxui";
 
-import { TextField } from "formik-material-ui";
+import {
+  LightTheme,
+  LightTitleBGGrad,
+} from "jinxui/themes"
+
 
 const StyledLink = styled.a`
   text-decoration: none;

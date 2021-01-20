@@ -11,13 +11,16 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SaveIcon from "@material-ui/icons/Save";
 import PublishIcon from "@material-ui/icons/Publish";
 
-
 import {
   usePortfolio,
-  LightPrimaryButtonGrad,
-  LightPrimaryButtonGradHover,
   SAVE_DESKTOP_WIDTH,
 } from "jinxui";
+
+import {
+  LightPrimaryButtonGrad,
+  LightPrimaryButtonGradHover,
+} from "jinxui/themes";
+
 
 const StyledSpeedDialDiv = styled.div`
   @media (min-width: ${() => SAVE_DESKTOP_WIDTH}) {

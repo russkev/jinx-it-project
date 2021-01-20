@@ -5,7 +5,7 @@ import {
   makeStyles,
   createStyles,
 } from "@material-ui/core/styles";
-import { LightPrimaryButtonGrad, LightPrimaryButtonGradHover } from "jinxui";
+import { LightPrimaryButtonGrad, LightPrimaryButtonGradHover } from "jinxui/themes";
 
 const useStyles = makeStyles(() =>
   createStyles({

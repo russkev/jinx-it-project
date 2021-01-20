@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
   useSection,
   NewSectionButton,
-  OneColumnSectionDiv,
   PaperSection,
   InputComponentVideo,
+  StyledOneColumnSectionDiv,
 } from "jinxui";
 
 import { TSectionInfo } from "jinxui/types";
@@ -30,9 +30,9 @@ const InputVideo = (props: TSectionInfo) => {
       {/* Main content */}
 
       <PaperSection pageId={props.pageId} section={props.section}>
-        <OneColumnSectionDiv>
+        <StyledOneColumnSectionDiv>
           <InputComponentVideo pageId={props.pageId} section={props.section}/>
-        </OneColumnSectionDiv>
+        </StyledOneColumnSectionDiv>
       </PaperSection>
 
       {/* Add section menu */}

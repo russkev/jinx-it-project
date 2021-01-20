@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline, Typography } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
-
+import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
+
 import {
   FormDiv,
   PrimaryButton,
@@ -13,16 +15,17 @@ import {
   FormAlert,
   Routes,
   useUser,
-  LightTheme,
-  LightTitleBGGrad,
   HeaderBar,
   FormOuterDiv,
   FormBottomButtonsDiv,
   FormSectionsDiv,
 } from "jinxui";
-import styled from "styled-components";
 
-import { TextField } from "formik-material-ui";
+import {
+  LightTheme,
+  LightTitleBGGrad,
+} from "jinxui/themes"
+
 
 // Ensure enough white space on top of form
 const FormTitleDiv = styled.div`

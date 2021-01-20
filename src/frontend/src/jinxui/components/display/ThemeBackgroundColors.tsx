@@ -88,7 +88,7 @@ const pickColorsBasedOnPrimarySecondary = (theme: Theme, colorIndex: number) => 
 
 // Export your background function here
 
-const BackgroundColor = {
+const ThemeBackgroundColors = {
     gradient: gradient,
     rainbowStep: rainbowStep,
     rainbowGradient: rainbowGradient,
@@ -101,4 +101,4 @@ const BackgroundColor = {
 /** The default color function to use for the full page background. */
 export const defaultColors = gradient;
 
-export default BackgroundColor;
+export default ThemeBackgroundColors;

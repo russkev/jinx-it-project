@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import { OneColumnSectionDiv } from "jinxui"
+import { StyledOneColumnSectionDiv } from "jinxui"
 
-const TwoColumnSectionDiv = styled(OneColumnSectionDiv)`
+const StyledTwoColumnSectionDiv = styled(StyledOneColumnSectionDiv)`
   grid-template-columns: 1fr 1fr;
   @media (max-width: 600px) {
     display: flex;
@@ -11,4 +11,4 @@ const TwoColumnSectionDiv = styled(OneColumnSectionDiv)`
 
 `;
 
-export default TwoColumnSectionDiv
+export default StyledTwoColumnSectionDiv

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
-import { useUser, useSection, StyledUserImage } from "jinxui";
+import { useUser, useSection, StyledUserImageEdit } from "jinxui";
 import { TImage, TSectionInfo } from "jinxui/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -118,7 +118,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
             relative to the image*/}
         <ImageGrid>
           <ImageGridMain>
-            <StyledUserImage
+            <StyledUserImageEdit
               src={localImage.path}
               onLoad={() => setProgress(0.0)}
               style={

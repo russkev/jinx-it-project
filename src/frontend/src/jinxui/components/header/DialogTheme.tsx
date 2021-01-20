@@ -27,11 +27,14 @@ import InvertColorsIcon from "@material-ui/icons/InvertColors";
 
 import {
   useUser,
-  PortfolioThemes,
   PrimaryButton,
   SecondaryButton,
-  themeColors,
+  ThemeSectionColors,
 } from "jinxui";
+
+import {
+  PortfolioThemes,
+} from "jinxui/themes"
 
 
 const PublishCancelDiv = styled.div`
@@ -127,7 +130,7 @@ const DialogTheme = forwardRef((props: TDialogTheme, ref: any) => {
     const subtitleColor = header?.useSecondaryForSubtitle
       ? props.theme.palette.secondary.main
       : titleColor;
-    const [backgroundColor, textColor, isFullHeight] = themeColors(
+    const [backgroundColor, textColor, isFullHeight] = ThemeSectionColors(
       props.theme,
       0
     );
