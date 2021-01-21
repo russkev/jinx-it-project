@@ -174,15 +174,6 @@ export const useSection = () => {
     updateState(pageId, index, { links: links });
   }
 
-  function getFetchedSectionLinksFromId(pageId: Tuuid, sectionId: Tuuid) {
-    try {
-      const index = sectionIndex(pageId, sectionId);
-      return state[pageId][index].links;
-    } catch (e) {
-      throw e;
-    }
-  }
-
   function sectionLinkIndex(sectionLinks: TLink[], linkId: Tuuid) {
     return sectionLinks.findIndex(
       (existingLink: TLink) => existingLink.id === linkId
@@ -279,7 +270,6 @@ export const useSection = () => {
     updateSectionLinks,
     sectionLinkIndex,
     getFetchedSectionLinks,
-    getFetchedSectionLinksFromId,
     sectionLinkUpdate,
     handleSectionLinkDelete,
     handleSectionLinkMoveUp,

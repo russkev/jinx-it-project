@@ -139,6 +139,7 @@ const DisplaySection = (props: TDisplaySection) => {
               <Grid item xs={12} sm={colsPerItem}>
                 <DisplayLinks
                   horizontalAlign="flex-start"
+                  pageId={props.pageId}
                   sectionId={props.section.id}
                   textColor={props.textColor}
                 />

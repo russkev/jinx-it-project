@@ -70,7 +70,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
               : ThemeSectionColors(theme, index)[1];
 
           return (
-            <>
+            <Box key={section.id}>
               <DisplayBackground
                 key={section.id}
                 allowedIndexingTypes={["sectionLocal", "sectionGlobal"]}
@@ -91,7 +91,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
                   </Container>
                 </Container>
               </DisplayBackground>
-            </>
+            </Box>
           );
         })}
       </DisplayBackground>

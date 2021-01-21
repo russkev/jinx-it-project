@@ -17,16 +17,16 @@ import { TLink } from "jinxui/types";
  */
 type TDisplayLinks = {
   horizontalAlign: string;
+  textColor?: string;
   pageId?: Tuuid;
   sectionId?: Tuuid;
-  textColor?: string;
 };
 const DisplayLinks = (props: TDisplayLinks) => {
   const { getFetchedPortfolioLinks } = usePortfolio();
-  const { getFetchedSectionLinksFromId } = useSection();
+  const { getFetchedSectionLinks } = useSection();
   const theme = useTheme();
   const links =  props.pageId && props.sectionId
-    ? getFetchedSectionLinksFromId(props.pageId, props.sectionId)
+    ? getFetchedSectionLinks(props.pageId, props.sectionId)
     : getFetchedPortfolioLinks();
 
   type TGetLinkDisplayIcon = {
@@ -73,43 +73,43 @@ const DisplayLinks = (props: TDisplayLinks) => {
   };
 
   const direction = linksHaveText() ? "column" : "row";
-  // return (
-  //   <>
-  //     <Box display="flex" justifyContent={props.horizontalAlign}>
-  //       <Box
-  //         display="flex"
-  //         width="max-content"
-  //         flexDirection={direction}
-  //         alignItems="baseline"
-  //         marginBottom="20px"
-  //       >
-  //         {links.map((link: TLink) => {
-  //           return (
-  //             <Box key={link.id} marginTop="15px">
-  //               {link.address && link.address !== "" ? (
-  //                 /* Address exists */
-  //                 <Tooltip title={link.address}>
-  //                   <Link
-  //                     href={link.address}
-  //                     color="textPrimary"
-  //                     underline="none"
-  //                   >
-  //                     <LinkContent link={link} textColor={props.textColor} />
-  //                   </Link>
-  //                 </Tooltip>
-  //               ) : (
-  //                 /* Address does not exist */
-  //                 <>
-  //                   <LinkContent link={link} textColor={props.textColor} />
-  //                 </>
-  //               )}
-  //             </Box>
-  //           );
-  //         })}
-  //       </Box>
-  //     </Box>
-  //   </>
-  // );
+  return (
+    <>
+      <Box display="flex" justifyContent={props.horizontalAlign}>
+        <Box
+          display="flex"
+          width="max-content"
+          flexDirection={direction}
+          alignItems="baseline"
+          marginBottom="20px"
+        >
+          {links.map((link: TLink) => {
+            return (
+              <Box key={link.id} marginTop="15px">
+                {link.address && link.address !== "" ? (
+                  /* Address exists */
+                  <Tooltip title={link.address}>
+                    <Link
+                      href={link.address}
+                      color="textPrimary"
+                      underline="none"
+                    >
+                      <LinkContent link={link} textColor={props.textColor} />
+                    </Link>
+                  </Tooltip>
+                ) : (
+                  /* Address does not exist */
+                  <>
+                    <LinkContent link={link} textColor={props.textColor} />
+                  </>
+                )}
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
+    </>
+  );
   return (<> </>)
 };
 
