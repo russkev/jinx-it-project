@@ -14,17 +14,8 @@ import {
 import {
   usePortfolio,
   DisplayLinks,
-  ThemeSectionColors,
 } from "jinxui";
-import {
-  TSection
-} from "jinxui/types"
 
-// Markdown
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 /* A block that takes up at minimum the height of the screen. Takes an optional */
 function HeaderBlock(props: any) {

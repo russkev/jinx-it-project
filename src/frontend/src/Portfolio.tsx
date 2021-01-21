@@ -9,11 +9,9 @@ import Grid from "@material-ui/core/Grid";
 import {
   useUser,
   usePortfolio,
-  useSection,
   HeaderBar,
   DisplayCopyright,
   DisplayHeader,
-  DisplaySectionList,
   DisplayPageList,
 } from "jinxui";
 
@@ -76,10 +74,6 @@ const SkeletonPage = () => (
   </Container>
 );
 
-/*
-  At the moment only the first page of portfolio is displayed.
-  TODO: primary portfolio redirection
- */
 const Portfolio = ({ username }: PortfolioProps) => {
   const {
     userData,
@@ -90,13 +84,7 @@ const Portfolio = ({ username }: PortfolioProps) => {
   } = useUser();
 
   const { fetchFullPortfolio, getFetchedPortfolio } = usePortfolio();
-  const { getFetchedSections } = useSection();
-
-  //!!! hard coded sections just for testing
-  const sections = getFetchedSections("17");
-
   const [author, setAuthor] = useState<string>("");
-
   const [error, setError] = useState<boolean>(false);
 
   // Updating portfolio/page/section data

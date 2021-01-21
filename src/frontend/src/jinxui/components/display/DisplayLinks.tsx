@@ -110,7 +110,6 @@ const DisplayLinks = (props: TDisplayLinks) => {
       </Box>
     </>
   );
-  return (<> </>)
 };
 
 export default DisplayLinks;

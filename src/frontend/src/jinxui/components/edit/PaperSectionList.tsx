@@ -101,6 +101,10 @@ const PaperSectionsDisplay = () => {
                 {index === getFetchedPages().length - 1 ? <PageEdit /> : <> </>}
               </Box>
             );
+          } else {
+            return (
+              <></>
+            )
           }
         }
       )}

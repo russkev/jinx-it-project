@@ -11,7 +11,7 @@ import {
   DisplaySection,
   DisplayBackground,
 } from "jinxui";
-import { TPage, TSection } from "jinxui/types";
+import { TPage } from "jinxui/types";
 
 type TSectionGrid = {
   page: TPage;

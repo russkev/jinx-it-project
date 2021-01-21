@@ -93,7 +93,7 @@ const DialogAccount = forwardRef((props: TDialog, ref: any) => {
                 setSuccessMessage("Updated account details");
               })
               .catch((error) => {
-                if (error.response.status == 400) {
+                if (error.response.status === 400) {
                   setErrorMessage("Invalid password");
                 } else {
                   setErrorMessage(error.message);

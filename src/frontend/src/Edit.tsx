@@ -7,7 +7,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import {
   useUser,
   usePortfolio,
-  PrimaryButton,
   SecondaryButton,
   Routes,
   PrimaryColumnDiv,
@@ -42,18 +41,12 @@ const Edit = (props: any) => {
       should be reported */
 
   const {
-    userData,
-    isSaving,
-    setErrorMessage,
     setLoading,
     setSaving,
   } = useUser();
   const {
     fetchFullPortfolio,
-    getFetchedPortfolio,
     getLightTheme,
-    saveFullPortfolio,
-    makePortfolioPublic,
   } = usePortfolio();
 
   // Updating portfolio/page/section data

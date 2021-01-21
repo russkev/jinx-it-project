@@ -119,7 +119,7 @@ const DialogTheme = forwardRef((props: TDialog, ref: any) => {
     const subtitleColor = header?.useSecondaryForSubtitle
       ? props.theme.palette.secondary.main
       : titleColor;
-    const [backgroundColor, textColor, isFullHeight] = ThemeSectionColors(
+    const [backgroundColor, textColor] = ThemeSectionColors(
       props.theme,
       0
     );

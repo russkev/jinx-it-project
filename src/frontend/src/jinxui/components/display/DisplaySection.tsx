@@ -1,24 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ReactPlayer from "react-player";
-import Container from "@material-ui/core/Container";
 import {
   makeStyles,
   createStyles,
   Theme,
   useTheme,
-  responsiveFontSizes,
 } from "@material-ui/core/styles";
 import {
-  usePortfolio,
-  useUser,
   DisplayLinks,
-  ThemeSectionColors,
 } from "jinxui";
-import { TSection, TSectionInfo, TImage, ESectionType } from "jinxui/types";
+import { TSectionInfo, ESectionType } from "jinxui/types";
 
 // Markdown
 import ReactMarkdown from "react-markdown";
@@ -62,7 +57,7 @@ const TextComponent = (props: TDisplaySection) => {
   };
   const type = props.section.type;
   const isTextSection =
-    type == ESectionType.text || type == ESectionType.imageText;
+    type === ESectionType.text || type === ESectionType.imageText;
   if (isTextSection && props.section.text) {
     return (
       <Grid item xs={12} sm={12}>
@@ -88,7 +83,7 @@ const ImageComponent = (props: TDisplaySection) => {
   const classes = useStyles();
   const type = props.section.type;
   const isImageSection =
-    type == ESectionType.image || type == ESectionType.imageText;
+    type === ESectionType.image || type === ESectionType.imageText;
   if (isImageSection && props.section.image !== null) {
     return (
       <>
@@ -109,7 +104,7 @@ const ImageComponent = (props: TDisplaySection) => {
 
 const VideoComponent = (props: TDisplaySection) => {
   const type = props.section.type;
-  const isVideoSection = type == ESectionType.video;
+  const isVideoSection = type === ESectionType.video;
   if (isVideoSection) {
     return (
       <Grid item xs={12} sm={12}>
@@ -134,7 +129,7 @@ const VideoComponent = (props: TDisplaySection) => {
 };
 
 const ImageTextComponent = (props: TDisplaySection) => {
-  const isImageTextSection = props.section.type == ESectionType.imageText;
+  const isImageTextSection = props.section.type === ESectionType.imageText;
   if (isImageTextSection) {
     return (
       <Box>
@@ -180,23 +175,6 @@ const HeadingComponent = (props: THeadingComponent) => {
 
 const DisplaySection = (props: TDisplaySection) => {
   const classes = useStyles();
-
-  // Cols per item when we want the text/media to fit on one row
-  // const colsPerItem = data.content && data.path ? 6 : 12;
-  const colsPerItem = 12;
-
-  const renderers = {
-    code: ({ language, value }: { language: string; value: string }) => {
-      return (
-        <SyntaxHighlighter
-          style={vscDarkPlus}
-          language={language}
-          children={value}
-        />
-      );
-    },
-  };
-
   const theme = useTheme();
 
   // Set defaults for various variables

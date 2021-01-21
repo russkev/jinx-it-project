@@ -100,7 +100,6 @@ export const usePortfolio = () => {
   } = usePage();
   const {
     resetSections,
-    getFetchedSectionsAll,
     getSectionsIndexedCopyAll,
     setSections,
   } = useSection();
@@ -227,7 +226,7 @@ export const usePortfolio = () => {
   };
 
   function portfolioIsFetched() {
-    return state.id != defaultPortfolioContext.id;
+    return state.id !== defaultPortfolioContext.id;
   }
 
   function getFetchedPortfolio() {

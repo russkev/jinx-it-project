@@ -46,7 +46,7 @@ const StyledImageUploadOverlay = styled(Paper)`
   }
   cursor: pointer;
 `;
-const FRONT_END_URL = process.env.REACT_APP_FRONT_URL;
+
 const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
   z-index: 2;
 `;
