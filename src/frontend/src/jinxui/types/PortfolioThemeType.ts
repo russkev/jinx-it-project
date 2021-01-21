@@ -41,8 +41,12 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         colors?: any
         // Specify custom css in this sort of object
         css?: any
-        // Gap between section title and section content
+        // Gap between pages
+        pageGap?: any
+        // Gap between title and first section
         titleGap?: any
+        // Gap between heading and section content
+        headingGap?: any
         // Gap between two sections
         sectionGap?: any
         // Material ui spacing between two columns of a single section
@@ -50,7 +54,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         // Which sections to give a border to
         border?: "first" | "odds" | "evens" | "all" | undefined
         // How much padding a border should have
-        borderPadding?: number
+        borderPadding?: any
         // What property should be used determine background colors
         bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
       }
@@ -73,7 +77,6 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         disableSubtitleGap?: boolean
         allCaps?: boolean
         useSecondaryForSubtitle?: boolean
-        headerGap?: any
       }
       theme?: {
         name?: string
@@ -81,7 +84,9 @@ declare module '@material-ui/core/styles/createMuiTheme' {
       section?: {
         colors?: any
         css?: any
+        pageGap?: any 
         titleGap?: any
+        headingGap?: any
         sectionGap?: any
         spacing?: 0 | 1 | 10 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | undefined
         border?: "first" | "odds" | "evens" | "all" | undefined

@@ -71,7 +71,7 @@ const magma: Theme = createTheme({
         },
         section: {
             sectionGap: "4em",
-            titleGap: "0em",
+            headingGap: "0em",
             colors: ThemeBackgroundColors.gradient,
             bgColorIndexing: "full",
         }
@@ -429,7 +429,7 @@ const arch: Theme = createTheme({
             useSecondaryForSubtitle: true,
         },
         section: {
-            titleGap: 50,
+            headingGap: 50,
             sectionGap: "9em",
             spacing: 7,
             borderPadding: 30,
@@ -466,18 +466,23 @@ const mountains: Theme = createTheme({
         fontWeightRegular: 400,
         fontWeightMedium: 600,
         fontWeightBold: 700,
-        h1: {
+        h1: {                   // Main Title
             fontWeight: 700,
             fontSize: "4rem",
         },
-        h2: {
+        h2: {                   // Page Titles
             fontWeight: 600,
             fontSize: "1.7rem",
         },
-        h3: {
+        h3: {                   // Main Subtitle
             fontWeight: 600,
             fontSize: "1.8rem",
             letterSpacing: "0.2rem"
+        },
+        h4: {                   // Section Headings
+            fontWeight: 600,
+            fontSize: "1.6rem",
+            letterSpacing: "0.1rem"
         },
         body1: {
             fontSize: "1.1rem",
@@ -504,7 +509,7 @@ const mountains: Theme = createTheme({
             disableSubtitleGap: true,
         },
         section: {
-            titleGap: 20,
+            headingGap: "20px",
             spacing: 7,
             border: "first",
             borderPadding: 30,
@@ -580,7 +585,7 @@ const sand: Theme = createTheme({
         },
         section: {
             spacing: 7,
-            titleGap: -30,
+            headingGap: -30,
             colors: ThemeBackgroundColors.secondPrimaryColor,
             bgColorIndexing: "page",
         }

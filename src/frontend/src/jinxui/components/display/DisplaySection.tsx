@@ -128,17 +128,17 @@ const ImageTextComponent = (props: TComponent) => {
 
 type THeadingComponent = {
   heading: string;
-  gap: number;
+  gap: any;
 };
 const HeadingComponent = (props: THeadingComponent) => {
   if (props.heading.length > 0) {
     return (
-      <Box marginBottom={props.gap + "px"}>
+      <Box>
         <Typography variant="h4" gutterBottom>
           {props.heading}
         </Typography>
+        <Box width="100%" height={props.gap} style={{ border: "1px solid yellow" }} />
       </Box>
-      // <Box width="100%" height={gap + "px"} />
     );
   } else {
     return <> </>;
@@ -203,7 +203,12 @@ const DisplaySection = (props: TDisplaySection) => {
 
   return (
     <>
-      <Box textAlign="left" paddingTop={sectionGap} paddingBottom={sectionGap}>
+      <Box
+        width="100%"
+        height={sectionGap}
+        style={{ border: "1px solid purple" }}
+      />
+      <Box textAlign="left">
         <Paper
           elevation={0}
           square
@@ -219,6 +224,11 @@ const DisplaySection = (props: TDisplaySection) => {
           {SectionComponent(componentProps)}
         </Paper>
       </Box>
+      <Box
+        width="100%"
+        height={sectionGap}
+        style={{ border: "1px solid green" }}
+      />
     </>
   );
 };
