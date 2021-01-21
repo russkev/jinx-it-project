@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
@@ -11,14 +11,113 @@ import {
   useTheme,
   responsiveFontSizes,
 } from "@material-ui/core/styles";
-import { usePortfolio, DisplayLinks, ThemeSectionColors } from "jinxui";
-import { TSection, TSectionInfo } from "jinxui/types";
+import {
+  usePortfolio,
+  useUser,
+  DisplayLinks,
+  ThemeSectionColors,
+} from "jinxui";
+import { TSection, TSectionInfo, TImage } from "jinxui/types";
 
 // Markdown
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    img: {
+      width: "100%",
+      height: "auto",
+      objectFit: "contain",
+    },
+    item: {
+      paddingTop: "1em",
+    },
+    paper: {
+      background: "rgba(255, 255, 255, 0.0)",
+      padding: theme.portfolio.section?.borderPadding,
+      border: "1px solid " + theme.palette.secondary.main,
+    },
+  })
+);
+
+interface TDisplaySection extends TSectionInfo {
+  textColor: string;
+}
+const TextComponent = (props: TDisplaySection) => {
+  // Markdown syntax highlighting
+  const renderers = {
+    code: ({ language, value }: { language: string; value: string }) => {
+      return (
+        <SyntaxHighlighter
+          style={vscDarkPlus}
+          language={language}
+          children={value}
+        />
+      );
+    },
+  };
+  const isTextSection = props.section.type === "text";
+  if (isTextSection && props.section.text) {
+    return (
+      <Grid item xs={12} sm={12}>
+        <DisplayLinks
+          horizontalAlign="flex-start"
+          pageId={props.pageId}
+          sectionId={props.section.id}
+          textColor={props.textColor}
+        />
+        <Typography variant="body1" component="span">
+          <ReactMarkdown plugins={[gfm]} renderers={renderers}>
+            {props.section.text}
+          </ReactMarkdown>
+        </Typography>
+      </Grid>
+    );
+  } else {
+    return <></>;
+  }
+};
+
+const ImageComponent = (props: TDisplaySection) => {
+  // const { fetchImage } = useUser();
+  // const classes = useStyles();
+  // const isImageSection = props.section.type === "image";
+  // const [localImage, setLocalImage] = useState<TImage>({
+  //   id: "",
+  //   name: "",
+  //   path: "",
+  // });
+
+  // if (props.section.image) {
+  //   fetchImage(props.section.image)
+  //     .then((response: any) => {
+  //       setLocalImage(response.data);
+  //     })
+  //     .catch((error: any) => {
+  //       throw error;
+  //     });
+  // }
+
+  // if (props.section.image) {
+  //   return (
+  //     <>
+  //       <Grid item xs={12} sm={12}>
+  //         <img
+  //           src={localImage.path}
+  //           alt={localImage.name}
+  //           className={classes.img}
+  //           style={{ marginTop: "25px" }} // compensate for markdown
+  //         />
+  //       </Grid>
+  //     </>
+  //   );
+  // } else {
+    return <> </>;
+  // }
+};
 
 /**
  * Generic section component that accepts any of the section fields and places their data (no background).
@@ -28,35 +127,13 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
  * 3. Text and image => Split left and right
  */
 
-interface TDisplaySection extends TSectionInfo {
-  textColor: string;
-}
 const DisplaySection = (props: TDisplaySection) => {
-  const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      img: {
-        width: "100%",
-        height: "auto",
-        objectFit: "contain",
-      },
-      item: {
-        paddingTop: "1em",
-      },
-      paper: {
-        background: "rgba(255, 255, 255, 0.0)",
-        padding: theme.portfolio.section?.borderPadding,
-        border: "1px solid " + theme.palette.secondary.main,
-      },
-    })
-  );
-
   const classes = useStyles();
 
   // Cols per item when we want the text/media to fit on one row
   // const colsPerItem = data.content && data.path ? 6 : 12;
   const colsPerItem = 12;
 
-  // Markdown syntax highlighting
   const renderers = {
     code: ({ language, value }: { language: string; value: string }) => {
       return (
@@ -135,21 +212,16 @@ const DisplaySection = (props: TDisplaySection) => {
                 />
               </Grid>
             ) : null} */}
-            {props.section.text ? (
-              <Grid item xs={12} sm={colsPerItem}>
-                <DisplayLinks
-                  horizontalAlign="flex-start"
-                  pageId={props.pageId}
-                  sectionId={props.section.id}
-                  textColor={props.textColor}
-                />
-                <Typography variant="body1" component="span">
-                  <ReactMarkdown plugins={[gfm]} renderers={renderers}>
-                    {props.section.text}
-                  </ReactMarkdown>
-                </Typography>
-              </Grid>
-            ) : null}
+            <TextComponent
+              pageId={props.pageId}
+              section={props.section}
+              textColor={props.textColor}
+            />
+            <ImageComponent
+              pageId={props.pageId}
+              section={props.section}
+              textColor={props.textColor}
+            />
           </Grid>
         </Paper>
       </Box>

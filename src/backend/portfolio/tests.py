@@ -645,7 +645,7 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
 
         with self.subTest(field='name'):
             initial_data = copy.deepcopy(
-                serializers.SectionSerializer(self.section).data)
+                serializers.SectionInputSerializer(self.section).data)
 
             update_field('name', name)
 
@@ -660,7 +660,7 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
 
         with self.subTest(field='text'):
             initial_data = copy.deepcopy(
-                serializers.SectionSerializer(self.section).data)
+                serializers.SectionInputSerializer(self.section).data)
 
             update_field('text', text)
 

@@ -31,9 +31,9 @@ export type TSection = {
   name: string;
   type: ESectionType;
   index: number;
-  text?: string;
-  image?: Tuuid;
-  video?: string;
+  text: string;
+  image: TImage | null;
+  video: string;
   page: Tuuid;
   links: TLink[];
 }

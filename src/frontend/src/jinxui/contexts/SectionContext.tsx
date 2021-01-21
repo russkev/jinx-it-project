@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { TSection, TSections, Tuuid, ESectionType } from "jinxui/types";
+import { TSection, TSections, Tuuid, ESectionType, TImage } from "jinxui/types";
+
+const FRONT_END_URL = process.env.REACT_APP_FRONT_URL;
+
+export const defaultImageContext: TImage = {
+  id: "0-0-0-0-0",
+  name: "",
+  path: FRONT_END_URL + "blank_image.svg",
+};
+
 
 export const defaultSectionContext: TSection = {
   id: "0-0-0-0-0",
@@ -7,11 +16,12 @@ export const defaultSectionContext: TSection = {
   type: ESectionType.skeleton,
   index: 0,
   text: "",
-  image: undefined,
+  image: defaultImageContext,
   video: "",
   page: "0-0-0-0-0",
   links: [],
 };
+
 
 export const SectionContext = React.createContext<[TSections, any, any, any]>([
   {}, 

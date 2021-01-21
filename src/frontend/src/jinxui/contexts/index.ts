@@ -17,6 +17,7 @@ export {
   SectionContextProvider,
   SectionContext,
   defaultSectionContext,
+  defaultImageContext,
 } from "./SectionContext";
 
 export {

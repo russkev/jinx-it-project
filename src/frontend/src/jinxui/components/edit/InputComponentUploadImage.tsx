@@ -5,6 +5,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
 import { useUser, useSection, StyledUserImageEdit } from "jinxui";
 import { TImage, TSectionInfo } from "jinxui/types";
+import { defaultImageContext } from "jinxui/contexts"
 import { v4 as uuidv4 } from "uuid";
 
 const StyledInput = styled.input`
@@ -52,31 +53,27 @@ const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
 
 const InputComponentUploadImage = (props: TSectionInfo) => {
   // const [imagePath, setImagePath] = useState(FRONT_END_URL + "blank_image.svg");
-  const { onSectionChange } = useSection();
+  const { onSectionChange, getFetchedSection } = useSection();
   const [imageExists, setImageExists] = useState(false);
-  const { fetchImage, uploadImage } = useUser();
+  const { uploadImage } = useUser();
   // const [imageResponse, setImageResponse] = useState({ path: "", id: "null" });
-  const [localImage, setLocalImage] = useState<TImage>({
-    id: "",
-    name: "",
-    path: FRONT_END_URL + "blank_image.svg",
-  });
+  const [localImage, setLocalImage] = useState<TImage>(() => {
+    const existingImage = getFetchedSection(props.pageId, props.section.id).image
+    if (existingImage !== null) {
+      return existingImage
+    } else {
+      return defaultImageContext
+    }
+  }
+    
+  );
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
-    if (props.section.image && props.section.image !== "") {
-      // if (props.section.image.path && props.section.image.path !== "") {
-      fetchImage(props.section.image)
-        .then((response: any) => {
-          setLocalImage(response.data);
-          setImageExists(true);
-        })
-        .catch((error: any) => {
-          console.log(error);
-          throw error;
-        });
+    if (props.section.image !== null && props.section.image.id !== defaultImageContext.id) {
+      setImageExists(true);
     }
-  }, [props.section, fetchImage]);
+  }, [props.section]);
 
   return (
     <>
@@ -99,7 +96,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
                 .then((response) => {
                   setLocalImage(() => {
                     onSectionChange(props.pageId, props.section.id, {
-                      image: response.data.id,
+                      image: response.data,
                     });
                     return response.data;
                   });

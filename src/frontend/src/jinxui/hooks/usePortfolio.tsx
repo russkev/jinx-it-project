@@ -89,6 +89,7 @@ export const usePortfolio = () => {
     setErrorMessage,
     setSuccessMessage,
     setInitialThemeState,
+    fetchImage,
   } = useUser();
   const {
     resetPages,
@@ -131,6 +132,12 @@ export const usePortfolio = () => {
           for (var link of section.links) {
             delete link.section;
           }
+          if (section.image !== null) {
+            const imageResponse = await fetchImage(section.image);
+            section.image = imageResponse.data
+          }
+          // section.image = section.image_out;
+          // delete section.image
         }
         sections[page.id] = pageSections;
       }
@@ -166,6 +173,11 @@ export const usePortfolio = () => {
         for (var [index, page] of pages.entries()) {
           if (!page.toDelete) {
             page.sections = allSections[page.id];
+            for (var section of page.sections) {
+              if (section.image != null) {
+                section.image = section.image.id;
+              }
+            }
             page.index = index;
             await savePage(state.id, page);
           }
