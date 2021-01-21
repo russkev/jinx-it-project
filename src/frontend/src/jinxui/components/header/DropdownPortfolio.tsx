@@ -337,8 +337,9 @@ const DropdownPortfolio = React.forwardRef(
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <AccountCircleIcon />
+                <AccountCircleIcon style={{ fontSize: 40 }}/>
                 <ExpandMoreIcon fontSize="small" />
+                {/* <Typography */}
               </StyledHeaderOptionsButton>
             </Tooltip>
           ) : null}

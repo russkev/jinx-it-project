@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import API from "../../API";
 import { createMuiTheme } from "@material-ui/core/styles";
-import { defaultPortfolioContext } from "jinxui/contexts";
+import { defaultImageContext, defaultPortfolioContext } from "jinxui/contexts";
 import { v4 as uuidv4, validate } from "uuid";
 
 import {
@@ -15,24 +15,18 @@ import {
   PORTFOLIOS_PATH,
 } from "jinxui";
 
-import {
-  LightTheme,
-  DarkTheme,
-} from "jinxui/themes";
+import { LightTheme, DarkTheme } from "jinxui/themes";
 
-import {
-  PortfolioContext
-} from "jinxui/contexts";
+import { PortfolioContext } from "jinxui/contexts";
 
 import {
   TPortfolio,
   TPage,
   TSections,
   TLink,
+  TImage,
   Tuuid,
 } from "jinxui/types";
-
-
 
 // Use this if you want to get a specific portfolio
 async function getPortfolio(portfolioId: Tuuid, config: any) {
@@ -116,8 +110,7 @@ export const usePortfolio = () => {
       portfolioDetails.pages = [];
 
       await updateState(portfolioDetails);
-      setInitialThemeState(portfolioDetails.theme)
-      
+      setInitialThemeState(portfolioDetails.theme);
 
       var pages: TPage[] = [];
       var sections: TSections = {};
@@ -133,7 +126,7 @@ export const usePortfolio = () => {
           }
           if (section.image !== null) {
             const imageResponse = await fetchImage(section.image);
-            section.image = imageResponse.data
+            section.image = imageResponse.data;
           }
           // section.image = section.image_out;
           // delete section.image
@@ -173,16 +166,14 @@ export const usePortfolio = () => {
           if (!page.toDelete) {
             page.sections = allSections[page.id];
             for (var section of page.sections) {
-              if (section.image != null) {
-                section.image = section.image.id;
-              }
+              section.image = imageObjectToId(section.image)
             }
             page.index = index;
             await savePage(state.id, page);
           }
         }
 
-        await setSuccessMessage("Portfolio saved");
+        
       } catch (e) {
         setErrorMessage(e.message);
         throw e;
@@ -202,14 +193,24 @@ export const usePortfolio = () => {
     }
   }
 
+  function imageObjectToId(image: TImage) {
+    if (image != null) {
+      if (image.id === defaultImageContext.id) {
+        return null;
+      } else {
+        return image.id;
+      }
+    } else {
+      return null;
+    }
+  }
+
   /* Save the currently edited page to backend and redirect to display page. */
   const handlePublishAndRedirect = (history: any) => {
     saveFullPortfolio(false).then(() => {
       makePortfolioPublic(getFetchedPortfolio().id)
         .then(() => {
-          history.push(
-            Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username
-          );
+          history.push(Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username);
         })
         .catch(() => {
           setErrorMessage("Something went wrong");
@@ -217,9 +218,12 @@ export const usePortfolio = () => {
     });
   };
 
-  
   const handleSave = () => {
-    saveFullPortfolio(false).catch((error: any) => {
+    saveFullPortfolio(false)
+    .then(() => {
+      setSuccessMessage("Portfolio saved");
+    })
+    .catch((error: any) => {
       console.log(error);
       throw error;
     });

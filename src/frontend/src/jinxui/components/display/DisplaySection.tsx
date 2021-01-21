@@ -10,9 +10,7 @@ import {
   Theme,
   useTheme,
 } from "@material-ui/core/styles";
-import {
-  DisplayLinks,
-} from "jinxui";
+import { DisplayLinks } from "jinxui";
 import { TSectionInfo, ESectionType } from "jinxui/types";
 
 // Markdown
@@ -55,110 +53,118 @@ const TextComponent = (props: TDisplaySection) => {
       );
     },
   };
-  const type = props.section.type;
-  const isTextSection =
-    type === ESectionType.text || type === ESectionType.imageText;
-  if (isTextSection && props.section.text) {
-    return (
-      <Grid item xs={12} sm={12}>
-        <DisplayLinks
-          horizontalAlign="flex-start"
-          pageId={props.pageId}
-          sectionId={props.section.id}
-          textColor={props.textColor}
-        />
-        <Typography variant="body1" component="span">
-          <ReactMarkdown plugins={[gfm]} renderers={renderers}>
-            {props.section.text}
-          </ReactMarkdown>
-        </Typography>
-      </Grid>
-    );
-  } else {
-    return <></>;
-  }
+  // const type = props.section.type;
+  // const isTextSection =
+  //   type === ESectionType.text || type === ESectionType.imageText;
+  // if (isTextSection && props.section.text) {
+  return (
+    <Grid item xs={12} sm={12}>
+      <DisplayLinks
+        horizontalAlign="flex-start"
+        pageId={props.pageId}
+        sectionId={props.section.id}
+        textColor={props.textColor}
+      />
+      <Typography variant="body1" component="span">
+        <ReactMarkdown plugins={[gfm]} renderers={renderers}>
+          {props.section.text}
+        </ReactMarkdown>
+      </Typography>
+    </Grid>
+  );
+  // } else {
+  //   return <></>;
+  // }
 };
 
 const ImageComponent = (props: TDisplaySection) => {
   const classes = useStyles();
   const type = props.section.type;
-  const isImageSection =
-    type === ESectionType.image || type === ESectionType.imageText;
-  if (isImageSection && props.section.image !== null) {
-    return (
-      <>
-        <Grid item xs={12} sm={12}>
+  // const isImageSection =
+  //   type === ESectionType.image || type;
+  // if (isImageSection && props.section.image !== null) {
+  return (
+    <>
+      <Grid item xs={12} sm={12}>
+        {props.section.image !== null ? (
           <img
             src={props.section.image.path}
             alt={props.section.image.name}
             className={classes.img}
             style={{ marginTop: "25px" }} // compensate for markdown
           />
-        </Grid>
-      </>
-    );
-  } else {
-    return <> </>;
-  }
+        ) : (
+          <></>
+        )}
+      </Grid>
+    </>
+  );
+  // } else {
+  //   return <> </>;
+  // }
 };
 
 const VideoComponent = (props: TDisplaySection) => {
   const type = props.section.type;
   const isVideoSection = type === ESectionType.video;
-  if (isVideoSection) {
-    return (
-      <Grid item xs={12} sm={12}>
-        <Box
-          position="relative"
-          paddingBottom="56.25%" // 16:9
-          paddingTop="30px"
-          height={0}
-          overflow="hidden"
-          marginBottom="15px"
-          style={{ background: "black" }}
-        >
-          <Box position="absolute" top={0} left={0} width="100%" height="100%">
-            <ReactPlayer url={props.section.video} width="100%" height="100%" />
-          </Box>
+  // if (isVideoSection) {
+  return (
+    <Grid item xs={12} sm={12}>
+      <Box
+        position="relative"
+        paddingBottom="56.25%" // 16:9
+        paddingTop="30px"
+        height={0}
+        overflow="hidden"
+        marginBottom="15px"
+        style={{ background: "black" }}
+      >
+        <Box position="absolute" top={0} left={0} width="100%" height="100%">
+          <ReactPlayer url={props.section.video} width="100%" height="100%" />
         </Box>
-      </Grid>
-    );
-  } else {
-    return <> </>;
-  }
+      </Box>
+    </Grid>
+  );
+  // } else {
+  //   return <> </>;
+  // }
 };
 
 const ImageTextComponent = (props: TDisplaySection) => {
   const isImageTextSection = props.section.type === ESectionType.imageText;
-  if (isImageTextSection) {
-    return (
-      <Box>
-        <TextComponent
-          pageId={props.pageId}
-          section={props.section}
-          textColor={props.textColor}
-        />
-        <ImageComponent
-          pageId={props.pageId}
-          section={props.section}
-          textColor={props.textColor}
-        />
-      </Box>
-    );
-  } else {
-    return <> </>;
-  }
+  // if (isImageTextSection) {
+  return (
+    <Box display="grid" gridTemplateColumns="1fr 1fr">
+      <TextComponent
+        pageId={props.pageId}
+        section={props.section}
+        textColor={props.textColor}
+      />
+      <ImageComponent
+        pageId={props.pageId}
+        section={props.section}
+        textColor={props.textColor}
+      />
+    </Box>
+  );
+  // } else {
+  //   return <> </>;
+  // }
 };
 
 type THeadingComponent = {
   heading: string;
+  gap: number
 };
 const HeadingComponent = (props: THeadingComponent) => {
   if (props.heading.length > 0) {
     return (
-      <Typography variant="h4" gutterBottom>
-        {props.heading}
-      </Typography>
+      <Box marginBottom={props.gap + "px"}>
+        <Typography variant="h4" gutterBottom>
+          {props.heading}
+        </Typography>
+      </Box>
+      // <Box width="100%" height={gap + "px"} />
     );
   } else {
     return <> </>;
@@ -180,7 +186,7 @@ const DisplaySection = (props: TDisplaySection) => {
   // Set defaults for various variables
   const sectionTheme = theme.portfolio.section;
 
-  const titleGap =
+  const headingGap =
     sectionTheme?.titleGap !== undefined && props.section.name.length > 0
       ? sectionTheme.titleGap
       : 0;
@@ -209,6 +215,27 @@ const DisplaySection = (props: TDisplaySection) => {
       border = false;
   }
 
+  const sectionMap = new Map<
+    ESectionType,
+    (props: TDisplaySection) => JSX.Element
+  >();
+  sectionMap.set(ESectionType.image, ImageComponent);
+  sectionMap.set(ESectionType.text, TextComponent);
+  sectionMap.set(ESectionType.video, VideoComponent);
+  sectionMap.set(ESectionType.imageText, ImageTextComponent);
+
+  // const sectionMap: Map<ESectionType, () => string> = {
+  //   [ESectionType.image] : ImageComponent,
+  //   [ESectionType.text]  : TextComponent,
+  //   [ESectionType.video] : VideoComponent,
+  //   [ESectionType.imageText] : ImageTextComponent,
+  // }
+
+  let SectionComponent = sectionMap.get(props.section.type);
+  if (SectionComponent === undefined) {
+    SectionComponent = TextComponent;
+  }
+
   // const textColor = ThemeSectionColors(theme, props.section.index)[1];
   return (
     <>
@@ -227,11 +254,11 @@ const DisplaySection = (props: TDisplaySection) => {
           {/* <Typography variant="h4" gutterBottom>
             {props.section.name}
           </Typography> */}
-          <HeadingComponent heading={props.section.name} />
+          <HeadingComponent heading={props.section.name} gap={headingGap} />
           <Grid
             container
             direction="row-reverse"
-            style={{ marginTop: titleGap }}
+            // style={{ marginTop: headingGap }}
             spacing={spacing}
           >
             {/* {data.path ? (
@@ -244,7 +271,13 @@ const DisplaySection = (props: TDisplaySection) => {
                 />
               </Grid>
             ) : null} */}
-            <TextComponent
+            {SectionComponent(props)}
+            {/* <SectionComponent 
+              pageId={props.pageId}
+              section={props.sectionId}
+              textColor={props.textColor}
+            /> */}
+            {/* <TextComponent
               pageId={props.pageId}
               section={props.section}
               textColor={props.textColor}
@@ -258,7 +291,7 @@ const DisplaySection = (props: TDisplaySection) => {
               pageId={props.pageId}
               section={props.section}
               textColor={props.textColor}
-            />
+            /> */}
             {/* <ImageTextComponent
               pageId={props.pageId}
               section={props.section}

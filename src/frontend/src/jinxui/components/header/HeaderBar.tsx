@@ -41,7 +41,7 @@ const StyledAppBar = styled(AppBar)`
 const StyledDivOuter = styled.div`
   display: grid;
   grid-template-columns: 1fr max-content 1fr;
-  grid-template-rows: minMax(46px, max-content);
+  grid-template-rows: minMax(56px, max-content);
   align-self: center;
   width: inherit;
   max-width: ${() => MAX_EDIT_SECTION_WIDTH};
