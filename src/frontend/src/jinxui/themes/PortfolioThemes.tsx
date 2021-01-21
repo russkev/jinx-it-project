@@ -441,6 +441,15 @@ const arch: Theme = createTheme({
 })
 
 const mountains: Theme = createTheme({
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 800,    // One column / two column breakpoint
+            md: 1100,   // Section width
+            lg: 1280,
+            xl: 1920,
+        }
+    },
     palette: {
         type: "dark",
         secondary: {

@@ -40,7 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
 interface TDisplaySection extends TSectionInfo {
   textColor: string;
 }
-const TextComponent = (props: TDisplaySection) => {
+interface TComponent extends TDisplaySection {
+  sectionTheme: any;
+}
+const TextComponent = (props: TComponent) => {
   // Markdown syntax highlighting
   const renderers = {
     code: ({ language, value }: { language: string; value: string }) => {
@@ -55,7 +58,7 @@ const TextComponent = (props: TDisplaySection) => {
   };
 
   return (
-    <Grid item xs={12} sm={12}>
+    <Box>
       <DisplayLinks
         horizontalAlign="flex-start"
         pageId={props.pageId}
@@ -67,71 +70,65 @@ const TextComponent = (props: TDisplaySection) => {
           {props.section.text}
         </ReactMarkdown>
       </Typography>
-    </Grid>
+    </Box>
   );
 };
 
-const ImageComponent = (props: TDisplaySection) => {
+const ImageComponent = (props: TComponent) => {
   const classes = useStyles();
   return (
     <>
-      <Grid item xs={12} sm={12}>
-        {props.section.image !== null ? (
-          <img
-            src={props.section.image.path}
-            alt={props.section.image.name}
-            className={classes.img}
-            style={{ marginTop: "25px" }} // compensate for markdown
-          />
-        ) : (
-          <></>
-        )}
-      </Grid>
+      {props.section.image !== null ? (
+        <img
+          src={props.section.image.path}
+          alt={props.section.image.name}
+          className={classes.img}
+          style={{ marginTop: "25px" }} // compensate for markdown
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
 
-const VideoComponent = (props: TDisplaySection) => {
-  const type = props.section.type;
+const VideoComponent = (props: TComponent) => {
   return (
-    <Grid item xs={12} sm={12}>
-      <Box
-        position="relative"
-        paddingBottom="56.25%" // 16:9
-        paddingTop="30px"
-        height={0}
-        overflow="hidden"
-        marginBottom="15px"
-        style={{ background: "black" }}
-      >
-        <Box position="absolute" top={0} left={0} width="100%" height="100%">
-          <ReactPlayer url={props.section.video} width="100%" height="100%" />
-        </Box>
+    <Box
+      position="relative"
+      paddingBottom="56.25%" // 16:9
+      paddingTop="30px"
+      height={0}
+      overflow="hidden"
+      marginBottom="15px"
+      style={{ background: "black" }}
+    >
+      <Box position="absolute" top={0} left={0} width="100%" height="100%">
+        <ReactPlayer url={props.section.video} width="100%" height="100%" />
       </Box>
-    </Grid>
+    </Box>
   );
 };
 
-const ImageTextComponent = (props: TDisplaySection) => {
+const ImageTextComponent = (props: TComponent) => {
+  const spacing =
+    props.sectionTheme.spacing !== undefined ? props.sectionTheme.spacing : 4;
+
   return (
-    <Box display="grid" gridTemplateColumns="1fr 1fr">
-      <TextComponent
-        pageId={props.pageId}
-        section={props.section}
-        textColor={props.textColor}
-      />
-      <ImageComponent
-        pageId={props.pageId}
-        section={props.section}
-        textColor={props.textColor}
-      />
-    </Box>
+    <Grid container direction="row-reverse" spacing={spacing}>
+      <Grid item xs={12} sm={6}>
+        {ImageComponent(props)}
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        {TextComponent(props)}
+      </Grid>
+    </Grid>
   );
 };
 
 type THeadingComponent = {
   heading: string;
-  gap: number
+  gap: number;
 };
 const HeadingComponent = (props: THeadingComponent) => {
   if (props.heading.length > 0) {
@@ -171,9 +168,6 @@ const DisplaySection = (props: TDisplaySection) => {
   const sectionGap =
     sectionTheme?.sectionGap !== undefined ? sectionTheme.sectionGap : "10em";
 
-  const spacing =
-    sectionTheme?.spacing !== undefined ? sectionTheme.spacing : 4;
-
   var border = false;
   switch (sectionTheme?.border) {
     case "first":
@@ -194,7 +188,7 @@ const DisplaySection = (props: TDisplaySection) => {
 
   const sectionMap = new Map<
     ESectionType,
-    (props: TDisplaySection) => JSX.Element
+    (props: TComponent) => JSX.Element
   >();
   sectionMap.set(ESectionType.image, ImageComponent);
   sectionMap.set(ESectionType.text, TextComponent);
@@ -205,6 +199,7 @@ const DisplaySection = (props: TDisplaySection) => {
   if (SectionComponent === undefined) {
     SectionComponent = TextComponent;
   }
+  const componentProps: TComponent = { ...props, sectionTheme: sectionTheme };
 
   return (
     <>
@@ -221,13 +216,7 @@ const DisplaySection = (props: TDisplaySection) => {
           }
         >
           <HeadingComponent heading={props.section.name} gap={headingGap} />
-          <Grid
-            container
-            direction="row-reverse"
-            spacing={spacing}
-          >
-            {SectionComponent(props)}
-          </Grid>
+          {SectionComponent(componentProps)}
         </Paper>
       </Box>
     </>
