@@ -3,6 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import ReactPlayer from "react-player";
 import Container from "@material-ui/core/Container";
 import {
   makeStyles,
@@ -17,7 +18,7 @@ import {
   DisplayLinks,
   ThemeSectionColors,
 } from "jinxui";
-import { TSection, TSectionInfo, TImage } from "jinxui/types";
+import { TSection, TSectionInfo, TImage, ESectionType } from "jinxui/types";
 
 // Markdown
 import ReactMarkdown from "react-markdown";
@@ -59,7 +60,9 @@ const TextComponent = (props: TDisplaySection) => {
       );
     },
   };
-  const isTextSection = props.section.type === "text";
+  const type = props.section.type;
+  const isTextSection =
+    type == ESectionType.text || type == ESectionType.imageText;
   if (isTextSection && props.section.text) {
     return (
       <Grid item xs={12} sm={12}>
@@ -82,41 +85,89 @@ const TextComponent = (props: TDisplaySection) => {
 };
 
 const ImageComponent = (props: TDisplaySection) => {
-  // const { fetchImage } = useUser();
-  // const classes = useStyles();
-  // const isImageSection = props.section.type === "image";
-  // const [localImage, setLocalImage] = useState<TImage>({
-  //   id: "",
-  //   name: "",
-  //   path: "",
-  // });
-
-  // if (props.section.image) {
-  //   fetchImage(props.section.image)
-  //     .then((response: any) => {
-  //       setLocalImage(response.data);
-  //     })
-  //     .catch((error: any) => {
-  //       throw error;
-  //     });
-  // }
-
-  // if (props.section.image) {
-  //   return (
-  //     <>
-  //       <Grid item xs={12} sm={12}>
-  //         <img
-  //           src={localImage.path}
-  //           alt={localImage.name}
-  //           className={classes.img}
-  //           style={{ marginTop: "25px" }} // compensate for markdown
-  //         />
-  //       </Grid>
-  //     </>
-  //   );
-  // } else {
+  const classes = useStyles();
+  const type = props.section.type;
+  const isImageSection =
+    type == ESectionType.image || type == ESectionType.imageText;
+  if (isImageSection && props.section.image !== null) {
+    return (
+      <>
+        <Grid item xs={12} sm={12}>
+          <img
+            src={props.section.image.path}
+            alt={props.section.image.name}
+            className={classes.img}
+            style={{ marginTop: "25px" }} // compensate for markdown
+          />
+        </Grid>
+      </>
+    );
+  } else {
     return <> </>;
-  // }
+  }
+};
+
+const VideoComponent = (props: TDisplaySection) => {
+  const type = props.section.type;
+  const isVideoSection = type == ESectionType.video;
+  if (isVideoSection) {
+    return (
+      <Grid item xs={12} sm={12}>
+        <Box
+          position="relative"
+          paddingBottom="56.25%" // 16:9
+          paddingTop="30px"
+          height={0}
+          overflow="hidden"
+          marginBottom="15px"
+          style={{ background: "black" }}
+        >
+          <Box position="absolute" top={0} left={0} width="100%" height="100%">
+            <ReactPlayer url={props.section.video} width="100%" height="100%" />
+          </Box>
+        </Box>
+      </Grid>
+    );
+  } else {
+    return <> </>;
+  }
+};
+
+const ImageTextComponent = (props: TDisplaySection) => {
+  const isImageTextSection = props.section.type == ESectionType.imageText;
+  if (isImageTextSection) {
+    return (
+      <Box>
+        <TextComponent
+          pageId={props.pageId}
+          section={props.section}
+          textColor={props.textColor}
+        />
+        <ImageComponent
+          pageId={props.pageId}
+          section={props.section}
+          textColor={props.textColor}
+        />
+      </Box>
+    );
+  } else {
+    return <> </>;
+  }
+};
+
+type THeadingComponent = {
+  heading: string;
+};
+const HeadingComponent = (props: THeadingComponent) => {
+  if (props.heading.length > 0) {
+    return (
+      <Typography variant="h4" gutterBottom>
+        {props.heading}
+      </Typography>
+    );
+  } else {
+    return <> </>;
+  }
 };
 
 /**
@@ -152,7 +203,9 @@ const DisplaySection = (props: TDisplaySection) => {
   const sectionTheme = theme.portfolio.section;
 
   const titleGap =
-    sectionTheme?.titleGap !== undefined ? sectionTheme.titleGap : 0;
+    sectionTheme?.titleGap !== undefined && props.section.name.length > 0
+      ? sectionTheme.titleGap
+      : 0;
 
   const sectionGap =
     sectionTheme?.sectionGap !== undefined ? sectionTheme.sectionGap : "10em";
@@ -193,9 +246,10 @@ const DisplaySection = (props: TDisplaySection) => {
               : { color: props.textColor, border: "none" }
           }
         >
-          <Typography variant="h4" gutterBottom>
+          {/* <Typography variant="h4" gutterBottom>
             {props.section.name}
-          </Typography>
+          </Typography> */}
+          <HeadingComponent heading={props.section.name} />
           <Grid
             container
             direction="row-reverse"
@@ -222,6 +276,16 @@ const DisplaySection = (props: TDisplaySection) => {
               section={props.section}
               textColor={props.textColor}
             />
+            <VideoComponent
+              pageId={props.pageId}
+              section={props.section}
+              textColor={props.textColor}
+            />
+            {/* <ImageTextComponent
+              pageId={props.pageId}
+              section={props.section}
+              textColor={props.textColor}
+            /> */}
           </Grid>
         </Paper>
       </Box>
