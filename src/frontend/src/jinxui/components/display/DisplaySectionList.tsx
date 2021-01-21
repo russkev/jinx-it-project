@@ -11,7 +11,71 @@ import {
   DisplaySection,
   DisplayBackground,
 } from "jinxui";
-import { TPage } from "jinxui/types";
+import { TPage, TSection } from "jinxui/types";
+
+// Title, only renders if section index is 0
+type TTitle = {
+  sectionIndex: number;
+  sectionTheme: any;
+  color: string;
+  title: string;
+};
+const Title = (props: TTitle) => {
+  const titleGap =
+    props.sectionTheme && props.sectionTheme.titleGap
+      ? props.sectionTheme.titleGap
+      : "2rem";
+
+  if (props.sectionIndex === 0 && props.title.length > 0) {
+    return (
+      <Box color={props.color}>
+        <Typography variant="h2" gutterBottom>
+          {props.title}
+        </Typography>
+        <Box
+          width="100%"
+          height={titleGap}
+          // style={{border: "1px solid blue"}}
+        />
+      </Box>
+    );
+  } else {
+    return <></>;
+  }
+};
+
+type TPageGap = {
+  sectionIndex: number;
+  sections: TSection[];
+  pageGap: any;
+};
+const PageGapTop = (props: TPageGap) => {
+  if (props.sectionIndex === 0) {
+    return (
+      <Box
+        width="100%"
+        height={props.pageGap}
+        // style={{ border: "1px solid red" }}
+      />
+    );
+  } else {
+    return <> </>;
+  }
+};
+
+const PageGapBottom = (props: TPageGap) => {
+  if (props.sectionIndex === props.sections.length - 1) {
+    return (
+      <Box
+        width="100%"
+        height={props.pageGap}
+        // style={{ border: "1px solid magenta" }}
+      />
+    );
+  } else {
+    return <> </>;
+  }
+};
 
 type TSectionGrid = {
   page: TPage;
@@ -21,49 +85,13 @@ const DisplaySectionList = (props: TSectionGrid) => {
   const { getGlobalSectionIndex } = usePage();
   const { getFetchedSections } = useSection();
   const sections = getFetchedSections(props.page.id);
-
-
-  // Title, only renders if section index is 0
-  type TTitle = {
-    sectionIndex: number;
-    sectionTheme: any;
-    color: string;
-    title: string;
-  }
-  const Title = (props: TTitle) => {
-
-    const titleGap = props.sectionTheme && props.sectionTheme.titleGap
-      ? props.sectionTheme.titleGap
-      : "2rem"
-
-    if (props.sectionIndex === 0 && props.title.length > 0) {
-      return (
-        <Box color={props.color}>
-          <Typography variant="h2" gutterBottom>
-            {props.title}
-          </Typography>
-          <Box 
-            width="100%" 
-            height={titleGap} 
-            // style={{border: "1px solid blue"}} 
-          />
-        </Box>
-      );
-    } else {
-      return (
-        <>
-        </>
-      )
-    }
-  }
-
   const bgColorIndexing = theme.portfolio.section
     ? theme.portfolio.section.bgColorIndexing
     : "page";
-  
-  const pageGap = theme.portfolio.section?.pageGap 
+
+  const pageGap = theme.portfolio.section?.pageGap
     ? theme.portfolio.section?.pageGap
-    : "10rem"
+    : "10rem";
 
   // Outer box for if gradient for full page required
   // Inner box is for applying to individual sections
@@ -73,11 +101,6 @@ const DisplaySectionList = (props: TSectionGrid) => {
         allowedIndexingTypes={["page"]}
         index={props.page.index}
       >
-        <Box
-          width="100%"
-          height={pageGap}
-          // style={{ border: "1px solid red" }}
-        />
         {sections.map((section) => {
           const index =
             bgColorIndexing === "sectionGlobal"
@@ -96,6 +119,11 @@ const DisplaySectionList = (props: TSectionGrid) => {
                 allowedIndexingTypes={["sectionLocal", "sectionGlobal"]}
                 index={index}
               >
+                <PageGapTop
+                  sectionIndex={section.index}
+                  sections={sections}
+                  pageGap={pageGap}
+                />
                 <Title
                   sectionIndex={section.index}
                   sectionTheme={theme.portfolio.section}
@@ -111,15 +139,15 @@ const DisplaySectionList = (props: TSectionGrid) => {
                     />
                   </Container>
                 </Container>
+                <PageGapBottom
+                  sectionIndex={section.index}
+                  sections={sections}
+                  pageGap={pageGap}
+                />
               </DisplayBackground>
             </Box>
           );
         })}
-        <Box
-          width="100%"
-          height={pageGap}
-          // style={{ border: "1px solid magenta" }}
-        />
       </DisplayBackground>
     );
   } else {

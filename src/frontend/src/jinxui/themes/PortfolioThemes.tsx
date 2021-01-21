@@ -475,7 +475,7 @@ const mountains: Theme = createTheme({
             fontSize: "3rem",
         },
         h3: {                   // Main Subtitle
-            fontWeight: 600,
+            fontWeight: 400,
             fontSize: "1.8rem",
             letterSpacing: "0.2rem"
         },
@@ -506,7 +506,7 @@ const mountains: Theme = createTheme({
             horizontalAlign: "center",
             textAlign: "center",
             useSecondaryForSubtitle: true,
-            disableSubtitleGap: true,
+            disableSubtitleGap: false,
         },
         section: {
             // headingGap: "20px",
