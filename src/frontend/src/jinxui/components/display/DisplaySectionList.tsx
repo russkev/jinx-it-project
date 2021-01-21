@@ -1,134 +1,100 @@
-import React, { useEffect, useState } from "react";
-import Typography from "@material-ui/core/Typography";
+import React from "react";
 import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { useTheme } from "@material-ui/core/styles";
+
 import {
-  makeStyles,
-  createStyles,
-  Theme,
-  useTheme,
-  responsiveFontSizes,
-} from "@material-ui/core/styles";
-import {
-  useSection,
   usePage,
-  usePortfolio,
-  DisplayLinks,
+  useSection,
   ThemeSectionColors,
   DisplaySection,
+  DisplayBackground,
 } from "jinxui";
-import { TSection, Tuuid } from "jinxui/types";
-
-// Markdown
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-
-/**
- * Given a list of components as props, render them in a centred grid.
- */
-function CentredGrid({ components }: { components: JSX.Element[] }) {
-  return (
-    <Grid container spacing={0}>
-      {components.map((component, index) => (
-        <Grid item xs={12} key={component.key}>
-          {component}
-        </Grid>
-      ))}
-    </Grid>
-  );
-}
+import { TPage, TSection } from "jinxui/types";
 
 type TSectionGrid = {
-  pageId: Tuuid;
+  page: TPage;
 };
 const DisplaySectionList = (props: TSectionGrid) => {
   const theme = useTheme();
-  const { getFetchedPages } = usePage();
-  const { getFetchedSections } = useSection()
-  const sections = getFetchedSections(props.pageId)
-  // var sections: TSection[] = []
+  const { getGlobalSectionIndex } = usePage();
+  const { getFetchedSections } = useSection();
+  const sections = getFetchedSections(props.page.id);
 
-  // const [sections, setSections] = useState<TSection[]>([])
 
-  // useEffect(() => {
-  //   if (getFetchedPages().length > 0) {
-  //     setSections(getFetchedSections(getFetchedPages()[0].id))
-  //   }
-  // }, [getFetchedPages()])
-
-  // // Add logic for mapping data to different section components (i.e. timeline) in here
-  // const layoutData = (data: TSection, index?: number) => {
-  //   return <DisplaySection {...data} />;
-  // };
-
-  const applyColors = (component: JSX.Element, index: number) => {
-    const [backgroundColor, textColor, isFullHeight] = ThemeSectionColors(
-      theme,
-      index
-    );
-    const customCss = theme.portfolio?.section?.css || {};
-
-    return (
-      <>
-        <Box style={isFullHeight ? {} : { background: backgroundColor }}>
-          <Container maxWidth="md">
-            <Box
-              style={{
-                ...customCss,
-                color: textColor,
-              }}
-            >
-              <Container disableGutters>{component}</Container>
-            </Box>
-          </Container>
+  // Title, only renders if section index is 0
+  type TTitle = {
+    sectionIndex: number;
+    color: string;
+    title: string;
+  }
+  const Title = (props: TTitle) => {
+    if (props.sectionIndex === 0 && props.title.length > 0) {
+      return (
+        <Box color={props.color} padding="30px">
+          <Typography variant="h2" gutterBottom>
+            {props.title}
+          </Typography>
         </Box>
-      </>
-    );
-  };
+      );
+    } else {
+      return (
+        <>
+        </>
+      )
+    }
+  }
 
-  // eslint-disable-next-line
-  const [backgroundColor, _textColor, isFullHeight] = ThemeSectionColors(
-    theme,
-    0
-  );
+  const bgColorIndexing = theme.portfolio.section
+    ? theme.portfolio.section.bgColorIndexing
+    : "page";
 
+  // Outer box for if gradient for full page required
+  // Inner box is for applying to individual sections
   if (sections) {
     return (
-      <Box style={isFullHeight ? { background: backgroundColor } : {}}>
-        {sections.map((section, index) => {
+      <DisplayBackground
+        allowedIndexingTypes={["page"]}
+        index={props.page.index}
+      >
+        {sections.map((section) => {
+          const index =
+            bgColorIndexing === "sectionGlobal"
+              ? getGlobalSectionIndex(props.page.id, section)
+              : section.index;
 
-          const [sectionBgColor, sectionTextColor,] 
-            = ThemeSectionColors(theme, index)
-          const customCss = theme.portfolio?.section?.css || {};
+          const sectionTextColor =
+            bgColorIndexing === "page"
+              ? ThemeSectionColors(theme, props.page.index)[1]
+              : ThemeSectionColors(theme, index)[1];
 
           return (
-            <Box style={isFullHeight ? {} : { background: sectionBgColor}}>
-              <Container maxWidth="md">
-                <Box
-                  style={{
-                    ...customCss,
-                    color: sectionTextColor
-                  }}
-                >
+            <>
+              <DisplayBackground
+                key={section.id}
+                allowedIndexingTypes={["sectionLocal", "sectionGlobal"]}
+                index={index}
+              >
+              <Title 
+                sectionIndex={section.index} 
+                color={sectionTextColor}
+                title={props.page.name}
+              />
+                <Container maxWidth="md">
                   <Container disableGutters>
-                    <DisplaySection pageId={props.pageId} section={section}/>
+                    <DisplaySection
+                      pageId={props.page.id}
+                      section={section}
+                      textColor={sectionTextColor}
+                    />
                   </Container>
-                </Box>
-              </Container>
-            </Box>
-          )
+                </Container>
+              </DisplayBackground>
+            </>
+          );
         })}
-
-        {/* <CentredGrid
-          components={sections.map((section, index) =>
-            applyColors(layoutData(section), index)
-          )}
-        /> */}
-      </Box>
+      </DisplayBackground>
     );
   } else {
     return <> </>;

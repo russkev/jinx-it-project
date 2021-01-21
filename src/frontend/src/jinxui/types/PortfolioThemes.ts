@@ -51,6 +51,8 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         border?: "first" | "odds" | "evens" | "all" | undefined
         // How much padding a border should have
         borderPadding?: number
+        // What property should be used determine background colors
+        bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
       }
     }
   }
@@ -84,6 +86,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         spacing?: 0 | 1 | 10 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | undefined
         border?: "first" | "odds" | "evens" | "all" | undefined
         borderPadding?: number
+        bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
       }
     },
   }

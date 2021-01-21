@@ -73,6 +73,7 @@ const magma: Theme = createTheme({
             sectionGap: "4em",
             titleGap: "0em",
             colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
         }
     },
 });
@@ -112,6 +113,7 @@ const sunset: Theme = createTheme({
         },
         section: {
             colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
         }
     },
 
@@ -146,10 +148,13 @@ const lilypad: Theme = createTheme({
             name: "Lily Pad",
         },
         headerBackground: {
-            colors: ThemeBackgroundColors.gradient,
             src: require("images/backgrounds/lilypad_01.webp"),
             src300: require("images/backgrounds/lilypad_01_300.jpg"),
         },
+        section: {
+            colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
+        }
     },
 });
 
@@ -182,9 +187,12 @@ const autumn: Theme = createTheme({
             name: "Autumn",
         },
         headerBackground: {
-            colors: ThemeBackgroundColors.gradient,
             src: require("images/backgrounds/autumn_01.webp"),
             src300: require("images/backgrounds/autumn_01_300.jpg"),
+        },
+        section: {
+            colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
         }
     },
 });
@@ -223,6 +231,7 @@ const cityscape: Theme = createTheme({
         },
         section: {
             colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
         }
     },
 });
@@ -275,6 +284,7 @@ const presentation: Theme = createTheme({
         section: {
             sectionGap: "20rem",
             colors: ThemeBackgroundColors.gradient,
+            bgColorIndexing: "full",
         }
     }
 });
@@ -307,6 +317,7 @@ const rainbow: Theme = createTheme({
         },
         section: {
             colors: ThemeBackgroundColors.rainbowStep,
+            bgColorIndexing: "sectionGlobal",
         }
     }
 });
@@ -340,6 +351,8 @@ const rainbowSmooth: Theme = createTheme({
         },
         section: {
             colors: ThemeBackgroundColors.rainbowGradient,
+            bgColorIndexing: "sectionGlobal",
+
         }
     }
 });
@@ -421,6 +434,8 @@ const arch: Theme = createTheme({
             spacing: 7,
             borderPadding: 30,
             colors: ThemeBackgroundColors.secondPaperColor,
+            bgColorIndexing: "page",
+
         }
     }
 })
@@ -485,6 +500,7 @@ const mountains: Theme = createTheme({
             border: "first",
             borderPadding: 30,
             colors: ThemeBackgroundColors.alternatingBackgroundColors,
+            bgColorIndexing: "page",
         }
     },
 });
@@ -556,7 +572,8 @@ const sand: Theme = createTheme({
         section: {
             spacing: 7,
             titleGap: -30,
-            colors: ThemeBackgroundColors.secondPrimaryColor
+            colors: ThemeBackgroundColors.secondPrimaryColor,
+            bgColorIndexing: "page",
         }
     }
 })

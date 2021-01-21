@@ -22,8 +22,7 @@ const gradient = ({ theme, index }: { theme: Theme; index: number }) => {
   const backgroundColor = `linear-gradient(${firstColor} 0%, ${lastColor} 100%)`;
   // @ts-ignore
   const textColor = theme.palette.primary.contrastText;
-  const isFullHeight = true;
-  return [backgroundColor, textColor, isFullHeight];
+  return [backgroundColor, textColor];
 };
 
 const hues = [red, orange, yellow, green, cyan, lightBlue, deepPurple, purple];
@@ -32,8 +31,7 @@ const hues = [red, orange, yellow, green, cyan, lightBlue, deepPurple, purple];
 export const rainbowStep = ({ index }: { index: number }) => {
   const backgroundColor = hues[index % hues.length]["A100"];
   const textColor = "#000";
-  const isFullHeight = false;
-  return [backgroundColor, textColor, isFullHeight];
+  return [backgroundColor, textColor];
 };
 
 export const rainbowGradient = ({ index }: { index: number }) => {
@@ -43,8 +41,8 @@ export const rainbowGradient = ({ index }: { index: number }) => {
   ];
   const backgroundColor = `linear-gradient(${firstColor} 0%, ${lastColor} 100%)`;
   const textColor = "#000";
-  const isFullHeight = false;
-  return [backgroundColor, textColor, isFullHeight];
+
+  return [backgroundColor, textColor];
 };
 
 /** The original function. Looks like a self-hosted website from 2004. */
@@ -94,8 +92,7 @@ const pickColorsBasedOnBackground = (theme: Theme, colorIndex: number) => {
   const color = colorIndex === 0 ? "default" : "paper";
   const backgroundColor = theme.palette.background[color];
   const textColor = theme.palette.text.primary;
-  const isFullHeight = false;
-  return [backgroundColor, textColor, isFullHeight];
+  return [backgroundColor, textColor];
 };
 
 const pickColorsBasedOnPrimarySecondary = (
@@ -107,8 +104,7 @@ const pickColorsBasedOnPrimarySecondary = (
   const backgroundColor = theme.palette[color].main;
   // @ts-ignore
   const textColor = theme.palette[color].contrastText;
-  const isFullHeight = false;
-  return [backgroundColor, textColor, isFullHeight];
+  return [backgroundColor, textColor];
 };
 
 // Export your background function here

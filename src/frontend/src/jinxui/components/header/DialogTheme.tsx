@@ -82,7 +82,8 @@ const DialogTheme = forwardRef((props: TDialog, ref: any) => {
   const themeClasses = useStylesThemes();
 
   const handleClose = () => {
-    props.setOpen(false)
+    props.setOpen(false);
+    setTheme(userData.portfolioId);
   };
 
   function handleThemeClick(themeName: string) {

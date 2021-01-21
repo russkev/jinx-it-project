@@ -11,11 +11,7 @@ import {
   useTheme,
   responsiveFontSizes,
 } from "@material-ui/core/styles";
-import {
-  usePortfolio,
-  DisplayLinks,
-  ThemeSectionColors,
-} from "jinxui";
+import { usePortfolio, DisplayLinks, ThemeSectionColors } from "jinxui";
 import { TSection, TSectionInfo } from "jinxui/types";
 
 // Markdown
@@ -32,7 +28,10 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
  * 3. Text and image => Split left and right
  */
 
-const DisplaySection = (props: TSectionInfo) => {
+interface TDisplaySection extends TSectionInfo {
+  textColor: string;
+}
+const DisplaySection = (props: TDisplaySection) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       img: {
@@ -102,7 +101,7 @@ const DisplaySection = (props: TSectionInfo) => {
       border = false;
   }
 
-  const textColor = ThemeSectionColors(theme, props.section.index)[1];
+  // const textColor = ThemeSectionColors(theme, props.section.index)[1];
   return (
     <>
       <Box textAlign="left" paddingTop={sectionGap} paddingBottom={sectionGap}>
@@ -112,10 +111,12 @@ const DisplaySection = (props: TSectionInfo) => {
           variant="outlined"
           className={classes.paper}
           style={
-            border ? { color: textColor } : { color: textColor, border: "none" }
+            border
+              ? { color: props.textColor }
+              : { color: props.textColor, border: "none" }
           }
         >
-          <Typography variant="h2" gutterBottom>
+          <Typography variant="h4" gutterBottom>
             {props.section.name}
           </Typography>
           <Grid
@@ -139,7 +140,7 @@ const DisplaySection = (props: TSectionInfo) => {
                 <DisplayLinks
                   horizontalAlign="flex-start"
                   sectionId={props.section.id}
-                  textColor={textColor}
+                  textColor={props.textColor}
                 />
                 <Typography variant="body1" component="span">
                   <ReactMarkdown plugins={[gfm]} renderers={renderers}>
@@ -155,4 +156,4 @@ const DisplaySection = (props: TSectionInfo) => {
   );
 };
 
-export default DisplaySection
+export default DisplaySection;

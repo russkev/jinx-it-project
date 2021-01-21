@@ -12,7 +12,8 @@ import {
   listAdd,
 } from "jinxui";
 import {
-  Tuuid
+  TSection,
+  Tuuid,
 } from "jinxui/types"
 import {
   PageContext
@@ -27,6 +28,7 @@ export const usePage = () => {
   const {
     handleSectionDeletePage,
     handleSectionAddPage,
+    getFetchedSectionsAll,
   } = useSection();
 
   function pageIndex(pageId: Tuuid) {
@@ -57,6 +59,22 @@ export const usePage = () => {
       }
     }
     return "";
+  }
+
+  function getGlobalSectionIndex(pageId: Tuuid, section: TSection) {
+    const currentPageIndex = pageIndex(pageId);
+    const allSections = getFetchedSectionsAll();
+    
+    if (currentPageIndex > state.length) {
+      throw Error("Page index value is invalid")
+    }
+
+    let globalIndex = 0;
+    
+    for (let i = 0; i < currentPageIndex; i++) {
+      globalIndex += allSections[state[i].id].length
+    }
+    return globalIndex + section.index;
   }
 
   const onPageChange = (
@@ -149,6 +167,7 @@ export const usePage = () => {
     getFetchedPages,
     getPagesIndexedCopy,
     getFetchedPageId,
+    getGlobalSectionIndex,
     onPageChange,
     savePage,
     commitPageDeletions,

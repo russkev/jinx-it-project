@@ -33,6 +33,7 @@ export { default as StyledHeaderBarSpacer } from "./components/header/StyledHead
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
 
 /* Display */
+export { default as DisplayBackground } from "./components/display/DisplayBackground"
 export { default as DisplayCopyright } from "./components/display/DisplayCopyright"
 export { default as DisplayHeader } from "./components/display/DisplayHeader"
 export { default as DisplayLinks } from "./components/display/DisplayLinks"
