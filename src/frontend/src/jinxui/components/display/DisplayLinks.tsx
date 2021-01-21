@@ -4,8 +4,13 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useTheme } from "@material-ui/core/styles";
-import { usePortfolio, useSection, LinkDisplayIcon, LinkIconEnum, } from "jinxui";
-import { Tuuid } from "jinxui/types"
+import {
+  usePortfolio,
+  useSection,
+  LinkDisplayIcon,
+  LinkIconEnum,
+} from "jinxui";
+import { Tuuid } from "jinxui/types";
 
 import { TLink } from "jinxui/types";
 
@@ -25,9 +30,10 @@ const DisplayLinks = (props: TDisplayLinks) => {
   const { getFetchedPortfolioLinks } = usePortfolio();
   const { getFetchedSectionLinks } = useSection();
   const theme = useTheme();
-  const links =  props.pageId && props.sectionId
-    ? getFetchedSectionLinks(props.pageId, props.sectionId)
-    : getFetchedPortfolioLinks();
+  const links =
+    props.pageId && props.sectionId
+      ? getFetchedSectionLinks(props.pageId, props.sectionId)
+      : getFetchedPortfolioLinks();
 
   type TGetLinkDisplayIcon = {
     link: TLink;
@@ -73,43 +79,47 @@ const DisplayLinks = (props: TDisplayLinks) => {
   };
 
   const direction = linksHaveText() ? "column" : "row";
-  return (
-    <>
-      <Box display="flex" justifyContent={props.horizontalAlign}>
-        <Box
-          display="flex"
-          width="max-content"
-          flexDirection={direction}
-          alignItems="baseline"
-          marginBottom="20px"
-        >
-          {links.map((link: TLink) => {
-            return (
-              <Box key={link.id} marginTop="15px">
-                {link.address && link.address !== "" ? (
-                  /* Address exists */
-                  <Tooltip title={link.address}>
-                    <Link
-                      href={link.address}
-                      color="textPrimary"
-                      underline="none"
-                    >
+  if (links.length > 0) {
+    return (
+      <>
+        <Box display="flex" justifyContent={props.horizontalAlign}>
+          <Box
+            display="flex"
+            width="max-content"
+            flexDirection={direction}
+            alignItems="baseline"
+            marginBottom="20px"
+          >
+            {links.map((link: TLink) => {
+              return (
+                <Box key={link.id} marginTop="15px">
+                  {link.address && link.address !== "" ? (
+                    /* Address exists */
+                    <Tooltip title={link.address}>
+                      <Link
+                        href={link.address}
+                        color="textPrimary"
+                        underline="none"
+                      >
+                        <LinkContent link={link} textColor={props.textColor} />
+                      </Link>
+                    </Tooltip>
+                  ) : (
+                    /* Address does not exist */
+                    <>
                       <LinkContent link={link} textColor={props.textColor} />
-                    </Link>
-                  </Tooltip>
-                ) : (
-                  /* Address does not exist */
-                  <>
-                    <LinkContent link={link} textColor={props.textColor} />
-                  </>
-                )}
-              </Box>
-            );
-          })}
+                    </>
+                  )}
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
-      </Box>
-    </>
-  );
+      </>
+    );
+  } else {
+    return <> </>;
+  }
 };
 
 export default DisplayLinks;

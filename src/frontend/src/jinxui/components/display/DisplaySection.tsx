@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       background: "rgba(255, 255, 255, 0.0)",
-      padding: theme.portfolio.section?.borderPadding,
+      // padding: theme.portfolio.section?.borderPadding,
+      padding: "-30px",
       border: "1px solid " + theme.palette.secondary.main,
     },
   })
@@ -58,7 +59,9 @@ const TextComponent = (props: TComponent) => {
   };
 
   return (
-    <Box>
+    <Box 
+      marginTop={"-25px"} // Compensate for markdown offset
+    >
       <DisplayLinks
         horizontalAlign="flex-start"
         pageId={props.pageId}
@@ -83,7 +86,7 @@ const ImageComponent = (props: TComponent) => {
           src={props.section.image.path}
           alt={props.section.image.name}
           className={classes.img}
-          style={{ marginTop: "25px" }} // compensate for markdown
+          // style={{ marginTop: "25px" }} // compensate for markdown
         />
       ) : (
         <></>
@@ -127,17 +130,26 @@ const ImageTextComponent = (props: TComponent) => {
 };
 
 type THeadingComponent = {
+  sectionTheme: any;
   heading: string;
-  gap: any;
 };
 const HeadingComponent = (props: THeadingComponent) => {
+  const headingGap =
+    props.sectionTheme?.headingGap !== undefined
+      ? props.sectionTheme.headingGap
+      : "30px";
+
   if (props.heading.length > 0) {
     return (
       <Box>
         <Typography variant="h4" gutterBottom>
           {props.heading}
         </Typography>
-        <Box width="100%" height={props.gap} style={{ border: "1px solid yellow" }} />
+        <Box
+          width="100%"
+          height={headingGap}
+          style={{ border: "1px solid yellow" }}
+        />
       </Box>
     );
   } else {
@@ -160,13 +172,8 @@ const DisplaySection = (props: TDisplaySection) => {
   // Set defaults for various variables
   const sectionTheme = theme.portfolio.section;
 
-  const headingGap =
-    sectionTheme?.titleGap !== undefined && props.section.name.length > 0
-      ? sectionTheme.titleGap
-      : 0;
-
   const sectionGap =
-    sectionTheme?.sectionGap !== undefined ? sectionTheme.sectionGap : "10em";
+    sectionTheme?.sectionGap !== undefined ? sectionTheme.sectionGap : "2.5em";
 
   var border = false;
   switch (sectionTheme?.border) {
@@ -220,7 +227,10 @@ const DisplaySection = (props: TDisplaySection) => {
               : { color: props.textColor, border: "none" }
           }
         >
-          <HeadingComponent heading={props.section.name} gap={headingGap} />
+          <HeadingComponent
+            heading={props.section.name}
+            sectionTheme={sectionTheme}
+          />
           {SectionComponent(componentProps)}
         </Paper>
       </Box>

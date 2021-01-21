@@ -34,7 +34,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
 
     const titleGap = props.sectionTheme && props.sectionTheme.titleGap
       ? props.sectionTheme.titleGap
-      : "15rem"
+      : "2rem"
 
     if (props.sectionIndex === 0 && props.title.length > 0) {
       return (
@@ -69,6 +69,11 @@ const DisplaySectionList = (props: TSectionGrid) => {
         allowedIndexingTypes={["page"]}
         index={props.page.index}
       >
+        <Box
+          width="100%"
+          height={pageGap}
+          style={{ border: "1px solid red" }}
+        />
         {sections.map((section) => {
           const index =
             bgColorIndexing === "sectionGlobal"
@@ -87,11 +92,6 @@ const DisplaySectionList = (props: TSectionGrid) => {
                 allowedIndexingTypes={["sectionLocal", "sectionGlobal"]}
                 index={index}
               >
-                <Box
-                  width="100%"
-                  height={pageGap}
-                  style={{ border: "1px solid red" }}
-                />
                 <Title
                   sectionIndex={section.index}
                   sectionTheme={theme.portfolio.section}
@@ -108,14 +108,14 @@ const DisplaySectionList = (props: TSectionGrid) => {
                   </Container>
                 </Container>
               </DisplayBackground>
-              <Box
-                width="100%"
-                height={pageGap}
-                style={{ border: "1px solid magenta" }}
-              />
             </Box>
           );
         })}
+        <Box
+          width="100%"
+          height={pageGap}
+          style={{ border: "1px solid magenta" }}
+        />
       </DisplayBackground>
     );
   } else {
