@@ -29,7 +29,7 @@ import {
 
 
 const HeaderMediaWidth = () => {
-  return "800px";
+  return "300px";
 };
 
 // Ensure that app bar sticks to top and sides
@@ -44,7 +44,6 @@ const StyledDivOuter = styled.div`
   grid-template-rows: minMax(56px, max-content);
   align-self: center;
   width: inherit;
-  max-width: ${() => MAX_EDIT_SECTION_WIDTH};
 `;
 
 //Left items
