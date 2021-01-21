@@ -19,8 +19,11 @@ import gfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => {
+  const padding = theme.portfolio.section?.borderPadding 
+    ? theme.portfolio.section.borderPadding 
+    : "30px"
+  return createStyles({
     img: {
       width: "100%",
       height: "auto",
@@ -31,12 +34,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paper: {
       background: "rgba(255, 255, 255, 0.0)",
-      // padding: theme.portfolio.section?.borderPadding,
-      padding: "-30px",
+      padding: padding,
       border: "1px solid " + theme.palette.secondary.main,
     },
-  })
-);
+  });
+});
 
 interface TDisplaySection extends TSectionInfo {
   textColor: string;
@@ -59,7 +61,7 @@ const TextComponent = (props: TComponent) => {
   };
 
   return (
-    <Box 
+    <Box
       marginTop={"-25px"} // Compensate for markdown offset
     >
       <DisplayLinks
@@ -148,7 +150,7 @@ const HeadingComponent = (props: THeadingComponent) => {
         <Box
           width="100%"
           height={headingGap}
-          style={{ border: "1px solid yellow" }}
+          // style={{ border: "1px solid yellow" }}
         />
       </Box>
     );
@@ -213,7 +215,7 @@ const DisplaySection = (props: TDisplaySection) => {
       <Box
         width="100%"
         height={sectionGap}
-        style={{ border: "1px solid purple" }}
+        // style={{ border: "1px solid purple" }}
       />
       <Box textAlign="left">
         <Paper
@@ -237,7 +239,7 @@ const DisplaySection = (props: TDisplaySection) => {
       <Box
         width="100%"
         height={sectionGap}
-        style={{ border: "1px solid green" }}
+        // style={{ border: "1px solid green" }}
       />
     </>
   );

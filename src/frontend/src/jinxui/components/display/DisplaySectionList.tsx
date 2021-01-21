@@ -42,7 +42,11 @@ const DisplaySectionList = (props: TSectionGrid) => {
           <Typography variant="h2" gutterBottom>
             {props.title}
           </Typography>
-          <Box width="100%" height={titleGap} style={{border: "1px solid blue"}} />
+          <Box 
+            width="100%" 
+            height={titleGap} 
+            // style={{border: "1px solid blue"}} 
+          />
         </Box>
       );
     } else {
@@ -72,7 +76,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
         <Box
           width="100%"
           height={pageGap}
-          style={{ border: "1px solid red" }}
+          // style={{ border: "1px solid red" }}
         />
         {sections.map((section) => {
           const index =
@@ -114,7 +118,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
         <Box
           width="100%"
           height={pageGap}
-          style={{ border: "1px solid magenta" }}
+          // style={{ border: "1px solid magenta" }}
         />
       </DisplayBackground>
     );
