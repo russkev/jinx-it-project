@@ -78,17 +78,16 @@ const NavigationItem = (props: TNavigationItem) => {
           <TimelineConnector />
         </TimelineSeparator>
         <TimelineContent>
-          <MenuItem onClick={onClick} key={props.pageId} component="div">
+          <MenuItem 
+            onClick={onClick} 
+            key={props.pageId} 
+            component="div"
+            style={{ whiteSpace: "normal" }}
+          >
             <ListItemText
             primary={props.name}
             classes={{ primary: classes.menuText }}
           />
-            {/* <Typography
-              component="span"
-              className={classes.verticallyCenterContent}
-            > */}
-              {/* {props.name}
-            </Typography> */}
           </MenuItem>
         </TimelineContent>
       </TimelineItem>
@@ -99,17 +98,12 @@ const NavigationItem = (props: TNavigationItem) => {
 const DisplayNavigation = (props: TDisplayNavigation) => {
   const { getFetchedPages } = usePage();
   const pages = getFetchedPages();
-  // console.log(pages)
-  // let tempNewPage: TPage = JSON.parse(JSON.stringify(defaultPageContext))
-  // tempNewPage.name = "Home"
-  // pages.unshift(tempNewPage)
-  // console.log(pages)
 
   return (
     <Box
       display="flex"
       flexDirection="column"
-      maxWidth="300px"
+      maxWidth="230px"
       alignSelf="center"
     >
       <Timeline align="right">
@@ -129,27 +123,6 @@ const DisplayNavigation = (props: TDisplayNavigation) => {
               handleClose={props.handleClose}
             />
           );
-          // const onClick = () => {
-          //   handleClick(props.handleClose, page, index);
-          //   // const yOffset = -70;
-          //   // const element = document.getElementById(page.id);
-          //   // let y = 0;
-          //   // if (element) {
-          //   //   y =
-          //   //     element.getBoundingClientRect().top +
-          //   //     window.pageYOffset +
-          //   //     yOffset;
-          //   // }
-          //   // if (element) {
-          //   //   window.scrollTo({ top: y, behavior: "smooth" });
-          //   // }
-          //   // if (props.handleClose) {
-          //   //   props.handleClose()
-          //   // }
-          // };
-          // return (
-
-          // );
         })}
       </Timeline>
     </Box>

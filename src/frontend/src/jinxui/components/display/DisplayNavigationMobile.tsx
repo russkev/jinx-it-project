@@ -17,9 +17,16 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/IconButton";
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 import Drawer from "@material-ui/core/Drawer";
+import SwipableDrawer from "@material-ui/core/SwipeableDrawer"
 import Hidden from "@material-ui/core/Hidden";
-import { DisplayNavigation, StyledPaperSectionBase } from "jinxui";
-import { AnyARecord } from "dns";
+import { 
+  DisplayNavigationDesktop, 
+  DisplayNavigation, 
+  StyledPaperSectionBase 
+} from "jinxui";
+import { 
+  AnyARecord 
+} from "dns";
 
 const drawerWidth = 300;
 
@@ -35,22 +42,28 @@ const DisplayNavigationMobile = (props: TDIsplayNavigationMobile) => {
     props.setOpen(false);
   };
 
+  const handleOpen = () => {
+    props.setOpen(true)
+  }
+
   return (
     <Box>
-      <Hidden lgUp implementation="css">
-        <Drawer
+      <Hidden xlUp implementation="css">
+        <SwipableDrawer
           anchor="left"
           open={props.open}
+          onOpen={handleOpen}
           onClose={handleClose}
           variant="temporary"
         >
           <Box display="flex" height="100%">
             <DisplayNavigation handleClose={handleClose} />
           </Box>
-        </Drawer>
+        </SwipableDrawer>
       </Hidden>
-      <Hidden mdDown implementation="css">
-        <Drawer
+      <Hidden lgDown implementation="css">
+        <DisplayNavigationDesktop />
+        {/* <Drawer
           anchor="left"
           open={props.open}
           onClose={handleClose}
@@ -59,7 +72,7 @@ const DisplayNavigationMobile = (props: TDIsplayNavigationMobile) => {
           <Box display="flex" height="100%">
             <DisplayNavigation handleClose={handleClose} />
           </Box>
-        </Drawer>
+        </Drawer> */}
       </Hidden>
     </Box>
   );

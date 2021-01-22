@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Box from "@material-ui/core/Box";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
   useUser,
@@ -35,12 +36,19 @@ const StyledHeaderOptionsButton = styled(Button)`
   padding-right: 10px;
 `;
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    fontSize: "0.95rem",
+  },
+}));
+
 type TEditMenuItem = {
   edit_disabled: boolean;
 };
 
 const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
   const [editRedirect, setEditRedirect] = useState(false);
+  const classes = useStyles();
 
   const onEdit = () => {
     // At the moment, this fails if a portfolio hasn't been created yet.
@@ -63,7 +71,10 @@ const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
           }}
           disabled={props.edit_disabled}
         >
-          <ListItemText primary="Edit Your Portfolio" />
+          <ListItemText
+            classes={{ primary: classes.root }}
+            primary="Edit Your Portfolio"
+          />
         </MenuItem>
       </>
     );
@@ -139,6 +150,7 @@ type TPrivateMenuItem = {
 const PrivacyMenuItem = React.forwardRef(
   (props: TPrivateMenuItem, ref: any) => {
     const { userData, setSuccessMessage, setErrorMessage } = useUser();
+    const classes = useStyles();
 
     const {
       makePortfolioPrivate,
@@ -180,12 +192,16 @@ const PrivacyMenuItem = React.forwardRef(
         onClick={isPrivate() ? handleMakePublic : handleMakePrivate}
         disabled={props.rest_disabled}
       >
-        <ListItemText primary={isPrivate() 
-          ? "Make Your Portfolio Public" 
-          : "Make Your Portfolio Private"} 
+        <ListItemText
+          primary={
+            isPrivate()
+              ? "Make Your Portfolio Public"
+              : "Make Your Portfolio Private"
+          }
+          classes={{ primary: classes.root }}
         />
       </MenuItem>
-    );      
+    );
   }
 );
 
@@ -196,6 +212,7 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   const { logout } = useUser();
   const { resetFullPortfolio } = usePortfolio();
   const [redirect, setRedirect] = useState(false);
+  const classes = useStyles();
 
   const handleLogout = () => {
     props.setOpen(false);
@@ -207,7 +224,7 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
       .catch((error) => {
         console.log(error);
       });
-    window.location.reload()
+    window.location.reload();
   };
 
   if (redirect) {
@@ -215,7 +232,7 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   } else {
     return (
       <MenuItem ref={ref} onClick={handleLogout}>
-        <ListItemText primary="Logout" />
+        <ListItemText primary="Logout" classes={{ primary: classes.root }} />
       </MenuItem>
     );
   }
@@ -226,6 +243,7 @@ type TDialogButton = {
   setOpen: any;
 };
 const ShareMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const classes = useStyles();
   const onClick = () => {
     props.setDialogOpen(true);
     props.setOpen(false);
@@ -233,12 +251,16 @@ const ShareMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      <ListItemText>Share Your Portfolio</ListItemText>
+      <ListItemText classes={{ primary: classes.root }}>
+        Share Your Portfolio
+      </ListItemText>
     </MenuItem>
   );
 });
 
 const ThemeMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const classes = useStyles();
+
   const onClick = () => {
     props.setDialogOpen(true);
     props.setOpen(false);
@@ -246,12 +268,16 @@ const ThemeMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      <ListItemText>Choose Your Theme</ListItemText>
+      <ListItemText classes={{ primary: classes.root }}>
+        Choose Your Theme
+      </ListItemText>
     </MenuItem>
   );
 });
 
 const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
+  const classes = useStyles();
+
   const onClick = () => {
     props.setDialogOpen(true);
     props.setOpen(false);
@@ -259,7 +285,9 @@ const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
 
   return (
     <MenuItem ref={ref} onClick={onClick}>
-      <ListItemText>Account Settings</ListItemText>
+      <ListItemText classes={{ primary: classes.root }}>
+        Account Settings
+      </ListItemText>
     </MenuItem>
   );
 });
@@ -326,7 +354,7 @@ const DropdownPortfolio = React.forwardRef(
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <AccountCircleIcon style={{ fontSize: 40 }}/>
+                <AccountCircleIcon style={{ fontSize: 40 }} />
                 <ExpandMoreIcon fontSize="small" />
               </StyledHeaderOptionsButton>
             </Tooltip>

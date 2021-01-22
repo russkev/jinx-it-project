@@ -132,7 +132,7 @@ const DisplaySectionList = (props: TSectionGrid) => {
                   title={props.page.name}
                   pageId={props.page.id}
                 />
-                <Container maxWidth="md" >
+                <Container maxWidth="lg" >
                   <Container disableGutters>
                     <DisplaySection
                       pageId={props.page.id}

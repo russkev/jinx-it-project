@@ -99,7 +99,7 @@ function DisplayHeader() {
     <>
       <BackgroundImage url={theme.portfolio.headerBackground.src}>
         <HeaderBlock>
-          <Container maxWidth="md" style={{ display: "flex" }}>
+          <Container maxWidth="lg" style={{ display: "flex" }}>
             <Grid
               direction="row"
               container

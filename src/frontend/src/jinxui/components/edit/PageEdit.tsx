@@ -20,6 +20,10 @@ import {
 } from "jinxui";
 import { TPage } from "jinxui/types";
 
+import {
+  defaultPageContext
+} from "jinxui/contexts"
+
 // Required for disabled buttons
 const TooltipDiv = styled.div`
   display: flex;
@@ -107,6 +111,7 @@ const PageEdit = (props: TPageEdit) => {
         flexDirection="column"
         justifyContent="space-evenly"
         position="relative"
+        id={props.page ? props.page.id : defaultPageContext.id}
       >
         <Box>
           <Tooltip title="Add new collection" arrow>

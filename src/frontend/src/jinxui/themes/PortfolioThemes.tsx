@@ -326,10 +326,10 @@ const rainbowSmooth: Theme = createTheme({
     breakpoints: {
         values: {
             xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
+            sm: 800,    // One column / two column breakpoint
+            md: 950,    // Intermediate responsive font size change
+            lg: 1100,   // Section width
+            xl: 1700,   // Permenant drawer width
         }
     },
     palette: {
@@ -361,10 +361,10 @@ const arch: Theme = createTheme({
     breakpoints: {
         values: {
             xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1700,   // Permenant drawer width
-            xl: 1920,
+            sm: 800,    // One column / two column breakpoint
+            md: 950,    // Intermediate responsive font size change
+            lg: 1100,   // Section width
+            xl: 1700,   // Permenant drawer width
         }
     },
     palette: {
@@ -448,9 +448,9 @@ const mountains: Theme = createTheme({
         values: {
             xs: 0,
             sm: 800,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,
-            xl: 1920,
+            md: 950,    // Intermediate responsive font size change
+            lg: 1100,   // Section width
+            xl: 1700,   // Permenant drawer width
         }
     },
     palette: {
@@ -523,6 +523,15 @@ const mountains: Theme = createTheme({
 });
 
 const sand: Theme = createTheme({
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,    // One column / two column breakpoint
+            md: 1260,    // Section width
+            lg: 960,   // Largest responsive font size
+            xl: 1560,   // Permenant drawer width
+        }
+    },
     palette: {
         type: "dark",
         primary: {
@@ -561,7 +570,7 @@ const sand: Theme = createTheme({
             fontSize: "1.1rem",
         },
         body1: {
-            fontSize: "1.3rem",
+            fontSize: "1.1rem",
             lineHeight: 1.5,
         }
     },

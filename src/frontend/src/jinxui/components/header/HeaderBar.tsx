@@ -6,6 +6,7 @@ import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 import {
   useTheme,
   Theme,
+  Hidden,
   Box,
   AppBar,
   Typography,
@@ -108,6 +109,29 @@ function headerBackground(theme: Theme) {
   return background;
 }
 
+type TNavigationButton = {
+  setOpen: any;
+  isPortfolioView?: boolean;
+};
+const NavigationButton = (props: TNavigationButton) => {
+  if (props.isPortfolioView) {
+    return (
+      <Hidden xlUp implementation="css">
+        <Button
+          onClick={() => {
+            props.setOpen(true);
+          }}
+          style={{ padding: "6px" }}
+        >
+          <MenuRoundedIcon fontSize="large" />
+        </Button>
+      </Hidden>
+    );
+  } else {
+    return <> </>;
+  }
+};
+
 type HeaderBarProps = {
   title?: string;
   darkTheme?: boolean;
@@ -144,14 +168,10 @@ const HeaderBar = (props: HeaderBarProps) => {
                 {!props.hideLogo ? (
                   <LogoLink lightTheme={!props.darkTheme} />
                 ) : null}
-                {props.isPortfolioView ? (
-                  <Button 
-                    onClick={() => {setNavDrawerOpen(true)}} 
-                    style={{ padding: "6px" }}
-                  >
-                    <MenuRoundedIcon fontSize="large" />
-                  </Button>
-                ) : null}
+                <NavigationButton
+                  setOpen={setNavDrawerOpen}
+                  isPortfolioView={props.isPortfolioView}
+                />
               </StyledDivLeft>
               <StyledDivCenter>
                 <StyledDivTitle>
@@ -199,10 +219,14 @@ const HeaderBar = (props: HeaderBarProps) => {
             </StyledDivOuter>
           </StyledAppBar>
         </Slide>
-        <DisplayNavigationMobile
-          open={navDrawerOpen}
-          setOpen={setNavDrawerOpen}
-        />
+        {props.isPortfolioView ? (
+          <DisplayNavigationMobile
+            open={navDrawerOpen}
+            setOpen={setNavDrawerOpen}
+          />
+        ) : (
+          <> </>
+        )}
       </StylesProvider>
     </>
   );
