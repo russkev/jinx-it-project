@@ -89,7 +89,11 @@ const DarkTheme = createMuiTheme({
       },
     },
   },
-  portfolio: {},
+  portfolio: {
+    theme: {
+      name: "GlobalDark"
+    }
+  },
 });
 
 let LightTheme = createMuiTheme({
@@ -165,7 +169,9 @@ let LightTheme = createMuiTheme({
     }
   },
   portfolio: {
-
+    theme:{
+      name: "GlobalLight"
+    }
   }
 });
 

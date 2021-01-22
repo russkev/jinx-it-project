@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import {
+  useTheme,
+  Theme,
   Box,
   AppBar,
   Typography,
@@ -20,14 +22,17 @@ import {
   SecondaryButton,
   Routes,
   SnackbarAlert,
+  DisplayNavigationMobile,
   MAX_EDIT_SECTION_WIDTH,
 } from "jinxui";
 
 import {
+  LightTheme,
+  DarkTheme,
   LightHeaderGrad,
   DarkHeaderGrad,
-} from "jinxui/themes"
-
+} from "jinxui/themes";
+import { LiveTvSharp } from "@material-ui/icons";
 
 const HeaderMediaWidth = () => {
   return "650px";
@@ -88,6 +93,19 @@ const StyledLink = styled.a`
   text-decoration: none;
 `;
 
+function headerBackground(theme: Theme) {
+  let background = theme.palette.background.paper;
+
+  if (theme.portfolio.theme && theme.portfolio.theme.name) {
+    if (theme.portfolio.theme.name === "GlobalLight") {
+      background = LightHeaderGrad;
+    } else if (theme.portfolio.theme.name === "GlobalDark") {
+      background = DarkHeaderGrad;
+    }
+  }
+  return background
+}
+
 type HeaderBarProps = {
   title?: string;
   darkTheme?: boolean;
@@ -97,25 +115,24 @@ type HeaderBarProps = {
   hideBGLoggedOut?: boolean;
   isUserEdit?: boolean;
   isUserView?: boolean;
+  isPortfolioView?: boolean;
 };
 
 const HeaderBar = (props: HeaderBarProps) => {
   const { userData } = useUser();
+  const theme = useTheme();
   const trigger = useScrollTrigger();
-  const [accountDialogOpen, setAccountDialogOpen] = useState(false)
-  const [themeDialogOpen, setThemeDialogOpen] = useState(false)
-  const [shareDialogOpen, setShareDialogOpen] = useState(false)
-
-  const headerGrad =
-    props.darkTheme === true ? DarkHeaderGrad : LightHeaderGrad;
+  const [accountDialogOpen, setAccountDialogOpen] = useState(false);
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   
-  return (
-    <>
-      <SnackbarAlert />
-      <StylesProvider injectFirst>
-        <Slide appear={false} direction="down" in={!trigger}>
-          <StyledAppBar
+
+  // const headerGrad =
+  //   props.darkTheme === true ? DarkHeaderGrad : LightHeaderGrad;
+
+  {
+    /* <StyledAppBar
             color={
               userData.authenticated || props.hideBGLoggedOut !== true
                 ? "inherit"
@@ -129,12 +146,24 @@ const HeaderBar = (props: HeaderBarProps) => {
                 ? { background: headerGrad }
                 : {}
             }
+          > */
+  }
+  return (
+    <>
+      <SnackbarAlert />
+      <StylesProvider injectFirst>
+        <Slide appear={false} direction="down" in={!trigger}>
+          <StyledAppBar
+            elevation={4}
+            color="default"
+            style={{ background: headerBackground(theme) }}
           >
             <StyledDivOuter>
               <StyledDivLeft>
                 {!props.hideLogo ? (
                   <LogoLink lightTheme={!props.darkTheme} />
                 ) : null}
+                {props.isPortfolioView ? <DisplayNavigationMobile /> : null}
               </StyledDivLeft>
               <StyledDivCenter>
                 <StyledDivTitle>
@@ -165,9 +194,9 @@ const HeaderBar = (props: HeaderBarProps) => {
                   setThemeDialogOpen={setThemeDialogOpen}
                   setShareDialogOpen={setShareDialogOpen}
                 />
-                <DialogAccount 
-                  open={accountDialogOpen} 
-                  setOpen={setAccountDialogOpen} 
+                <DialogAccount
+                  open={accountDialogOpen}
+                  setOpen={setAccountDialogOpen}
                 />
                 <DialogTheme
                   open={themeDialogOpen}
@@ -177,7 +206,7 @@ const HeaderBar = (props: HeaderBarProps) => {
                   open={shareDialogOpen}
                   setOpen={setShareDialogOpen}
                 />
-                <Box width="30px" height="100%" />
+                <Box width="15px" height="100%" />
               </StyledDivRight>
             </StyledDivOuter>
           </StyledAppBar>

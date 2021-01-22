@@ -23,6 +23,7 @@ import {
 } from "jinxui/themes"
 
 import NotFound from "./NotFound";
+import { TrendingUpOutlined } from "@material-ui/icons";
 const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
   const theme_name =
     userData.authenticated &&
@@ -128,19 +129,21 @@ const Portfolio = ({ username }: PortfolioProps) => {
       <>
         <CssBaseline />
         {/* Site main theme */}
-        <ThemeProvider theme={LightTheme}>
+        <ThemeProvider theme={thisTheme}>
           <HeaderBar
             hideBGLoggedOut={true}
+            hideLogo={true}
             isUserView={userData.username === username}
+            isPortfolioView={true}
           />
           {/* Portfolio theme */}
-          <ThemeProvider theme={thisTheme}>
+          {/* <ThemeProvider theme={thisTheme}> */}
             <CssBaseline />
             {/* <DisplayNavigationDesktop /> */}
-            <DisplayNavigationMobile />
+            {/* <DisplayNavigationMobile /> */}
             <DisplayHeader />
             <DisplayPageList />
-          </ThemeProvider>
+          {/* </ThemeProvider> */}
           <DisplayCopyright text={author} />
         </ThemeProvider>
       </>

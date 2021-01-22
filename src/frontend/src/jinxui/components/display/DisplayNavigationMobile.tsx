@@ -50,7 +50,7 @@ const DisplayNavigationMobile = () => {
           />
         </Button>
       </Box> */}
-      <Box
+      {/* <Box
         position="fixed"
         display="flex"
         right="0px"
@@ -60,7 +60,7 @@ const DisplayNavigationMobile = () => {
           background: theme.palette.background.default,
         }}
         borderRadius="10px 0px 0px 10px"
-      >
+      > */}
         <Button onClick={handleOpen} style={{padding: "6px"}}>
           <MenuRoundedIcon
             // color="primary"
@@ -72,13 +72,13 @@ const DisplayNavigationMobile = () => {
             }}
           />
         </Button>
-      </Box>
+      {/* </Box> */}
       <Drawer
-        anchor="right"
+        anchor="left"
         open={isOpen}
         onClose={handleClose}
         variant="temporary"
-        BackdropProps={{ invisible: true }}
+        // BackdropProps={{ invisible: true }}
       >
         <Box display="flex" height="100%">
           <DisplayNavigation handleClose={handleClose}/>
