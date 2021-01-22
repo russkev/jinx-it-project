@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Button from "@material-ui/core/IconButton";
+import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
 import {
   useTheme,
@@ -103,7 +105,7 @@ function headerBackground(theme: Theme) {
       background = DarkHeaderGrad;
     }
   }
-  return background
+  return background;
 }
 
 type HeaderBarProps = {
@@ -125,29 +127,8 @@ const HeaderBar = (props: HeaderBarProps) => {
   const [accountDialogOpen, setAccountDialogOpen] = useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [navDrawerOpen, setNavDrawerOpen] = useState(false);
 
-  
-
-  // const headerGrad =
-  //   props.darkTheme === true ? DarkHeaderGrad : LightHeaderGrad;
-
-  {
-    /* <StyledAppBar
-            color={
-              userData.authenticated || props.hideBGLoggedOut !== true
-                ? "inherit"
-                : "transparent"
-            }
-            elevation={
-              userData.authenticated || props.hideBGLoggedOut !== true ? 4 : 0
-            }
-            style={
-              userData.authenticated || props.hideBGLoggedOut !== true
-                ? { background: headerGrad }
-                : {}
-            }
-          > */
-  }
   return (
     <>
       <SnackbarAlert />
@@ -163,7 +144,14 @@ const HeaderBar = (props: HeaderBarProps) => {
                 {!props.hideLogo ? (
                   <LogoLink lightTheme={!props.darkTheme} />
                 ) : null}
-                {props.isPortfolioView ? <DisplayNavigationMobile /> : null}
+                {props.isPortfolioView ? (
+                  <Button 
+                    onClick={() => {setNavDrawerOpen(true)}} 
+                    style={{ padding: "6px" }}
+                  >
+                    <MenuRoundedIcon fontSize="large" />
+                  </Button>
+                ) : null}
               </StyledDivLeft>
               <StyledDivCenter>
                 <StyledDivTitle>
@@ -211,6 +199,10 @@ const HeaderBar = (props: HeaderBarProps) => {
             </StyledDivOuter>
           </StyledAppBar>
         </Slide>
+        <DisplayNavigationMobile
+          open={navDrawerOpen}
+          setOpen={setNavDrawerOpen}
+        />
       </StylesProvider>
     </>
   );

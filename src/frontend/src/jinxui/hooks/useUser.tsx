@@ -158,7 +158,6 @@ export const useUser = () => {
     await resetState();
     try {
       const response = await API.post(LOGOUT_PATH, {}, state.config);
-
       // Logout succeeded on backend
       if (response.status === 204) {
         return response;
@@ -311,7 +310,9 @@ async function fetchImage(imageId: Tuuid) {
         ACCOUNT_PATH + `?username=${username}`,
         state.config
       );
-      return response.data[0];
+      let profile = response.data[0]
+      delete profile.user
+      return profile
     } catch (error) {
       throw handleError(error);
     }
@@ -350,8 +351,6 @@ async function fetchImage(imageId: Tuuid) {
   } 
 
   async function setTheme(portfolioId: Tuuid) {
-    console.log(state)
-
     const path = PORTFOLIOS_PATH + "/" + portfolioId;
     try {
       const response = await API.patch(

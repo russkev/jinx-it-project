@@ -26,9 +26,6 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'image_id'
     swagger_schema = swagger.PortfolioAutoSchema
 
-    def get_queryset(self):
-        return models.Image.objects.filter(owner=self.request.user)
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -38,9 +35,6 @@ class ImageList(generics.ListCreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
     swagger_schema = swagger.PortfolioAutoSchema
-
-    def get_queryset(self):
-        return models.Image.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

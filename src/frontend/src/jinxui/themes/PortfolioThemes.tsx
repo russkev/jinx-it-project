@@ -363,7 +363,7 @@ const arch: Theme = createTheme({
             xs: 0,
             sm: 700,    // One column / two column breakpoint
             md: 1100,   // Section width
-            lg: 1280,
+            lg: 1700,   // Permenant drawer width
             xl: 1920,
         }
     },

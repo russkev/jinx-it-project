@@ -28,6 +28,8 @@ import {
   Tuuid,
 } from "jinxui/types";
 
+import { defaultUserContext } from "jinxui/contexts";
+
 // Use this if you want to get a specific portfolio
 async function getPortfolio(portfolioId: Tuuid, config: any) {
   const path = PORTFOLIOS_PATH + "/" + portfolioId.toString();
@@ -109,6 +111,7 @@ export const usePortfolio = () => {
       const pageDetails = portfolioDetails.pages;
       portfolioDetails.pages = [];
 
+
       await updateState(portfolioDetails);
       setInitialThemeState(portfolioDetails.theme);
 
@@ -128,8 +131,6 @@ export const usePortfolio = () => {
             const imageResponse = await fetchImage(section.image);
             section.image = imageResponse.data;
           }
-          // section.image = section.image_out;
-          // delete section.image
         }
         sections[page.id] = pageSections;
       }
@@ -144,9 +145,18 @@ export const usePortfolio = () => {
 
   async function fetchFullPortfolio(username?: string) {
     try {
-      const portfolioId = username
-        ? (await getAccountDetailsFromUsername(username)).primary_portfolio
-        : getSavedPortfolioId();
+      // console.log(portolioId)
+      const localUsername = username ? username : userData.username;
+      let portfolioId = defaultUserContext.portfolioId;
+      if (localUsername === userData.username) {
+        portfolioId = getSavedPortfolioId();
+      } else {
+        portfolioId = await (await getAccountDetailsFromUsername(localUsername))
+          .primary_portfolio;
+      }
+      if (portfolioId === defaultUserContext.portfolioId) {
+        throw Error("Unable to find portfolio with username: " + localUsername)
+      }
       await fetchPortfolio(portfolioId);
     } catch (e) {
       throw e;
@@ -166,14 +176,12 @@ export const usePortfolio = () => {
           if (!page.toDelete) {
             page.sections = allSections[page.id];
             for (var section of page.sections) {
-              section.image = imageObjectToId(section.image)
+              section.image = imageObjectToId(section.image);
             }
             page.index = index;
             await savePage(state.id, page);
           }
         }
-
-        
       } catch (e) {
         setErrorMessage(e.message);
         throw e;
@@ -220,13 +228,13 @@ export const usePortfolio = () => {
 
   const handleSave = () => {
     saveFullPortfolio(false)
-    .then(() => {
-      setSuccessMessage("Portfolio saved");
-    })
-    .catch((error: any) => {
-      console.log(error);
-      throw error;
-    });
+      .then(() => {
+        setSuccessMessage("Portfolio saved");
+      })
+      .catch((error: any) => {
+        console.log(error);
+        throw error;
+      });
   };
 
   function portfolioIsFetched() {

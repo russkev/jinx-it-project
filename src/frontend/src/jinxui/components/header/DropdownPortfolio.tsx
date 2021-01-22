@@ -199,7 +199,7 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
 
   const handleLogout = () => {
     props.setOpen(false);
-    setRedirect(true);
+    // setRedirect(true);
     logout()
       .then(() => {
         resetFullPortfolio();
@@ -207,6 +207,7 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
       .catch((error) => {
         console.log(error);
       });
+    window.location.reload()
   };
 
   if (redirect) {

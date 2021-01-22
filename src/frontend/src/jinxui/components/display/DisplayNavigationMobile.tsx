@@ -17,73 +17,50 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/IconButton";
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 import Drawer from "@material-ui/core/Drawer";
-
+import Hidden from "@material-ui/core/Hidden";
 import { DisplayNavigation, StyledPaperSectionBase } from "jinxui";
+import { AnyARecord } from "dns";
 
-const DisplayNavigationMobile = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const drawerWidth = 300;
+
+type TDIsplayNavigationMobile = {
+  open: boolean
+  setOpen: any
+}
+const DisplayNavigationMobile = (props: TDIsplayNavigationMobile) => {
+  // const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
 
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-
   const handleClose = () => {
-    setIsOpen(false);
+    props.setOpen(false);
   };
 
   return (
     <Box>
-      {/* <Box
-        position="fixed"
-        display="flex"
-        right="30px"
-        top="90px"
-        zIndex={500}
-        
-      >
-        <Button>
-          <MenuRoundedIcon
-            style={{
-              fontSize: 40,
-            }}
-          />
-        </Button>
-      </Box> */}
-      {/* <Box
-        position="fixed"
-        display="flex"
-        right="0px"
-        top="70px"
-        zIndex={500}
-        style={{
-          background: theme.palette.background.default,
-        }}
-        borderRadius="10px 0px 0px 10px"
-      > */}
-        <Button onClick={handleOpen} style={{padding: "6px"}}>
-          <MenuRoundedIcon
-            // color="primary"
-            fontSize="large"
-            style={{
-              // color: theme.palette.grey[500],
-              mixBlendMode: "difference",
-              // fontSize: 40,
-            }}
-          />
-        </Button>
-      {/* </Box> */}
-      <Drawer
-        anchor="left"
-        open={isOpen}
-        onClose={handleClose}
-        variant="temporary"
-        // BackdropProps={{ invisible: true }}
-      >
-        <Box display="flex" height="100%">
-          <DisplayNavigation handleClose={handleClose}/>
-        </Box>
-      </Drawer>
+      <Hidden lgUp implementation="css">
+        <Drawer
+          anchor="left"
+          open={props.open}
+          onClose={handleClose}
+          variant="temporary"
+        >
+          <Box display="flex" height="100%">
+            <DisplayNavigation handleClose={handleClose} />
+          </Box>
+        </Drawer>
+      </Hidden>
+      <Hidden mdDown implementation="css">
+        <Drawer
+          anchor="left"
+          open={props.open}
+          onClose={handleClose}
+          variant="permanent"
+        >
+          <Box display="flex" height="100%">
+            <DisplayNavigation handleClose={handleClose} />
+          </Box>
+        </Drawer>
+      </Hidden>
     </Box>
   );
 };

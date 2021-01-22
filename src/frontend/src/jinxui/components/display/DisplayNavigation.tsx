@@ -41,7 +41,11 @@ const DisplayNavigation = (props: TDisplayNavigation) => {
   const { getFetchedPages } = usePage();
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="column" maxWidth="380px" alignSelf="center">
+    <Box 
+      display="flex" 
+      flexDirection="column" 
+      maxWidth="300px" 
+      alignSelf="center">
       <Timeline align="right">
         {getFetchedPages().map((page: TPage) => {
           const onClick = () => {
