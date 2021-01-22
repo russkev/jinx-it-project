@@ -487,6 +487,9 @@ const mountains: Theme = createTheme({
             fontSize: "1.6rem",
             letterSpacing: "0.1rem"
         },
+        h6: {                   // Link Text
+            fontWeight: 400,
+        },
         body1: {
             fontSize: "1.1rem",
             fontWeight: 300,

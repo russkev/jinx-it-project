@@ -53,7 +53,7 @@ export type TLink = {
   name?: string;
   address?: string;
   icon?: number;
-  number: number;
+  index: number;
 };
 
 export type TImage = {

@@ -1,4 +1,3 @@
-/** Material Ui theme object extension */
 // This must be left here
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 

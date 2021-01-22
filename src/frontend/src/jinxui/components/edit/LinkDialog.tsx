@@ -74,7 +74,7 @@ const LinkDialog = React.forwardRef((props: TLinkDialog, ref: any) => {
     address: "",
     icon: LinkIconEnum.Disabled,
     id: "",
-    number: 0,
+    index: 0,
   };
 
   // Set up the link to be worked on
