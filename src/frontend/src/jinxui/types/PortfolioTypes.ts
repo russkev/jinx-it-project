@@ -31,6 +31,7 @@ export type TSection = {
   name: string;
   type: ESectionType;
   index: number;
+  border: boolean;
   text: string;
   image: TImage | null;
   video: string;

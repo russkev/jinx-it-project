@@ -138,6 +138,7 @@ class Section(models.Model):
     # ordering number to order sections on a page
     index = models.IntegerField(default=0)
     type = models.CharField(max_length=100, default='text')
+    border = models.BooleanField(default=False)
     text = models.TextField(blank=True)
     image = models.ForeignKey(
         Image, null=True, on_delete=models.CASCADE, related_name='sections')

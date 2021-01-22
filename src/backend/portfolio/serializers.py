@@ -58,7 +58,7 @@ class PortfolioLinkSerializer(
 ################################################################################
 # SECTION
 ################################################################################
-class SectionInputSerializer(
+class SectionSerializer(
     UniqueFieldsMixin,
     NestedCreateMixin,
     NestedUpdateMixin,
@@ -69,24 +69,24 @@ class SectionInputSerializer(
 
     class Meta:
         model = models.Section
-        fields = ['id', 'name', 'type', 'index', 'page', 'links',
+        fields = ['id', 'name', 'type', 'index', 'page', 'border', 'links',
                   'text', 'image', 'video']
 
 
-class SectionOutputSerializer(
-    UniqueFieldsMixin,
-    NestedCreateMixin,
-    NestedUpdateMixin,
-    serializers.ModelSerializer
-):
-    links = SectionLinkSerializer(many=True)
-    page = serializers.ReadOnlyField(source='page.id')
-    image = ImageSerializer(read_only=True)
+# class SectionOutputSerializer(
+#     UniqueFieldsMixin,
+#     NestedCreateMixin,
+#     NestedUpdateMixin,
+#     serializers.ModelSerializer
+# ):
+#     links = SectionLinkSerializer(many=True)
+#     page = serializers.ReadOnlyField(source='page.id')
+#     image = ImageSerializer(read_only=True)
 
-    class Meta:
-        model = models.Section
-        fields = ['id', 'name', 'type', 'index', 'page', 'links',
-                  'text', 'image', 'video']
+#     class Meta:
+#         model = models.Section
+#         fields = ['id', 'name', 'type', 'index', 'page', 'links',
+#                   'text', 'image', 'video']
 
 
 ################################################################################
@@ -98,7 +98,7 @@ class PageSerializer(
     NestedUpdateMixin,
     serializers.ModelSerializer
 ):
-    sections = SectionInputSerializer(many=True)
+    sections = SectionSerializer(many=True)
 
     class Meta:
         model = models.Page

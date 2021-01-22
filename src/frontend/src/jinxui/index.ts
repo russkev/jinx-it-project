@@ -40,6 +40,7 @@ export { default as DisplayLinks } from "./components/display/DisplayLinks"
 export { default as DisplaySection } from "./components/display/DisplaySection"
 export { default as DisplaySectionList } from "./components/display/DisplaySectionList"
 export { default as DisplayPageList } from "./components/display/DisplayPageList"
+export { default as DisplayNavigation } from "./components/display/DisplayNavigation"
 export { default as ThemeBackgroundColors } from "./components/display/ThemeBackgroundColors"
 export { default as ThemeSectionColors } from "./components/display/ThemeSectionColors"
 

@@ -15,6 +15,7 @@ export const defaultSectionContext: TSection = {
   name: "",
   type: ESectionType.skeleton,
   index: 0,
+  border: false,
   text: "",
   image: defaultImageContext,
   video: "",

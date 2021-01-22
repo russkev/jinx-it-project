@@ -10,6 +10,8 @@ import OndemandVideoIcon from "@material-ui/icons/OndemandVideo";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import Checkbox from "@material-ui/core/Checkbox";
+import Box from "@material-ui/core/Box";
 
 import { useSection, PrimaryMenu, MenuGap } from "jinxui";
 
@@ -17,10 +19,22 @@ import { ESectionType, TSectionInfo } from "jinxui/types";
 
 const ContentChoiceMenu = (props: TSectionInfo) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { handleSectionStateUpdate } = useSection();
+  const { getFetchedSection, handleSectionStateUpdate } = useSection();
+  const [hasBorder, setHasBorder] = useState(
+    getFetchedSection(props.pageId, props.section.id).border
+  );
 
   const handleSectionTypeUpdate = (type: ESectionType) => {
     handleSectionStateUpdate(props.pageId, props.section.id, { type: type });
+  };
+
+  const handleToggleBorder = () => {
+    setHasBorder(() => {
+      handleSectionStateUpdate(props.pageId, props.section.id, {
+        border: !hasBorder,
+      });
+      return !hasBorder;
+    });
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -84,6 +98,28 @@ const ContentChoiceMenu = (props: TSectionInfo) => {
           </ListItemIcon>
           <ListItemText primary="Embedded Video" />
         </MenuItem>
+        <Box width="100%" height="15px" />
+        <Typography align="center" variant="h6">
+          Options
+        </Typography>
+
+        <MenuGap />
+        <Box display="flex">
+          <ListItemIcon>
+            <Checkbox
+              checked={hasBorder}
+              onChange={handleToggleBorder}
+              style={{ marginLeft: "6px" }}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary="Border"
+            style={{
+              alignSelf: "center",
+              paddingLeft: "16px",
+            }}
+          />
+        </Box>
       </PrimaryMenu>
     </>
   );

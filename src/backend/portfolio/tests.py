@@ -477,6 +477,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'id': str(uuid.uuid4()),
                 'name': 'polarised neptune',
                 'type': 'text',
+                'border': False,
                 'text': 'medial bodging committed unworthier',
                 'image': None,
                 'video': '',
@@ -486,6 +487,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'id': str(uuid.uuid4()),
                 'name': 'ostrich drainpipe',
                 'type': 'text',
+                'border': False,
                 'text': 'novices rehearing leafier stationer',
                 'image': None,
                 'video': '',
@@ -523,6 +525,7 @@ class PageNestTest(UserMixin, PortfolioMixin, APITestCase):
                 'id': str(uuid.uuid4()),
                 'name': 'sacrifice liberates',
                 'type': 'text',
+                'border': False,
                 'text': 'possessive colonoscopies suburbans',
                 'links': [],
                 'image': None,
@@ -645,7 +648,7 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
 
         with self.subTest(field='name'):
             initial_data = copy.deepcopy(
-                serializers.SectionInputSerializer(self.section).data)
+                serializers.SectionSerializer(self.section).data)
 
             update_field('name', name)
 
@@ -660,7 +663,7 @@ class SectionTest(UserMixin, PortfolioMixin, APITestCase):
 
         with self.subTest(field='text'):
             initial_data = copy.deepcopy(
-                serializers.SectionInputSerializer(self.section).data)
+                serializers.SectionSerializer(self.section).data)
 
             update_field('text', text)
 

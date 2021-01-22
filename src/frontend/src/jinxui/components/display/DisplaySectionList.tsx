@@ -11,7 +11,7 @@ import {
   DisplaySection,
   DisplayBackground,
 } from "jinxui";
-import { TPage, TSection } from "jinxui/types";
+import { TPage, TSection, Tuuid } from "jinxui/types";
 
 // Title, only renders if section index is 0
 type TTitle = {
@@ -19,6 +19,7 @@ type TTitle = {
   sectionTheme: any;
   color: string;
   title: string;
+  pageId: Tuuid;
 };
 const Title = (props: TTitle) => {
   const titleGap =
@@ -28,7 +29,7 @@ const Title = (props: TTitle) => {
 
   if (props.sectionIndex === 0 && props.title.length > 0) {
     return (
-      <Box color={props.color}>
+      <Box color={props.color} id={props.pageId}>
         <Typography variant="h2" gutterBottom>
           {props.title}
         </Typography>
@@ -129,8 +130,9 @@ const DisplaySectionList = (props: TSectionGrid) => {
                   sectionTheme={theme.portfolio.section}
                   color={sectionTextColor}
                   title={props.page.name}
+                  pageId={props.page.id}
                 />
-                <Container maxWidth="md">
+                <Container maxWidth="md" >
                   <Container disableGutters>
                     <DisplaySection
                       pageId={props.page.id}

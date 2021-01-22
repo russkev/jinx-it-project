@@ -13,6 +13,7 @@ import {
   DisplayCopyright,
   DisplayHeader,
   DisplayPageList,
+  DisplayNavigation,
 } from "jinxui";
 
 import {
@@ -134,8 +135,8 @@ const Portfolio = ({ username }: PortfolioProps) => {
           {/* Portfolio theme */}
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
-            <DisplayHeader></DisplayHeader>
-            {/* <DisplaySectionList sections={sections} /> */}
+            <DisplayNavigation />
+            <DisplayHeader />
             <DisplayPageList />
           </ThemeProvider>
           <DisplayCopyright text={author} />

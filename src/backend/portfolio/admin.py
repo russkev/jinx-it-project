@@ -34,7 +34,7 @@ class PageAdmin(admin.ModelAdmin):
 
 @admin.register(models.Section)
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'page', 'index',
+    list_display = ['name', 'page', 'index', 'border',
                     'text', 'image', 'video', 'owner', 'id']
 
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import {
+  Box,
   AppBar,
   Typography,
   Slide,
@@ -29,7 +30,7 @@ import {
 
 
 const HeaderMediaWidth = () => {
-  return "300px";
+  return "650px";
 };
 
 // Ensure that app bar sticks to top and sides
@@ -176,6 +177,7 @@ const HeaderBar = (props: HeaderBarProps) => {
                   open={shareDialogOpen}
                   setOpen={setShareDialogOpen}
                 />
+                <Box width="30px" height="100%" />
               </StyledDivRight>
             </StyledDivOuter>
           </StyledAppBar>

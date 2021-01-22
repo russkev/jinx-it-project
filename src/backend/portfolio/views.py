@@ -96,14 +96,7 @@ class SectionLinkDetail(generics.RetrieveUpdateDestroyAPIView):
 # SECTION
 ################################################################################
 class SectionList(generics.ListCreateAPIView):
-    def get_serializer_class(self):
-        print(self.request.method)
-        if self.request.method == 'GET':
-            print("GETTING")
-            return serializers.SectionOutputSerializer
-        else:
-            return serializers.SectionInputSerializer
-
+    serializer_class = serializers.SectionSerializer
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
     queryset = models.Section.objects.all()
     swagger_schema = swagger.PortfolioAutoSchema
@@ -116,7 +109,7 @@ class SectionList(generics.ListCreateAPIView):
 
 
 class SectionDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.SectionInputSerializer
+    serializer_class = serializers.SectionSerializer
     lookup_url_kwarg = 'section_id'
     permission_classes = [(IsNotPrivate & IsReadOnly) | IsOwner]
     queryset = models.Section.objects.all()

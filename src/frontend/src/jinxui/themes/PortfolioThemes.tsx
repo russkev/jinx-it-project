@@ -411,6 +411,9 @@ const arch: Theme = createTheme({
             fontSize: "1.3rem",
         }
     },
+    shape:{
+        borderRadius: 10,
+    },
     portfolio: {
         theme: {
             name: "Arch",
