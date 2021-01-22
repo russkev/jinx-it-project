@@ -352,6 +352,7 @@ const rainbowSmooth: Theme = createTheme({
         section: {
             colors: ThemeBackgroundColors.rainbowGradient,
             bgColorIndexing: "sectionGlobal",
+            borderColor: "textColor"
 
         }
     }
@@ -436,6 +437,7 @@ const arch: Theme = createTheme({
             sectionGap: "9em",
             spacing: 7,
             borderPadding: 30,
+            borderIsSecondaryFill: true,
             colors: ThemeBackgroundColors.secondPaperColor,
             bgColorIndexing: "page",
 
@@ -518,6 +520,7 @@ const mountains: Theme = createTheme({
             // headingGap: "20px",
             spacing: 7,
             border: "first",
+            borderColor: "secondary",
             borderPadding: 30,
             colors: ThemeBackgroundColors.alternatingBackgroundColors,
             bgColorIndexing: "page",
@@ -599,10 +602,9 @@ const sand: Theme = createTheme({
             disableSubtitleGap: "true",
         },
         section: {
-            spacing: 7,
-            headingGap: -30,
             colors: ThemeBackgroundColors.secondPrimaryColor,
             bgColorIndexing: "page",
+            borderColor: "textColor",
         }
     }
 })

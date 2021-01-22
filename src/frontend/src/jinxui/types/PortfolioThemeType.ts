@@ -54,6 +54,10 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         border?: "first" | "odds" | "evens" | "all" | undefined
         // How much padding a border should have
         borderPadding?: any
+        // Either a palette color or a color string
+        borderColor?: "textColor" | "secondary" | string
+        // Fill instead of providing a frame
+        borderIsSecondaryFill?: boolean
         // What property should be used determine background colors
         bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
       }
@@ -90,6 +94,8 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         spacing?: 0 | 1 | 10 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | undefined
         border?: "first" | "odds" | "evens" | "all" | undefined
         borderPadding?: number
+        borderColor?:  "textColor" | "secondary" | string
+        borderIsSecondaryFill?: boolean
         bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
       }
     },

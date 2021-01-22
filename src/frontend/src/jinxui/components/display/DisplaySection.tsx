@@ -20,9 +20,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const useStyles = makeStyles((theme: Theme) => {
-  const padding = theme.portfolio.section?.borderPadding 
-    ? theme.portfolio.section.borderPadding 
-    : "30px"
+  const padding = theme.portfolio.section?.borderPadding
+    ? theme.portfolio.section.borderPadding
+    : "30px";
   return createStyles({
     img: {
       width: "100%",
@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme: Theme) => {
     paper: {
       background: "rgba(255, 255, 255, 0.0)",
       padding: padding,
-      border: "1px solid " + theme.palette.secondary.main,
+      // color:
+      // border: "1px solid " + theme.palette.secondary.main,
     },
   });
 });
@@ -177,23 +178,23 @@ const DisplaySection = (props: TDisplaySection) => {
   const sectionGap =
     sectionTheme?.sectionGap !== undefined ? sectionTheme.sectionGap : "2.5em";
 
-  var border = false;
-  switch (sectionTheme?.border) {
-    case "first":
-      border = props.section.index === 0;
-      break;
-    case "odds":
-      border = props.section.index % 2 === 1;
-      break;
-    case "evens":
-      border = props.section.index % 2 === 0;
-      break;
-    case "all":
-      border = true;
-      break;
-    default:
-      border = false;
-  }
+  // var border = false;
+  // switch (sectionTheme?.border) {
+  //   case "first":
+  //     border = props.section.index === 0;
+  //     break;
+  //   case "odds":
+  //     border = props.section.index % 2 === 1;
+  //     break;
+  //   case "evens":
+  //     border = props.section.index % 2 === 0;
+  //     break;
+  //   case "all":
+  //     border = true;
+  //     break;
+  //   default:
+  //     border = false;
+  // }
 
   const sectionMap = new Map<
     ESectionType,
@@ -209,7 +210,18 @@ const DisplaySection = (props: TDisplaySection) => {
     SectionComponent = TextComponent;
   }
   const componentProps: TComponent = { ...props, sectionTheme: sectionTheme };
+  
+  let borderColor = theme.palette.secondary.main
 
+  if (theme.portfolio.section?.borderColor) {
+    if (theme.portfolio.section.borderColor === "textColor") {
+      borderColor = props.textColor;
+    } else if (theme.portfolio.section.borderColor === "secondary") {
+      borderColor = theme.palette.secondary.main
+    }
+  }
+  
+  console.log(props.textColor + "80");
   return (
     <>
       <Box
@@ -224,9 +236,21 @@ const DisplaySection = (props: TDisplaySection) => {
           variant="outlined"
           className={classes.paper}
           style={
-            border
-              ? { color: props.textColor }
-              : { color: props.textColor, border: "none" }
+            props.section.border
+              ? {
+                  color: props.textColor,
+                  borderRadius: theme.shape.borderRadius,
+                  background: theme.portfolio.section?.borderIsSecondaryFill
+                    ? theme.palette.secondary.main + "40"
+                    : "#00000000",
+                  border: theme.portfolio.section?.borderIsSecondaryFill
+                    ? "none"
+                    : "1px solid " + borderColor
+                }
+              : {
+                  color: props.textColor,
+                  border: "none",
+                }
           }
         >
           <HeadingComponent
