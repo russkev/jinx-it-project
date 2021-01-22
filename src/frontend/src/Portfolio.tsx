@@ -13,7 +13,8 @@ import {
   DisplayCopyright,
   DisplayHeader,
   DisplayPageList,
-  DisplayNavigation,
+  DisplayNavigationDesktop,
+  DisplayNavigationMobile,
 } from "jinxui";
 
 import {
@@ -135,7 +136,8 @@ const Portfolio = ({ username }: PortfolioProps) => {
           {/* Portfolio theme */}
           <ThemeProvider theme={thisTheme}>
             <CssBaseline />
-            <DisplayNavigation />
+            {/* <DisplayNavigationDesktop /> */}
+            <DisplayNavigationMobile />
             <DisplayHeader />
             <DisplayPageList />
           </ThemeProvider>

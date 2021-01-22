@@ -309,18 +309,6 @@ const DropdownPortfolio = React.forwardRef(
       } catch {}
     }, [open]);
 
-    // // return focus to the button when we transitioned from !open -> open
-    // const themePrevOpen = React.useRef(themeOpen);
-    // React.useEffect(() => {
-    //   try {
-    //     if (themePrevOpen.current === true && themeOpen === false) {
-    //       themeAnchorRef.current!.focus();
-    //     }
-
-    //     themePrevOpen.current = themeOpen;
-    //   } catch {}
-    // }, [themeOpen]);
-
     const viewDisabled = props.isUserView === true;
     const editDisabled = props.isUserEdit === true;
     const restDisabled = props.isUserView !== true && props.isUserEdit !== true;
@@ -339,7 +327,6 @@ const DropdownPortfolio = React.forwardRef(
               >
                 <AccountCircleIcon style={{ fontSize: 40 }}/>
                 <ExpandMoreIcon fontSize="small" />
-                {/* <Typography */}
               </StyledHeaderOptionsButton>
             </Tooltip>
           ) : null}
