@@ -364,6 +364,7 @@ async function fetchImage(imageId: Tuuid) {
       updateState({theme: response.data.theme})
       return response
     } catch (e) {
+      console.log(e)
       throw e
     }
   }

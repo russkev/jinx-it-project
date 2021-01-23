@@ -39,8 +39,8 @@ function LoadingLogo(props: any) {
             y2="50.4272"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0047FF" />
-            <stop offset="1" stop-color="#00A3FF" />
+            <stop stopColor="#0047FF" />
+            <stop offset="1" stopColor="#00A3FF" />
           </linearGradient>
           <linearGradient
             id="paint1_linear"
@@ -50,8 +50,8 @@ function LoadingLogo(props: any) {
             y2="24.33"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#00C2FF" />
-            <stop offset="1" stop-color="#00FFC2" />
+            <stop stopColor="#00C2FF" />
+            <stop offset="1" stopColor="#00FFC2" />
           </linearGradient>
           <linearGradient
             id="paint2_linear"
@@ -61,8 +61,8 @@ function LoadingLogo(props: any) {
             y2="24.33"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#00C2FF" />
-            <stop offset="1" stop-color="#00FFC2" />
+            <stop stopColor="#00C2FF" />
+            <stop offset="1" stopColor="#00FFC2" />
           </linearGradient>
         </defs>
       </svg>
