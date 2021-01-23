@@ -46,34 +46,6 @@ interface PortfolioProps {
   username: string;
 }
 
-const SkeletonPage = () => (
-  <Container maxWidth="md">
-    <Box height="100vh">
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="flex-end"
-        alignContent="flex-end"
-        style={{ height: "100%" }}
-      >
-        <Skeleton
-          variant="rect"
-          width={600}
-          height={100}
-          style={{ marginBottom: 30 }}
-          animation="wave"
-        />
-        <Skeleton
-          variant="rect"
-          width={400}
-          height={40}
-          style={{ marginBottom: 50 }}
-        />
-      </Grid>
-    </Box>
-  </Container>
-);
-
 const Portfolio = ({ username }: PortfolioProps) => {
   const {
     userData,
@@ -125,7 +97,6 @@ const Portfolio = ({ username }: PortfolioProps) => {
     return (
       <>
         <CssBaseline />
-        {/* Site main theme */}
         <ThemeProvider theme={thisTheme}>
           <HeaderBar
             hideBGLoggedOut={true}
@@ -133,14 +104,9 @@ const Portfolio = ({ username }: PortfolioProps) => {
             isUserView={userData.username === username}
             isPortfolioView={true}
           />
-          {/* Portfolio theme */}
-          {/* <ThemeProvider theme={thisTheme}> */}
             <CssBaseline />
-            {/* <DisplayNavigationDesktop /> */}
-            {/* <DisplayNavigationMobile /> */}
             <DisplayHeader />
             <DisplayPageList />
-          {/* </ThemeProvider> */}
           <DisplayCopyright text={author} />
         </ThemeProvider>
       </>

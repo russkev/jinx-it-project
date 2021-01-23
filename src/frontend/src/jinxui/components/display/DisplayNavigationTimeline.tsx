@@ -3,6 +3,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
 
 import Timeline from "@material-ui/lab/Timeline";
 import { TimelineItem as MuiTimelineItem } from "@material-ui/lab";
@@ -11,7 +12,7 @@ import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineDot from "@material-ui/lab/TimelineDot";
 
-import { usePage} from "jinxui";
+import { usePage } from "jinxui";
 import { defaultPageContext } from "jinxui/contexts";
 import { TPage, Tuuid } from "jinxui/types";
 
@@ -37,7 +38,11 @@ const TimelineItem = withStyles({
   },
 })(MuiTimelineItem);
 
-export function HandleNavigationClick(handleClose: any, id: Tuuid, index: number) {
+export function HandleNavigationClick(
+  handleClose: any,
+  id: Tuuid,
+  index: number
+) {
   let y = 0;
   if (index > -1) {
     const yOffset = -70;
@@ -74,17 +79,22 @@ const NavigationItem = (props: TNavigationItem) => {
           <TimelineDot />
           <TimelineConnector />
         </TimelineSeparator>
-        <TimelineContent>
-          <MenuItem 
-            onClick={onClick} 
-            key={props.pageId} 
+        <TimelineContent
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+          }}
+        >
+          <MenuItem
+            onClick={onClick}
+            key={props.pageId}
             component="div"
-            style={{ whiteSpace: "normal" }}
+            style={{ whiteSpace: "normal", justifyContent: "right" }}
           >
-            <ListItemText
-            primary={props.name}
-            classes={{ primary: classes.menuText }}
-          />
+            <Typography align="right" variant="button" style={{textTransform: "none"}}>
+              {props.name}
+            </Typography>
           </MenuItem>
         </TimelineContent>
       </TimelineItem>
