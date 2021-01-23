@@ -1,9 +1,7 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import SwipableDrawer from "@material-ui/core/SwipeableDrawer";
 import Hidden from "@material-ui/core/Hidden";
-import { DisplayNavigationDesktop, DisplayNavigation } from "jinxui";
 
 import { usePage, HandleNavigationClick } from "jinxui";
 
@@ -36,26 +34,27 @@ const DisplayNavigationHeader = () => {
   const { getFetchedPages } = usePage();
 
   return (
-    <Hidden xlUp xsDown implementation="css">
-      <Box display="flex">
-        <HeaderNavigationItem
-          pageId={defaultPageContext.id}
-          name={"Home"}
-          index={-1}
-        />
-        {getFetchedPages().map((page: TPage, index: number) => {
-          return (
-
-            <HeaderNavigationItem
-            key={page.id}
-            pageId={page.id}
-            name={page.name}
-            index={index}
-            />
-          )
-        })}
-      </Box>
-    </Hidden>
+    <Box width="100%">
+      <Hidden xlUp xsDown implementation="css" >
+        <Box display="flex" justifyContent="space-evenly" width="100%">
+          <HeaderNavigationItem
+            pageId={defaultPageContext.id}
+            name={"Home"}
+            index={-1}
+          />
+          {getFetchedPages().map((page: TPage, index: number) => {
+            return (
+              <HeaderNavigationItem
+                key={page.id}
+                pageId={page.id}
+                name={page.name}
+                index={index}
+              />
+            );
+          })}
+        </Box>
+      </Hidden>
+    </Box>
   );
 };
 

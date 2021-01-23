@@ -92,7 +92,7 @@ const NavigationItem = (props: TNavigationItem) => {
   );
 };
 
-const DisplayNavigation = (props: TDisplayNavigation) => {
+const DisplayNavigationTimeline = (props: TDisplayNavigation) => {
   const { getFetchedPages } = usePage();
   const pages = getFetchedPages();
 
@@ -126,4 +126,4 @@ const DisplayNavigation = (props: TDisplayNavigation) => {
   );
 };
 
-export default DisplayNavigation;
+export default DisplayNavigationTimeline;

@@ -5,8 +5,6 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   useUser,
@@ -15,15 +13,12 @@ import {
   DisplayCopyright,
   DisplayHeader,
   DisplayPageList,
-  DisplayNavigationDesktop,
-  DisplayNavigationMobile,
   DisplayLoading,
 } from "jinxui";
 
-import { DarkTheme, PortfolioThemes } from "jinxui/themes";
+import { PortfolioThemes } from "jinxui/themes";
 
 import NotFound from "./NotFound";
-import { TrendingUpOutlined } from "@material-ui/icons";
 
 
 const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
