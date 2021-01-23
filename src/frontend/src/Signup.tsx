@@ -5,10 +5,15 @@ import { CssBaseline, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import * as Yup from "yup";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   PrimaryButton,
+  SecondaryButton,
   AccountPageDiv,
   Routes,
   useUser,
@@ -19,11 +24,7 @@ import {
   StyledFormBottomButtonsDiv,
 } from "jinxui";
 
-import {
-  LightTheme,
-  LightTitleBGGrad,
-} from "jinxui/themes"
-
+import { LightTheme, LightTitleBGGrad } from "jinxui/themes";
 
 const StyledLink = styled.a`
   text-decoration: none;
@@ -43,7 +44,7 @@ const FormSectionsDiv = styled.div`
     93px
     max-content
     30px
-    10px
+    10px;
 `;
 
 // Extra white space at top.
@@ -90,6 +91,7 @@ const Signup = () => {
   const [redirect, setRedirect] = useState(
     userData.authenticated ? true : false
   );
+  const [demoSubmitting, setDemoSubmitting] = useState(false)
 
   const { signup } = useUser();
 
@@ -105,13 +107,16 @@ const Signup = () => {
       <ThemeProvider theme={LightTheme}>
         <CssBaseline />
         <AccountPageDiv>
+          <Backdrop open={demoSubmitting} style={{zIndex: 2000}}>
+            <CircularProgress color="secondary" />
+          </Backdrop>
           <HeaderBar title="Sign Up"></HeaderBar>
           <StyledFormOuterDiv>
             <div />
             <StyledFormDiv
               variant="elevation"
               elevation={8}
-              style={{ background: LightTitleBGGrad}}
+              style={{ background: LightTitleBGGrad }}
             >
               <FormTitleDiv>
                 <Typography variant="h5">Sign up for free!</Typography>
@@ -152,84 +157,106 @@ const Signup = () => {
                     });
                 }}
               >
-                {({ errors, touched, isSubmitting }) => (
+                {({ errors, touched, isSubmitting, setSubmitting }) => (
                   <Form>
                     <FormSectionsDiv>
                       {/* <div> */}
 
-                    <Field
-                      component={TextField}
-                      id="firstName"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      name="firstName"
-                      label="First Name"
+                      <Field
+                        component={TextField}
+                        id="firstName"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="firstName"
+                        label="First Name"
                       />
 
-                    <Field
-                      component={TextField}
-                      id="lastName"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth 
-                      name="lastName" 
-                      label="Last Name" />
+                      <Field
+                        component={TextField}
+                        id="lastName"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="lastName"
+                        label="Last Name"
+                      />
 
-                    <Field
-                      component={TextField}
-                      id="username"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth 
-                      name="username" 
-                      label="Username" />
+                      <Field
+                        component={TextField}
+                        id="username"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="username"
+                        label="Username"
+                      />
 
-                    <Field
-                      component={TextField}
-                      id="email"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      name="email"
-                      type="email"
-                      label="Email"
-                    />
+                      <Field
+                        component={TextField}
+                        id="email"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="email"
+                        type="email"
+                        label="Email"
+                      />
 
-                    <Field
-                      component={TextField}
-                      id="password"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      name="password"
-                      type="password"
-                      label="Password"
-                    />
+                      <Field
+                        component={TextField}
+                        id="password"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="password"
+                        type="password"
+                        label="Password"
+                      />
 
-                    <Field
-                      component={TextField}
-                      id="passwordConfirm"
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      name="passwordConfirm"
-                      type="password"
-                      label="Confirm Password"
-                    />
-                    <StyledFormBottomButtonsDiv>
-
-                    <PrimaryButton 
-                      type="submit" 
-                      disabled={isSubmitting}
-                    >
-                      JOIN
-                    </PrimaryButton>
+                      <Field
+                        component={TextField}
+                        id="passwordConfirm"
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        name="passwordConfirm"
+                        type="password"
+                        label="Confirm Password"
+                      />
+                      <StyledFormBottomButtonsDiv>
+                        <PrimaryButton type="submit" disabled={isSubmitting}>
+                          JOIN
+                        </PrimaryButton>
+                        <SecondaryButton 
+                          type="button" 
+                          disabled={isSubmitting}
+                          onClick={() => {
+                            setSubmitting(true)
+                            signup(
+                              uuidv4(),
+                              "demo@demo.com",
+                              "demonstrationpassword",
+                              "demo",
+                              "demp",
+                            ).then(() => {
+                              setRedirect(true)
+                            }).catch(function (error) {
+                              setSubmittionError(error)
+                              setSubmitting(false)
+                            }).finally(() => {
+                            })
+                          }}
+                        >
+                        Make demo account
+                        </SecondaryButton>
                       </StyledFormBottomButtonsDiv>
 
-                    <StyledLink href={Routes.LOGIN}>
-                      <Typography variant="subtitle2">Already have an account? Log In</Typography>
-                    </StyledLink>
+                      <StyledLink href={Routes.LOGIN}>
+                        <Typography variant="subtitle2">
+                          Already have an account? Log In
+                        </Typography>
+                      </StyledLink>
                     </FormSectionsDiv>
                   </Form>
                 )}

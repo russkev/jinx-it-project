@@ -45,6 +45,7 @@ export { default as DisplayNavigation } from "./components/display/DisplayNaviga
 export { default as DisplayNavigationDesktop } from "./components/display/DisplayNavigationDesktop"
 export { default as DisplayNavigationMobile } from "./components/display/DisplayNavigationMobile"
 export { default as DisplayNavigationHeader } from "./components/display/DisplayNavigationHeader"
+export { default as DisplayLoading } from "./components/display/DisplayLoading"
 export { default as ThemeBackgroundColors } from "./components/display/ThemeBackgroundColors"
 export { default as ThemeSectionColors } from "./components/display/ThemeSectionColors"
 

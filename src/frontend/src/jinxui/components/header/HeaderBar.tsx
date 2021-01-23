@@ -212,7 +212,7 @@ const HeaderBar = (props: HeaderBarProps) => {
                     {props.title ? props.title : ""}
                   </Typography>
                 </StyledDivTitle>
-                <DisplayNavigationHeader />
+                {props.isPortfolioView ? <DisplayNavigationHeader /> : null}
               </StyledDivCenter>
               <StyledDivRight>
                 {props.children}

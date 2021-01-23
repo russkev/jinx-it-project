@@ -164,6 +164,7 @@ export const useUser = () => {
       }
       // Logout failed on backend - the browser's token might have already expired
     } catch (e) {
+      console.log(e)
       throw handleError(e);
     }
   }

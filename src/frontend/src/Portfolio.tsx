@@ -17,15 +17,15 @@ import {
   DisplayPageList,
   DisplayNavigationDesktop,
   DisplayNavigationMobile,
+  DisplayLoading,
 } from "jinxui";
 
-import {
-  LightTheme,
-  PortfolioThemes,
-} from "jinxui/themes"
+import { DarkTheme, PortfolioThemes } from "jinxui/themes";
 
 import NotFound from "./NotFound";
 import { TrendingUpOutlined } from "@material-ui/icons";
+
+
 const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
   const theme_name =
     userData.authenticated &&
@@ -111,7 +111,7 @@ const Portfolio = ({ username }: PortfolioProps) => {
       }
     };
     fetchPortfolio();
-  // rendering a portfolio depends on the username
+    // rendering a portfolio depends on the username
   }, [username]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error) {
@@ -151,25 +151,9 @@ const Portfolio = ({ username }: PortfolioProps) => {
       </>
     );
   } else {
-    // Skeleton Page
-    return (
-      <>
-        <CssBaseline />
-        {/* Site main theme */}
-        <ThemeProvider theme={LightTheme}>
-          <HeaderBar
-            hideBGLoggedOut={true}
-            isUserView={userData.username === username}
-          />
-          {/* Portfolio theme */}
-          <Backdrop open={true}>
-            <CircularProgress color="secondary" />
-          </Backdrop>
-          <CssBaseline />
-          <SkeletonPage />
-        </ThemeProvider>
-      </>
-    );
+  return (
+    <DisplayLoading />
+  );
   }
 };
 
