@@ -221,7 +221,6 @@ const DisplaySection = (props: TDisplaySection) => {
     }
   }
   
-  console.log(props.textColor + "80");
   return (
     <>
       <Box

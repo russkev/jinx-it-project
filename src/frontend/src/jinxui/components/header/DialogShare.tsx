@@ -37,8 +37,8 @@ const DialogShare = forwardRef((props: TDialog, ref: any) => {
         onClose={handleClose}
         aria-labelledby="Share dialog"
       >
-        <DialogTitle id="share-dialog-title">Share</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="share-dialog-title">Portfolio address</DialogTitle>
+        <DialogContent style={{ padding: "0px 24px 24px 24px" }}>
           <DialogContentText>{path}</DialogContentText>
           <MenuItem onClick={handleCopyLink}>
             <ListItemIcon>

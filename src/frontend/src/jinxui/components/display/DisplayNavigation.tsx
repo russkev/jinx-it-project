@@ -1,10 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
 
 import Timeline from "@material-ui/lab/Timeline";
 import { TimelineItem as MuiTimelineItem } from "@material-ui/lab";
@@ -12,9 +10,8 @@ import TimelineSeparator from "@material-ui/lab/TimelineSeparator";
 import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineDot from "@material-ui/lab/TimelineDot";
-import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
-import { usePage, StyledPaperSectionBase, SAVE_DESKTOP_WIDTH } from "jinxui";
+import { usePage} from "jinxui";
 import { defaultPageContext } from "jinxui/contexts";
 import { TPage, Tuuid } from "jinxui/types";
 
@@ -40,7 +37,7 @@ const TimelineItem = withStyles({
   },
 })(MuiTimelineItem);
 
-function handleClick(handleClose: any, id: Tuuid, index: number) {
+export function HandleNavigationClick(handleClose: any, id: Tuuid, index: number) {
   let y = 0;
   if (index > -1) {
     const yOffset = -70;
@@ -67,7 +64,7 @@ const NavigationItem = (props: TNavigationItem) => {
   const classes = useStyles();
 
   const onClick = () => {
-    handleClick(props.handleClose, props.pageId, props.index);
+    HandleNavigationClick(props.handleClose, props.pageId, props.index);
   };
   return (
     <>

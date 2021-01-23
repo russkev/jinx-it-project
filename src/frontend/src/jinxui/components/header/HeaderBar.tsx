@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/IconButton";
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
@@ -26,7 +26,7 @@ import {
   Routes,
   SnackbarAlert,
   DisplayNavigationMobile,
-  MAX_EDIT_SECTION_WIDTH,
+  DisplayNavigationHeader,
 } from "jinxui";
 
 import {
@@ -36,6 +36,7 @@ import {
   DarkHeaderGrad,
 } from "jinxui/themes";
 import { LiveTvSharp } from "@material-ui/icons";
+import { isElementAccessChain } from "typescript";
 
 const HeaderMediaWidth = () => {
   return "650px";
@@ -49,7 +50,7 @@ const StyledAppBar = styled(AppBar)`
 // Three columns, left middle and right
 const StyledDivOuter = styled.div`
   display: grid;
-  grid-template-columns: 1fr max-content 1fr;
+  grid-template-columns: 1fr auto 1fr;
   grid-template-rows: minMax(56px, max-content);
   align-self: center;
   width: inherit;
@@ -67,6 +68,8 @@ const StyledDivCenter = styled.div`
   display: flex;
   justify-content: center;
   align-self: center;
+  overflow: auto;
+  // height: 50px;
 `;
 
 // Right items
@@ -116,7 +119,7 @@ type TNavigationButton = {
 const NavigationButton = (props: TNavigationButton) => {
   if (props.isPortfolioView) {
     return (
-      <Hidden xlUp implementation="css">
+      <Hidden smUp implementation="css">
         <Button
           onClick={() => {
             props.setOpen(true);
@@ -152,6 +155,35 @@ const HeaderBar = (props: HeaderBarProps) => {
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
+  // const [overflowActive, setOverflowActive] = useState(false);
+
+  // function isOverflowing(element: any) {
+  //   console.log(element.offsetWidth);
+  //   console.log(element.scrollWidth);
+  //   return element.offsetWidth < element.scrollWidth;
+  // }
+
+  // useEffect(() => {
+  //   const updateDimensions = () => {
+  //     if (element) {
+  //       // const overflowActive = isOverflowing(targetElement);
+  //       // console.log(overflowActive);
+  //       // setOverflowActive(overflowActive);
+  //       console.log(element.offsetWidth);
+  //       console.log(element.scrollWidth);
+  //       console.log(element)
+  //       setOverflowActive(
+  //         element.offsetWidth < element.scrollWidth
+  //         );
+  //       }
+  //     };
+  //   const element = document.getElementById("headerCenterDiv");
+  //   updateDimensions();
+
+  //   // window.addEventListener("resize", updateDimensions);
+
+  //   // return () => window.removeEventListener("resize", updateDimensions);
+  // }, []);
 
   return (
     <>
@@ -173,12 +205,14 @@ const HeaderBar = (props: HeaderBarProps) => {
                   isPortfolioView={props.isPortfolioView}
                 />
               </StyledDivLeft>
-              <StyledDivCenter>
+
+              <StyledDivCenter id="headerCenterDiv">
                 <StyledDivTitle>
                   <Typography variant="h5">
                     {props.title ? props.title : ""}
                   </Typography>
                 </StyledDivTitle>
+                <DisplayNavigationHeader />
               </StyledDivCenter>
               <StyledDivRight>
                 {props.children}

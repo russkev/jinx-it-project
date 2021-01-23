@@ -109,7 +109,6 @@ const DisplayLinks = (props: TDisplayLinks) => {
             // marginX="15px"
           >
             {links.map((link: TLink, index: number) => {
-              console.log(index);
               return (
                 <Box key={link.id} marginLeft={index > 0 ? "30px" : "0px"}>
                   {link.address && link.address !== "" ? (
