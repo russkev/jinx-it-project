@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link"
 import MenuRoundedIcon from "@material-ui/icons/MenuRounded";
 
 import {
@@ -88,9 +89,7 @@ const StyledLogin = styled(SecondaryButton)`
   width: 120px;
 `;
 
-const StyledLink = styled.a`
-  text-decoration: none;
-`;
+
 
 function headerBackground(theme: Theme) {
   let background = theme.palette.background.paper;
@@ -184,7 +183,8 @@ const HeaderBar = (props: HeaderBarProps) => {
               <StyledDivRight>
                 {props.children}
                 {userData.authenticated || props.hideLogin ? null : (
-                  <StyledLink
+                  <>
+                  <Link
                     href={
                       userData.authenticated
                         ? Routes.PORTFOLIO_DISPLAY_BASE +
@@ -192,9 +192,16 @@ const HeaderBar = (props: HeaderBarProps) => {
                           userData.username
                         : Routes.LOGIN
                     }
+                    color="inherit"
+                    underline="none"
                   >
-                    <StyledLogin>Login</StyledLogin>
-                  </StyledLink>
+                    <StyledLogin 
+                      style={{borderRadius: "5px"}}
+                    >
+                      Login
+                    </StyledLogin>
+                  </Link>
+                  </>
                 )}
                 <DropdownPortfolio
                   isUserView={props.isUserView}

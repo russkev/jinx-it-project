@@ -342,7 +342,7 @@ const rainbowSmooth: Theme = createTheme({
     },
     portfolio: {
         theme: {
-            name: "Rainbow smooth",
+            name: "Retro",
         },
         headerBackground: {
             isDark: true,
@@ -615,14 +615,14 @@ const PortfolioThemes = {
     arch: arch,
     mountains: mountains,
     sand: sand,
-    magma: magma,
-    sunset: sunset,
-    lilypad: lilypad,
-    autumn: autumn,
-    cityscape: cityscape,
-    rainbow: rainbow,
+    // magma: magma,
+    // sunset: sunset,
+    // lilypad: lilypad,
+    // autumn: autumn,
+    // cityscape: cityscape,
+    // rainbow: rainbow,
     rainbowSmooth: rainbowSmooth,
-    presentation: presentation,
+    // presentation: presentation,
 }
 
 export default PortfolioThemes;

@@ -244,7 +244,6 @@ const Signup = () => {
                             }).catch(function (error) {
                               setSubmittionError(error)
                               setSubmitting(false)
-                            }).finally(() => {
                             })
                           }}
                         >
