@@ -62,7 +62,7 @@ const StyledDivCenter = styled.div`
   justify-content: center;
   align-self: center;
   overflow: auto;
-  // height: 50px;
+  overflow-y: hidden;
 `;
 
 // Right items

@@ -64,18 +64,20 @@ const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
   } else {
     return (
       <>
-        <MenuItem
-          ref={ref}
-          onClick={() => {
-            setEditRedirect(true);
-          }}
-          disabled={props.edit_disabled}
-        >
-          <ListItemText
-            classes={{ primary: classes.root }}
-            primary="Edit Your Portfolio"
-          />
-        </MenuItem>
+        <Link href={Routes.PORTFOLIO_EDIT} color="inherit" underline="none">
+          <MenuItem
+            ref={ref}
+            // onClick={() => {
+            //   setEditRedirect(true);
+            // }}
+            // disabled={props.edit_disabled}
+          >
+            <ListItemText
+              classes={{ primary: classes.root }}
+              primary="Edit Your Portfolio"
+            />
+          </MenuItem>
+        </Link>
       </>
     );
   }
@@ -92,22 +94,24 @@ const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
   const menuText = "Your Portfolio";
 
   const ViewMenuInner = () => {
-    if (!props.viewDisabled) {
+    // if (!props.viewDisabled) {
       return (
         <Box margin="0px 30px">
-          <PrimaryButton
-            ref={ref}
-            onClick={() => {
-              setViewRedirect(true);
-            }}
-          >
-            {menuText}
-          </PrimaryButton>
+          <Link href={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username} underline="none">
+            <PrimaryButton
+              ref={ref}
+              // onClick={() => {
+              //   setViewRedirect(true);
+              // }}
+            >
+              {menuText}
+            </PrimaryButton>
+          </Link>
         </Box>
       );
-    } else {
-      return <SecondaryButton disabled={true}>{menuText}</SecondaryButton>;
-    }
+    // } else {
+    //   return <SecondaryButton disabled={true}>{menuText}</SecondaryButton>;
+    // }
   };
 
   const onView = () => {

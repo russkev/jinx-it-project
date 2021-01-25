@@ -10,7 +10,7 @@ import {
   SecondaryButton,
   Routes,
   PrimaryColumnDiv,
-  PaperSectionsDisplay,
+  PaperSectionsList,
   HeaderEditAddition,
   SaveMobile,
   SaveDesktop,
@@ -76,7 +76,7 @@ const Edit = (props: any) => {
             <FormTitle>Enter your information</FormTitle>
             <form>
               <SaveMobile history={props.history} />
-              {PaperSectionsDisplay()}
+              {PaperSectionsList()}
               <PublishCancelDiv>
                 <TooltipDiv>
                   <Tooltip title="Cancel, go back to Jinx home page" arrow>

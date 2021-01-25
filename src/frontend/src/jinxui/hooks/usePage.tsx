@@ -98,7 +98,8 @@ export const usePage = () => {
       if (page.isNew) {
         const path = PORTFOLIOS_PATH + "/" + portfolioId + "/pages";
         await API.post(path, page, getConfig());
-        delete page.isNew
+        const index = pageIndex(page.id)
+        updateState(index, {isNew: false})
       } else {
         const path = PORTFOLIOS_PATH + "/pages/" + page.id;
         await API.put(path, page, getConfig())
@@ -125,7 +126,8 @@ export const usePage = () => {
   // Mark pages for deletion from server
   async function handlePageDelete(portfolioId: Tuuid, index: number) {
     try {
-      state[index].toDelete = true;
+      updateState(index, {toDelete: true})
+      // state[index].toDelete = true;
       handleSectionDeletePage(state[index].id);
     } catch (e) {
       throw e;

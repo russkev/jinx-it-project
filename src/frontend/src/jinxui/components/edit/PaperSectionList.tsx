@@ -18,8 +18,8 @@ import {
 
 import { TSection, TPage, ESectionType } from "jinxui/types";
 
-const PaperSectionsDisplay = () => {
-  const { isSaving } = useUser();
+const PaperSectionList = () => {
+  const { isSaving, isLoading } = useUser();
   const { getFetchedPages } = usePage();
   const { getFetchedSections } = useSection();
 
@@ -33,6 +33,7 @@ const PaperSectionsDisplay = () => {
         // Map over pages
         (page: TPage, index: number) => {
           const sections = getFetchedSections(page.id);
+          const isLastPage = index === getFetchedPages().length - 1;
           if (sections && !page.toDelete) {
             return (
               <Box key={page.id}>
@@ -98,9 +99,13 @@ const PaperSectionsDisplay = () => {
                 ) : (
                   <></>
                 )}
-                {index === getFetchedPages().length - 1 ? <PageEdit /> : <> </>}
+                {/* {isLastPage ? <PageEdit /> : <> </>} */}
               </Box>
             );
+          // } else if (sections && isLastPage && page.toDelete ) {
+          //   return(
+          //     <PageEdit />
+          //   )
           } else {
             return (
               <></>
@@ -108,8 +113,9 @@ const PaperSectionsDisplay = () => {
           }
         }
       )}
+      {isLoading() ? null : <PageEdit />}
     </>
   );
 };
 
-export default PaperSectionsDisplay;
+export default PaperSectionList;

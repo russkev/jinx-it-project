@@ -108,7 +108,7 @@ class Page(models.Model):
 
     portfolio = models.ForeignKey(
         Portfolio, on_delete=models.CASCADE, related_name='pages')
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
     # page number (distinct from its id) to allow reordering of pages
     index = models.IntegerField(default=0)
 
