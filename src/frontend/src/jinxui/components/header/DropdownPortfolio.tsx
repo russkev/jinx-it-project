@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditMenuItem = React.forwardRef((ref: any) => {
+const EditMenuItem = React.forwardRef((props: any, ref: any) => {
   const classes = useStyles();
 
   return (
@@ -59,7 +59,7 @@ const EditMenuItem = React.forwardRef((ref: any) => {
 });
 
 
-const ViewMenuItem = React.forwardRef((ref: any) => {
+const ViewMenuItem = React.forwardRef((props: any, ref: any) => {
   const { userData } = useUser();
   const menuText = "Your Portfolio";
 
