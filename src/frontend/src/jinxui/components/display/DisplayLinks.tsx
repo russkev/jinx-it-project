@@ -1,7 +1,6 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useTheme } from "@material-ui/core/styles";
@@ -49,12 +48,11 @@ const DisplayLinks = (props: TDisplayLinks) => {
   };
 
   const linksHaveText = () => {
-    // for (var link of links) {
-    //   if (link.title && link.title !== "") {
-    //     return true;
-    //   }
-    // }
-    return false;
+    for (var link of links) {
+      if (link.name && link.name !== "") {
+        return true;
+      }
+    }
   };
 
   type TLinkContent = {
@@ -74,8 +72,6 @@ const DisplayLinks = (props: TDisplayLinks) => {
         display="flex"
         alignItems="center"
         color={props.textColor ? props.textColor : theme.palette.text.primary}
-        // marginX="30px"
-        // marginX="0px"
       >
         <Tooltip title={tooltipMessage}>
           <Box display="flex" alignItems="center">
@@ -106,20 +102,12 @@ const DisplayLinks = (props: TDisplayLinks) => {
             alignItems="baseline"
             marginBottom="20px"
             marginTop="15px"
-            // marginX="15px"
           >
             {links.map((link: TLink, index: number) => {
               return (
                 <Box key={link.id} marginLeft={index > 0 ? "30px" : "0px"}>
                   {link.address && link.address !== "" ? (
                     <Box>
-                      {/* Address exists */}
-                      {/* <Tooltip title={link.address}> */}
-                      {/* <Link
-                        href={link.address}
-                        color="textPrimary"
-                        underline="none"
-                      > */}
                       <Button
                         onClick={() => {
                           onClick(link);
@@ -132,8 +120,6 @@ const DisplayLinks = (props: TDisplayLinks) => {
                       >
                         <LinkContent link={link} textColor={props.textColor} />
                       </Button>
-                      {/* </Link> */}
-                      {/* </Tooltip> */}
                     </Box>
                   ) : (
                     /* Address does not exist */

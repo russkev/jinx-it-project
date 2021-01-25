@@ -91,7 +91,7 @@ const Signup = () => {
   const [redirect, setRedirect] = useState(
     userData.authenticated ? true : false
   );
-  const [demoSubmitting, setDemoSubmitting] = useState(false)
+  const [demoSubmitting] = useState(false)
 
   const { signup } = useUser();
 

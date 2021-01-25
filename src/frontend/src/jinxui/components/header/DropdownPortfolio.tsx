@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Link from "@material-ui/core/Link";
@@ -16,7 +15,6 @@ import {
   useUser,
   usePortfolio,
   PrimaryMenu,
-  SecondaryButton,
   PrimaryButton,
   Routes,
   SnackbarAlert,
@@ -42,109 +40,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type TEditMenuItem = {
-  edit_disabled: boolean;
-};
 
-const EditMenuItem = React.forwardRef((props: TEditMenuItem, ref: any) => {
-  const [editRedirect, setEditRedirect] = useState(false);
+const EditMenuItem = React.forwardRef((ref: any) => {
   const classes = useStyles();
 
-  const onEdit = () => {
-    // At the moment, this fails if a portfolio hasn't been created yet.
-    return (
-      <>
-        <Redirect to={Routes.PORTFOLIO_EDIT} />
-      </>
-    );
-  };
-
-  if (editRedirect) {
-    return onEdit();
-  } else {
-    return (
-      <>
-        <Link href={Routes.PORTFOLIO_EDIT} color="inherit" underline="none">
-          <MenuItem
-            ref={ref}
-            // onClick={() => {
-            //   setEditRedirect(true);
-            // }}
-            // disabled={props.edit_disabled}
-          >
-            <ListItemText
-              classes={{ primary: classes.root }}
-              primary="Edit Your Portfolio"
-            />
-          </MenuItem>
-        </Link>
-      </>
-    );
-  }
+  return (
+    <>
+      <Link href={Routes.PORTFOLIO_EDIT} color="inherit" underline="none">
+        <MenuItem ref={ref}>
+          <ListItemText
+            classes={{ primary: classes.root }}
+            primary="Edit Your Portfolio"
+          />
+        </MenuItem>
+      </Link>
+    </>
+  );
 });
 
-type TViewMenuItem = {
-  viewDisabled: boolean;
-  editDisabled: boolean;
-};
 
-const ViewMenuItem = React.forwardRef((props: TViewMenuItem, ref: any) => {
+const ViewMenuItem = React.forwardRef((ref: any) => {
   const { userData } = useUser();
-  const [viewRedirect, setViewRedirect] = useState(false);
   const menuText = "Your Portfolio";
 
-  const ViewMenuInner = () => {
-    // if (!props.viewDisabled) {
-      return (
-        <Box margin="0px 30px">
-          <Link href={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username} underline="none">
-            <PrimaryButton
-              ref={ref}
-              // onClick={() => {
-              //   setViewRedirect(true);
-              // }}
-            >
-              {menuText}
-            </PrimaryButton>
-          </Link>
-        </Box>
-      );
-    // } else {
-    //   return <SecondaryButton disabled={true}>{menuText}</SecondaryButton>;
-    // }
-  };
-
-  const onView = () => {
-    return (
-      <>
-        <Redirect
-          to={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username}
-        />
-      </>
-    );
-  };
-
-  if (props.viewDisabled || props.editDisabled) {
-    if (viewRedirect) {
-      return onView();
-    } else {
-      return (
-        <>
-          <ViewMenuInner />
-        </>
-      );
-    }
-  } else {
-    return (
+  return (
+    <Box margin="0px 30px">
       <Link
-        color="inherit"
-        underline="none"
         href={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username}
+        underline="none"
       >
-        <ViewMenuInner />
+        <PrimaryButton ref={ref}>{menuText}</PrimaryButton>
       </Link>
-    );
-  }
+    </Box>
+  );
 });
 
 type TPrivateMenuItem = {
@@ -215,12 +143,10 @@ type TLogoutMenuItem = {
 const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
   const { logout } = useUser();
   const { resetFullPortfolio } = usePortfolio();
-  const [redirect, setRedirect] = useState(false);
   const classes = useStyles();
 
   const handleLogout = () => {
     props.setOpen(false);
-    // setRedirect(true);
     logout()
       .then(() => {
         resetFullPortfolio();
@@ -231,15 +157,11 @@ const LogoutMenuItem = React.forwardRef((props: TLogoutMenuItem, ref: any) => {
     window.location.reload();
   };
 
-  if (redirect) {
-    return <Redirect to={Routes.LOGIN} />;
-  } else {
-    return (
-      <MenuItem ref={ref} onClick={handleLogout}>
-        <ListItemText primary="Logout" classes={{ primary: classes.root }} />
-      </MenuItem>
-    );
-  }
+  return (
+    <MenuItem ref={ref} onClick={handleLogout}>
+      <ListItemText primary="Logout" classes={{ primary: classes.root }} />
+    </MenuItem>
+  );
 });
 
 type TDialogButton = {
@@ -342,8 +264,6 @@ const DropdownPortfolio = React.forwardRef(
       } catch {}
     }, [open]);
 
-    const viewDisabled = props.isUserView === true;
-    const editDisabled = props.isUserEdit === true;
     const restDisabled = props.isUserView !== true && props.isUserEdit !== true;
 
     return (
@@ -373,10 +293,7 @@ const DropdownPortfolio = React.forwardRef(
               onClose={handleClose}
               onKeyDown={handleListKeyDown}
             >
-              <ViewMenuItem
-                viewDisabled={viewDisabled}
-                editDisabled={editDisabled}
-              />
+              <ViewMenuItem />
 
               <ShareMenuItem
                 setOpen={setOpen}
@@ -385,7 +302,7 @@ const DropdownPortfolio = React.forwardRef(
 
               <MenuGap />
 
-              <EditMenuItem edit_disabled={editDisabled} />
+              <EditMenuItem />
 
               <ThemeMenuItem
                 setOpen={setOpen}

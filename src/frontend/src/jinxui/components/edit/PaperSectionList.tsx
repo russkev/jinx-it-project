@@ -33,7 +33,6 @@ const PaperSectionList = () => {
         // Map over pages
         (page: TPage, index: number) => {
           const sections = getFetchedSections(page.id);
-          const isLastPage = index === getFetchedPages().length - 1;
           if (sections && !page.toDelete) {
             return (
               <Box key={page.id}>
@@ -102,10 +101,6 @@ const PaperSectionList = () => {
                 {/* {isLastPage ? <PageEdit /> : <> </>} */}
               </Box>
             );
-          // } else if (sections && isLastPage && page.toDelete ) {
-          //   return(
-          //     <PageEdit />
-          //   )
           } else {
             return (
               <></>

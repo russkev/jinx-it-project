@@ -1,8 +1,7 @@
 import React from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import MenuItem from "@material-ui/core/MenuItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 
 import Timeline from "@material-ui/lab/Timeline";
@@ -19,16 +18,6 @@ import { TPage, Tuuid } from "jinxui/types";
 type TDisplayNavigation = {
   handleClose?: any;
 };
-
-const useStyles = makeStyles((theme) => ({
-  verticallyCenterContent: {
-    margin: "auto 0",
-    textAlign: "right",
-  },
-  menuText: {
-    textAlign: "right",
-  },
-}));
 
 const TimelineItem = withStyles({
   missingOppositeContent: {
@@ -66,8 +55,6 @@ type TNavigationItem = {
   handleClose: any;
 };
 const NavigationItem = (props: TNavigationItem) => {
-  const classes = useStyles();
-
   const onClick = () => {
     HandleNavigationClick(props.handleClose, props.pageId, props.index);
   };

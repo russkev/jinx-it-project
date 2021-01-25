@@ -6,7 +6,6 @@ import {
   Theme,
 } from "@material-ui/core/styles";
 import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SaveIcon from "@material-ui/icons/Save";
 import PublishIcon from "@material-ui/icons/Publish";
@@ -103,7 +102,7 @@ const SaveMobile = (props: TSaveMobile) => {
           root: classes.speedDial,
           fab: classes.speedDialIcon,
         }}
-        icon={<SpeedDialIcon />}
+        icon={<SaveIcon />}
         onClose={handleClose}
         onOpen={handleOpen}
         open={open}
