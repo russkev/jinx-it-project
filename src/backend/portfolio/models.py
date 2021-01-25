@@ -16,20 +16,93 @@ def create_default_portfolio(sender, **kwargs):
     portfolio = Portfolio.objects.create(
         owner=account.user,
         name='My Portfolio',
+        subtitle='A collection of works',
         theme="Arch",
     )
-    page = Page.objects.create(
+    PortfolioLink.objects.create(
         portfolio=portfolio,
-        name='First Page',
+        name='',
+        icon=6,
+        address='https://www.linkedin.com/',
+        index=0
+    )
+    PortfolioLink.objects.create(
+        portfolio=portfolio,
+        name='',
+        icon=9,
+        address='https://www.instagram.com/',
+        index=1,
+    )
+    about_me_page = Page.objects.create(
+        portfolio=portfolio,
+        name='About Me',
         index=0,
     )
     Section.objects.create(
-        page=page,
-        name='Hello There!',
+        page=about_me_page,
+        name='',
         index='0',
         type='text',
         text='Welcome to Jinx\'s portfolio creation software! '
         'This is a default portfolio, feel free to modify or delete.',
+    )
+    projects_page = Page.objects.create(
+        portfolio=portfolio,
+        name='Projects',
+        index=1,
+    )
+    project_1_section = Section.objects.create(
+        page=projects_page,
+        name='Project 1',
+        type='image_text',
+        border=True,
+        text='Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+        'sed do eiusmod tempor incididunt ut labore et dolore magna '
+        'aliqua. Ut enim ad minim veniam, quis nostrud exercitation '
+        'ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis '
+        'aute irure dolor in reprehenderit in voluptate velit esse '
+        'cillum dolore eu fugiat nulla pariatur.',
+        index=0,
+    )
+    SectionLink.objects.create(
+        section=project_1_section,
+        name='Github Repository',
+        icon=6,
+        address='https://github.com/',
+        index=0
+    )
+    SectionLink.objects.create(
+        section=project_1_section,
+        name='Demo',
+        icon=13,
+        address='https://app.jinx.systems/',
+        index=1,
+    )
+    Section.objects.create(
+        page=projects_page,
+        name='Project 2',
+        type='image_text',
+        border=True,
+        text='Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+        'sed do eiusmod tempor incididunt ut labore et dolore magna '
+        'aliqua. Ut enim ad minim veniam, quis nostrud exercitation '
+        'ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis '
+        'aute irure dolor in reprehenderit in voluptate velit esse '
+        'cillum dolore eu fugiat nulla pariatur.',
+        index=1
+    )
+    contact_me_page = Page.objects.create(
+        portfolio=portfolio,
+        name='Contact Me',
+        index=2,
+    )
+    Section.objects.create(
+        page=contact_me_page,
+        name='',
+        text='email: [' + account.user.email + '](mailto:' + 
+            account.user.email + ')' + '\n\n' +
+            'phone: (+61) 0400 123 456 \n\n' + 
+            'location: Melbourne, Australia'
     )
     account.primary_portfolio = portfolio
     account.save()

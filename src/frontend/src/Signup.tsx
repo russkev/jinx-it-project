@@ -238,7 +238,7 @@ const Signup = () => {
                               "demo@demo.com",
                               "demonstrationpassword",
                               "demo",
-                              "demp",
+                              "demo",
                             ).then(() => {
                               setRedirect(true)
                             }).catch(function (error) {
@@ -251,7 +251,6 @@ const Signup = () => {
                         Make demo account
                         </SecondaryButton>
                       </StyledFormBottomButtonsDiv>
-
                       <StyledLink href={Routes.LOGIN}>
                         <Typography variant="subtitle2">
                           Already have an account? Log In
