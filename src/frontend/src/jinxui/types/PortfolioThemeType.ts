@@ -59,7 +59,9 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         // Fill instead of providing a frame
         borderIsSecondaryFill?: boolean
         // What property should be used determine background colors
-        bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
+        bgColorIndexing?: "sectionLocal" | "sectionGlobal" | "page" | "full" 
+        // Thickness of the border
+        borderThickness?: any
       }
     }
   }
@@ -97,6 +99,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         borderColor?:  "textColor" | "secondary" | string
         borderIsSecondaryFill?: boolean
         bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
+        borderThickness?: any
       }
     },
   }

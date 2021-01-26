@@ -333,12 +333,20 @@ const rainbowSmooth: Theme = createTheme({
         }
     },
     palette: {
-        type: "dark"
-    },
+        type: "dark",
+        secondary: {
+            main: "#9c0c81",
+        },
+        background: {
+            default: "#410054",
+            paper: "#420d52"
+        },
+    },        
     typography: {
         body1: {
-            fontSize: "1.5rem"
-        }
+            fontSize: "1.1rem"
+        },
+
     },
     portfolio: {
         theme: {
@@ -352,8 +360,8 @@ const rainbowSmooth: Theme = createTheme({
         section: {
             colors: ThemeBackgroundColors.rainbowGradient,
             bgColorIndexing: "sectionGlobal",
-            borderColor: "textColor"
-
+            borderColor: "secondary",
+            borderThickness: "3px",
         }
     }
 });
@@ -433,10 +441,6 @@ const arch: Theme = createTheme({
             useSecondaryForSubtitle: true,
         },
         section: {
-            headingGap: 50,
-            sectionGap: "9em",
-            spacing: 7,
-            borderPadding: 30,
             borderIsSecondaryFill: true,
             colors: ThemeBackgroundColors.secondPaperColor,
             bgColorIndexing: "page",

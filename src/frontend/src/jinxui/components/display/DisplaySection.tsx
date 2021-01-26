@@ -220,6 +220,11 @@ const DisplaySection = (props: TDisplaySection) => {
       borderColor = theme.palette.secondary.main
     }
   }
+
+  let borderThickness = "1px"
+  if (theme.portfolio.section && theme.portfolio.section.borderThickness) {
+    borderThickness = theme.portfolio.section.borderThickness;
+  }
   
   return (
     <>
@@ -244,7 +249,7 @@ const DisplaySection = (props: TDisplaySection) => {
                     : "#00000000",
                   border: theme.portfolio.section?.borderIsSecondaryFill
                     ? "none"
-                    : "1px solid " + borderColor
+                    : borderThickness + " solid " + borderColor
                 }
               : {
                   color: props.textColor,

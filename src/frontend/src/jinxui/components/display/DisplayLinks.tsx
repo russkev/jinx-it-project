@@ -100,12 +100,13 @@ const DisplayLinks = (props: TDisplayLinks) => {
             width="max-content"
             flexDirection={direction}
             alignItems="baseline"
-            marginBottom="20px"
-            marginTop="15px"
+            marginBottom="5px"
+            marginTop="0px"
           >
             {links.map((link: TLink, index: number) => {
               return (
-                <Box key={link.id} marginLeft={index > 0 ? "30px" : "0px"}>
+                <Box key={link.id} margin="15px">
+                {/* <Box key={link.id} marginLeft={index > 0 ? "30px" : "0px"}> */}
                   {link.address && link.address !== "" ? (
                     <Box>
                       <Button
