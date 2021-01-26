@@ -117,6 +117,7 @@ const DisplayLinks = (props: TDisplayLinks) => {
                           backgroundColor: "transparent",
                           padding: "0px",
                           textTransform: "none",
+                          minWidth: "auto",
                         }}
                       >
                         <LinkContent link={link} textColor={props.textColor} />

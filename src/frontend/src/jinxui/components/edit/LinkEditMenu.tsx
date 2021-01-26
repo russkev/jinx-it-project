@@ -96,17 +96,19 @@ const LinkEditMenu = (props: TLinkEditMenu) => {
 
   return (
     <div>
-      <Tooltip title="Edit link" arrow>
-        <Button onClick={handleClick}>
-          <LinkDisplayIcon icon={props.link?.icon} />
-          {props.link && props.link.name && props.link.name.length > 0 ? (
-            <Box width="8px" />
-          ) : (
-            <></>
-          )}
-          <Typography variant="button">{props.link?.name}</Typography>
-        </Button>
-      </Tooltip>
+      <Box margin="15px">
+        <Tooltip title="Edit link" arrow>
+          <Button onClick={handleClick} style={{ minWidth: "auto" }}>
+            <LinkDisplayIcon icon={props.link?.icon} />
+            {props.link && props.link.name && props.link.name.length > 0 ? (
+              <Box width="8px" />
+            ) : (
+              <></>
+            )}
+            <Typography variant="button">{props.link?.name}</Typography>
+          </Button>
+        </Tooltip>
+      </Box>
       <PrimaryMenu
         id="link-edit-menu"
         anchorEl={anchorEl}

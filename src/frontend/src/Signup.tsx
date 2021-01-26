@@ -91,12 +91,14 @@ const Signup = () => {
   const [redirect, setRedirect] = useState(
     userData.authenticated ? true : false
   );
-  const [demoSubmitting] = useState(false)
+  const [demoSubmitting] = useState(false);
 
   const { signup } = useUser();
 
   const onRegister = () => {
-    return <Redirect to={Routes.PORTFOLIO_EDIT} />;
+    return (
+      <Redirect to={Routes.PORTFOLIO_DISPLAY_BASE + "/" + userData.username} />
+    );
   };
 
   const [submittionError, setSubmittionError] = useState("");
@@ -107,7 +109,7 @@ const Signup = () => {
       <ThemeProvider theme={LightTheme}>
         <CssBaseline />
         <AccountPageDiv>
-          <Backdrop open={demoSubmitting} style={{zIndex: 2000}}>
+          <Backdrop open={demoSubmitting} style={{ zIndex: 2000 }}>
             <CircularProgress color="secondary" />
           </Backdrop>
           <HeaderBar title="Sign Up"></HeaderBar>
@@ -228,26 +230,28 @@ const Signup = () => {
                         <PrimaryButton type="submit" disabled={isSubmitting}>
                           JOIN
                         </PrimaryButton>
-                        <SecondaryButton 
-                          type="button" 
+                        <SecondaryButton
+                          type="button"
                           disabled={isSubmitting}
                           onClick={() => {
-                            setSubmitting(true)
+                            setSubmitting(true);
                             signup(
                               uuidv4(),
                               "demo@demo.com",
                               "demonstrationpassword",
                               "demo",
-                              "demo",
-                            ).then(() => {
-                              setRedirect(true)
-                            }).catch(function (error) {
-                              setSubmittionError(error)
-                              setSubmitting(false)
-                            })
+                              "demo"
+                            )
+                              .then(() => {
+                                setRedirect(true);
+                              })
+                              .catch(function (error) {
+                                setSubmittionError(error);
+                                setSubmitting(false);
+                              });
                           }}
                         >
-                        Make demo account
+                          Make demo account
                         </SecondaryButton>
                       </StyledFormBottomButtonsDiv>
                       <StyledLink href={Routes.LOGIN}>
