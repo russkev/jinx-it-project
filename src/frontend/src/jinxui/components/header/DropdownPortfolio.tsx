@@ -61,7 +61,7 @@ const EditMenuItem = React.forwardRef((props: any, ref: any) => {
 
 const ViewMenuItem = React.forwardRef((props: any, ref: any) => {
   const { userData } = useUser();
-  const menuText = "Your Portfolio";
+  const menuText = "View Your Portfolio";
 
   return (
     <Box margin="0px 30px">
