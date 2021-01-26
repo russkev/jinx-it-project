@@ -98,7 +98,7 @@ declare module '@material-ui/core/styles/createMuiTheme' {
         borderPadding?: number
         borderColor?:  "textColor" | "secondary" | string
         borderIsSecondaryFill?: boolean
-        bgColorIndexing: "sectionLocal" | "sectionGlobal" | "page" | "full" 
+        bgColorIndexing?: "sectionLocal" | "sectionGlobal" | "page" | "full" 
         borderThickness?: any
       }
     },
