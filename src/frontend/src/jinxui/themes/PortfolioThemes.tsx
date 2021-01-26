@@ -22,305 +22,305 @@ import
 
 const createTheme = (theme: any) => responsiveFontSizes(createMuiTheme(theme));
 
-const magma: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#801313",
-        },
-        secondary: {
-            "main": "#362420",
-        },
-    },
-    typography: {
-        fontFamily: "Lora, serif",
-        // fontSize: 24,
-        h1: {
-            fontFamily: "Kaushan Script, sans-serif",
-            lineHeight: 1.5,
-            fontSize: "6rem",
-        },
-        h2: {
-            fontFamily: "Kaushan Script, sans-serif"
-        },
-        h3: {
-            fontFamily: "Kaushan Script, sans-serif",
-            lineHeight: 2.5,
-        },
-        body1: {
-            "fontFamily": "Lora, serif",
-            fontSize: 22,
-        }
-    },
-    portfolio: {
-        theme: {
-            name: "Magma",
-        },
-        headerBackground: {
-            src: require("images/backgrounds/magma_01.webp"),
-            src300: require("images/backgrounds/magma_01_300.jpg"),
-        },
-        section: {
-            sectionGap: "4em",
-            headingGap: "0em",
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    },
-});
+// const magma: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#801313",
+//         },
+//         secondary: {
+//             "main": "#362420",
+//         },
+//     },
+//     typography: {
+//         fontFamily: "Lora, serif",
+//         // fontSize: 24,
+//         h1: {
+//             fontFamily: "Kaushan Script, sans-serif",
+//             lineHeight: 1.5,
+//             fontSize: "6rem",
+//         },
+//         h2: {
+//             fontFamily: "Kaushan Script, sans-serif"
+//         },
+//         h3: {
+//             fontFamily: "Kaushan Script, sans-serif",
+//             lineHeight: 2.5,
+//         },
+//         body1: {
+//             "fontFamily": "Lora, serif",
+//             fontSize: 22,
+//         }
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Magma",
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/magma_01.webp"),
+//             src300: require("images/backgrounds/magma_01_300.jpg"),
+//         },
+//         section: {
+//             sectionGap: "4em",
+//             headingGap: "0em",
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     },
+// });
 
-const sunset: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#ffa183",
-        },
-        secondary: {
-            "main": "#ffffa3",
-        },
-    },
-    typography: {
-        body1: {
-            fontSize: 22,
-        },
-    },
-    portfolio: {
-        theme: {
-            name: "Sunset",
-        },
-        headerBackground: {
-            isDark: true,
-            src: require("images/backgrounds/sunset_01.webp"),
-            src300: require("images/backgrounds/sunset_01_300.jpg"),
-        },
-        section: {
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    },
+// const sunset: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#ffa183",
+//         },
+//         secondary: {
+//             "main": "#ffffa3",
+//         },
+//     },
+//     typography: {
+//         body1: {
+//             fontSize: 22,
+//         },
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Sunset",
+//         },
+//         headerBackground: {
+//             isDark: true,
+//             src: require("images/backgrounds/sunset_01.webp"),
+//             src300: require("images/backgrounds/sunset_01_300.jpg"),
+//         },
+//         section: {
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     },
 
-});
+// });
 
-const lilypad: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#97b8b5",
-        },
-        secondary: {
-            "main": "#98b787",
-        },
-    },
-    typography: {
-        body1: {
-            fontSize: 22,
-        },
-    },
-    portfolio: {
-        theme: {
-            name: "Lily Pad",
-        },
-        headerBackground: {
-            src: require("images/backgrounds/lilypad_01.webp"),
-            src300: require("images/backgrounds/lilypad_01_300.jpg"),
-        },
-        section: {
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    },
-});
+// const lilypad: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#97b8b5",
+//         },
+//         secondary: {
+//             "main": "#98b787",
+//         },
+//     },
+//     typography: {
+//         body1: {
+//             fontSize: 22,
+//         },
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Lily Pad",
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/lilypad_01.webp"),
+//             src300: require("images/backgrounds/lilypad_01_300.jpg"),
+//         },
+//         section: {
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     },
+// });
 
-const autumn: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#919196",
-        },
-        secondary: {
-            "main": "#8e6b5f",
-        },
-    },
-    typography: {
-        body1: {
-            fontSize: 22,
-        },
-    },
-    portfolio: {
-        theme: {
-            name: "Autumn",
-        },
-        headerBackground: {
-            src: require("images/backgrounds/autumn_01.webp"),
-            src300: require("images/backgrounds/autumn_01_300.jpg"),
-        },
-        section: {
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    },
-});
+// const autumn: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#919196",
+//         },
+//         secondary: {
+//             "main": "#8e6b5f",
+//         },
+//     },
+//     typography: {
+//         body1: {
+//             fontSize: 22,
+//         },
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Autumn",
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/autumn_01.webp"),
+//             src300: require("images/backgrounds/autumn_01_300.jpg"),
+//         },
+//         section: {
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     },
+// });
 
-const cityscape: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#4a4545",
-        },
-        secondary: {
-            "main": "#c79c79",
-        },
-    },
-    typography: {
-        body1: {
-            fontSize: "1.8rem"
-        }
-    },
-    portfolio: {
-        theme: {
-            name: "Cityscape",
-        },
-        headerBackground: {
-            src: require("images/backgrounds/cityscape_01.webp"),
-            src300: require("images/backgrounds/cityscape_01_300.jpg"),
-        },
-        section: {
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    },
-});
+// const cityscape: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#4a4545",
+//         },
+//         secondary: {
+//             "main": "#c79c79",
+//         },
+//     },
+//     typography: {
+//         body1: {
+//             fontSize: "1.8rem"
+//         }
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Cityscape",
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/cityscape_01.webp"),
+//             src300: require("images/backgrounds/cityscape_01_300.jpg"),
+//         },
+//         section: {
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     },
+// });
 
-const presentation: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1200,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark",
-        primary: {
-            "main": "#bcc4ea",
-        },
-        secondary: {
-            "main": "#9efdec",
-        },
-    },
-    typography: {
-        h1: {
-            fontFamily: "Computer Modern Bright"
-        },
-        h2: {
-            fontFamily: "Computer Modern Serif",
-            fontWeight: 700,
-        },
-        h3: {
-            fontFamily: "Computer Modern Serif"
-        },
-        body1: {
-            fontSize: 22,
-            fontFamily: "Computer Modern Serif, sans-serif"
-        }
-    },
-    portfolio: {
-        theme: {
-            name: "Presentation",
-        },
-        headerBackground: {
-            isDark: true,
-            overlayColor: "0, 0, 0, 0.0",
-            src: require("images/backgrounds/jinx_logo_bg.svg"),
-            src300: require("images/backgrounds/jinx_logo_bg.svg"),
-        },
-        section: {
-            sectionGap: "20rem",
-            colors: ThemeBackgroundColors.gradient,
-            bgColorIndexing: "full",
-        }
-    }
-});
+// const presentation: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1200,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark",
+//         primary: {
+//             "main": "#bcc4ea",
+//         },
+//         secondary: {
+//             "main": "#9efdec",
+//         },
+//     },
+//     typography: {
+//         h1: {
+//             fontFamily: "Computer Modern Bright"
+//         },
+//         h2: {
+//             fontFamily: "Computer Modern Serif",
+//             fontWeight: 700,
+//         },
+//         h3: {
+//             fontFamily: "Computer Modern Serif"
+//         },
+//         body1: {
+//             fontSize: 22,
+//             fontFamily: "Computer Modern Serif, sans-serif"
+//         }
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Presentation",
+//         },
+//         headerBackground: {
+//             isDark: true,
+//             overlayColor: "0, 0, 0, 0.0",
+//             src: require("images/backgrounds/jinx_logo_bg.svg"),
+//             src300: require("images/backgrounds/jinx_logo_bg.svg"),
+//         },
+//         section: {
+//             sectionGap: "20rem",
+//             colors: ThemeBackgroundColors.gradient,
+//             bgColorIndexing: "full",
+//         }
+//     }
+// });
 
-const rainbow: Theme = createTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 700,    // One column / two column breakpoint
-            md: 1100,   // Section width
-            lg: 1280,   // Required for text breakpoints
-            xl: 1920,   // Required for text breakpoints
-        }
-    },
-    palette: {
-        type: "dark"
-    },
-    typography: {
-        body1: {
-            fontSize: "1.5rem"
-        }
-    },
-    portfolio: {
-        theme: {
-            name: "Rainbow",
-        },
-        headerBackground: {
-            src: require("images/backgrounds/rainbow_01.webp"),
-            src300: require("images/backgrounds/rainbow_01_300.jpg"),
-        },
-        section: {
-            colors: ThemeBackgroundColors.rainbowStep,
-            bgColorIndexing: "sectionGlobal",
-        }
-    }
-});
+// const rainbow: Theme = createTheme({
+//     breakpoints: {
+//         values: {
+//             xs: 0,
+//             sm: 700,    // One column / two column breakpoint
+//             md: 1100,   // Section width
+//             lg: 1280,   // Required for text breakpoints
+//             xl: 1920,   // Required for text breakpoints
+//         }
+//     },
+//     palette: {
+//         type: "dark"
+//     },
+//     typography: {
+//         body1: {
+//             fontSize: "1.5rem"
+//         }
+//     },
+//     portfolio: {
+//         theme: {
+//             name: "Rainbow",
+//         },
+//         headerBackground: {
+//             src: require("images/backgrounds/rainbow_01.webp"),
+//             src300: require("images/backgrounds/rainbow_01_300.jpg"),
+//         },
+//         section: {
+//             colors: ThemeBackgroundColors.rainbowStep,
+//             bgColorIndexing: "sectionGlobal",
+//         }
+//     }
+// });
 
 const rainbowSmooth: Theme = createTheme({
     breakpoints: {
