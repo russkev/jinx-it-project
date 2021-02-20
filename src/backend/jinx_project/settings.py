@@ -224,3 +224,4 @@ DATABASES['default'].update(db_from_env)
 # May also need to include a .env file from the next step
 # If getting error along the lines of:
 # "refused to execute script ... MIME type ('text/html')"
+# add a view function oulined in above tutorial
