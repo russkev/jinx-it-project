@@ -28,8 +28,9 @@ Otherwise, ensure that there is a `.env` file in `/deploy/django` with these var
 
 If you decide to change the API domain, you will need to edit the [frontend environment][frontend-env] file.
 
-[uwsgi-settings]: https://github.com/JayZ2398/jinx-it-project/blob/master/src/backend/uwsgi.ini
-[frontend-env]: https://github.com/JayZ2398/jinx-it-project/blob/master/src/frontend/.env.production
+<!-- [uwsgi-settings]: https://github.com/JayZ2398/jinx-it-project/blob/master/src/backend/uwsgi.ini -->
+[uwsgi-settings]: ../../../src/backend/uwsgi.ini
+[frontend-env]: ../../../src/frontend/.env.production
 [uwsgi]: https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/uwsgi/
 [django-deploy]: https://docs.djangoproject.com/en/3.1/howto/deployment/
 

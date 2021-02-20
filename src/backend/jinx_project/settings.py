@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 
 # dot in front will match all our subdomains
-ALLOWED_HOSTS = ['.jinx.systems', '127.0.0.1']
+ALLOWED_HOSTS = ['.jinx.systems', '127.0.0.1', 'kjinx.mooo.com']
 
 
 # Corsheader settings.
@@ -70,6 +70,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,12 +79,22 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_URL = '/static/'
+
+STATIC_DIRS = [
+    os.path.join(BASE_DIR, 'build/static')
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 ROOT_URLCONF = 'jinx_project.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -201,3 +212,15 @@ SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': SWAGGER_SECURITY_DEFINITIONS,
     'USE_SESSION_AUTH': SWAGER_DJANGO_SESSIONS,
 }
+
+# Heroku: Update database configuration from $DATABASE_URL
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+# May need to set heroku settings. 
+# See the following at the end of "Deploying the Web App using Heroku"
+# https://dev.to/mdrhmn/deploying-react-django-app-using-heroku-2gfa
+# May also need to include a .env file from the next step
+# If getting error along the lines of:
+# "refused to execute script ... MIME type ('text/html')"

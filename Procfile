@@ -1,0 +1,1 @@
+web: uwsgi src/backend/uwsgi.ini
