@@ -41,7 +41,9 @@ CORS_ALLOWED_ORIGINS = (
     'http://localhost:3000',
     'localhost:3000'
 )
-
+CORS_ALLOWED_ORIGIN_REGEXES = (
+    'https:\/\/elastic\-allen\-99fad7\.netlify\.app*'
+)
 
 # Prevent browsers from sending cookies if on http
 CSRF_COOKIE_SECURE = False
