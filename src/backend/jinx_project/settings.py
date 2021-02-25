@@ -35,15 +35,15 @@ ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com', '.kjinx.mooo.com']
 # Corsheader settings.
 # Sets which sites are allowed to contact the api
 # This should be set to where the front end will be served.
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOWED_ORIGINS = (
-    'https://elastic-allen-99fad7.netlify.app',
-    'http://localhost:3000',
-    'localhost:3000'
-)
-CORS_ALLOWED_ORIGIN_REGEXES = (
-    'https:\/\/elastic\-allen\-99fad7\.netlify\.app*'
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = (
+#     'https://elastic-allen-99fad7.netlify.app',
+#     'http://localhost:3000',
+#     'localhost:3000'
+# )
+# CORS_ALLOWED_ORIGIN_REGEXES = (
+#     'https:\/\/elastic\-allen\-99fad7\.netlify\.app*'
+# )
 
 # Prevent browsers from sending cookies if on http
 CSRF_COOKIE_SECURE = False
