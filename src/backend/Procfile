@@ -1,2 +1,2 @@
-web: gunicorn --chdir jinx_project.wsgi:application --log-file -
+web: gunicorn jinx_project.wsgi:application --log-file -
 release: python manage.py migrate
