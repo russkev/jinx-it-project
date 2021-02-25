@@ -16,8 +16,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-print("BASE_DIR:")
-print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -168,7 +166,7 @@ STATIC_URL = '/static/'
 # MEDIA_URL = 'https://cdn.jinx.systems/'
 # MEDIA_ROOT = '/srv/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/media')
 MEDIA_URL = '/media/'
 
 
@@ -190,7 +188,7 @@ SWAGGER_SECURITY_DEFINITIONS = {
     }
 }
 
-SWAGER_DJANGO_SESSIONS = False
+SWAGGER_DJANGO_SESSIONS = False
 
 # if development mode, load dev settings to override production settings
 if os.getenv('DJANGO_DEV'):
@@ -207,7 +205,7 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': SWAGGER_SECURITY_DEFINITIONS,
-    'USE_SESSION_AUTH': SWAGER_DJANGO_SESSIONS,
+    'USE_SESSION_AUTH': SWAGGER_DJANGO_SESSIONS,
 }
 
 # Heroku: Update database configuration from $DATABASE_URL

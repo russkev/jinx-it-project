@@ -44,7 +44,7 @@ DRF_DEFAULT_AUTHENTICATION_CLASSES = (
     'rest_framework.authentication.SessionAuthentication',
 )
 
-SWAGER_DJANGO_SESSIONS = True
+SWAGGER_DJANGO_SESSIONS = True
 
 LOGIN_URL = '/api/dev-auth/login'
 LOGOUT_URL = 'api/dev-auth/logout'
