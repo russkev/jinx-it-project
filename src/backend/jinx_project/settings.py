@@ -28,8 +28,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 
 # dot in front will match all our subdomains
-ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com']
-# ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Corsheader settings.
