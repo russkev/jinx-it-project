@@ -136,3 +136,18 @@ This is based off [this guide](https://testdriven.io/blog/django-debugging-vs-co
   6. Spin up docker
   7. Press the little `Start Debugging` button. Keep in mind, you need to do this in order for DJango to start up.
   8. Now if you open up `http://localhost:3000` and do anything to hit one of the breakpoints, it should pause and give you a debugging session in VSCode.
+
+  ## How to deploy on dokku / heroku
+  The backend is set up to deploy on Dokku using a buildpack. It should work with Heroku as well (although I have not tried it)
+
+  The trick is to push the backend directory and not the whole project to Dokku. Once you have set up the remote properly (see documentation), you can push the backend directory by running:
+  ```
+  git subtree push --prefix src/backend dokku_backend master
+  ```
+  In this case `dokku_backend` is the name I've given to the remote.
+
+  On the Dokku image, the `BASE_DIR` is `/app`
+
+  Free subdomains for hosting a backend like this can be found at: `https://freedns.afraid.org`
+
+  
