@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IUserContext } from "jinxui";
+import { IUserContext } from "jinxui/types";
 
 const USER_DATA_KEY = "userData";
 
@@ -7,12 +7,16 @@ export const defaultUserContext: IUserContext = {
   username: "",
   firstName: "",
   lastName: "",
+  email: "",
   token: "",
-  portfolioId: 0,
+  portfolioId: "0-0-0-0-0",
   authenticated: false,
   theme: "",
   lightThemeMode: true,
   isSaving: false,
+  isLoading: false,
+  successMessage: "",
+  errorMessage: "",
   config: {},
 };
 
@@ -28,6 +32,7 @@ export const UserContext = React.createContext<[IUserContext, any, any]>([defaul
  * @param userData new copy of userData to save - ideally the latest context state
  */
 export function storeUserData(userData: IUserContext) {
+  
   localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
 }
 

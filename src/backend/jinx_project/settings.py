@@ -17,7 +17,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,19 +27,22 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 
 # dot in front will match all our subdomains
-ALLOWED_HOSTS = ['.jinx.systems', '127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com', '.kjinx.mooo.com']
+# ALLOWED_HOSTS = ['*']
 
 
 # Corsheader settings.
 # Sets which sites are allowed to contact the api
 # This should be set to where the front end will be served.
 CORS_ORIGIN_ALLOW_ALL = True
-#CORS_ALLOWED_ORIGINS = (
-#    'https://app.jinx.systems',
-#    'http://localhost:3000',
-#    'localhost:3000'
-#)
-
+# CORS_ALLOWED_ORIGINS = (
+#     'https://elastic-allen-99fad7.netlify.app',
+#     'http://localhost:3000',
+#     'localhost:3000'
+# )
+# CORS_ALLOWED_ORIGIN_REGEXES = (
+#     'https:\/\/elastic\-allen\-99fad7\.netlify\.app*'
+# )
 
 # Prevent browsers from sending cookies if on http
 CSRF_COOKIE_SECURE = False
@@ -70,6 +72,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,7 +86,7 @@ ROOT_URLCONF = 'jinx_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -160,8 +163,11 @@ STATIC_URL = '/static/'
 # User uploaded file
 # we don't actually have a cdn lol, but just in case this project grows big enough to need one
 
-MEDIA_URL = 'https://cdn.jinx.systems/'
-MEDIA_ROOT = '/srv/media/'
+# MEDIA_URL = 'https://cdn.jinx.systems/'
+# MEDIA_ROOT = '/srv/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
 
 
 DRF_DEFAULT_RENDERER_CLASSES = (
@@ -182,7 +188,7 @@ SWAGGER_SECURITY_DEFINITIONS = {
     }
 }
 
-SWAGER_DJANGO_SESSIONS = False
+SWAGGER_DJANGO_SESSIONS = False
 
 # if development mode, load dev settings to override production settings
 if os.getenv('DJANGO_DEV'):
@@ -199,5 +205,18 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': SWAGGER_SECURITY_DEFINITIONS,
-    'USE_SESSION_AUTH': SWAGER_DJANGO_SESSIONS,
+    'USE_SESSION_AUTH': SWAGGER_DJANGO_SESSIONS,
 }
+
+# Heroku: Update database configuration from $DATABASE_URL
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+# May need to set heroku settings. 
+# See the following at the end of "Deploying the Web App using Heroku"
+# https://dev.to/mdrhmn/deploying-react-django-app-using-heroku-2gfa
+# May also need to include a .env file from the next step
+# If getting error along the lines of:
+# "refused to execute script ... MIME type ('text/html')"
+# add a view function oulined in above tutorial

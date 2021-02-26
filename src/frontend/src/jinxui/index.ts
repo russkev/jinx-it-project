@@ -1,75 +1,85 @@
 /* Form */
-export { default as ErrorMessage } from "./components/form/ErrorMessage";
-export { default as EntryTitle } from "./components/form/EntryTitle";
-export { default as FormDiv } from "./components/form/FormDiv";
-export { default as FormEntry } from "./components/form/FormEntry";
-export { default as SubmitButton } from "./components/form/SubmitButton";
-export { default as FormAlert } from "./components/form/FormAlert";
-export { default as FormOuterDiv } from "./components/form/FormOuterDiv";
-export { default as FormBottomButtonsDiv } from "./components/form/FormBottomButtonsDiv";
-export { default as FormSectionsDiv } from "./components/form/FormSectionDiv";
+export { default as StyledFormDiv } from "./components/form/StyledFormDiv";
+export { default as StyledFormAlert } from "./components/form/StyledFormAlert";
+export { default as StyledFormOuterDiv } from "./components/form/StyledFormOuterDiv";
+export { default as StyledFormBottomButtonsDiv } from "./components/form/StyledFormBottomButtonsDiv";
+export { default as StyledFormSectionsDiv } from "./components/form/StyledFormSectionDiv";
 
 /* Site */
 export { default as SiteLayout } from "./components/site/SiteLayout";
 export { default as PrimaryColumnDiv } from "./components/site/PrimaryColumnDiv";
 export { default as PrimaryMenu } from "./components/site/PrimaryMenu";
-export { default as SnackbarAlert } from "./components/site/SnackbarAlert"; 
+export { default as SnackbarAlert } from "./components/site/SnackbarAlert";
+export { default as MenuGap } from "./components/site/MenuGap"
 
 /* Button */
-export { PrimaryButton } from "./components/button/Button";
-export { SecondaryButton } from "./components/button/Button";
+export { PrimaryButton } from "./components/site/Button";
+export { SecondaryButton } from "./components/site/Button";
 
 /* Header */
-export { default as HeaderDiv } from "./components/header/HeaderDiv";
-export { default as SiteHeader } from "./components/header/SiteHeader";
 export { default as LogoLink } from "./components/header/LogoLink";
-export { default as HeaderTitle } from "./components/header/HeaderTitle";
 export { HeaderBar, HeaderMediaWidth } from "./components/header/HeaderBar";
-export { default as HeaderButton } from "./components/header/HeaderButton";
-export { default as HeaderBarSpacer } from "./components/header/HeaderBarSpacer";
+export { default as DropdownPortfolio } from "./components/header/DropdownPortfolio";
+export { default as DialogAccount } from "./components/header/DialogAccount"
+export { default as DialogShare } from "./components/header/DialogShare";
+export { default as DialogTheme } from "./components/header/DialogTheme";
+export { default as StyledHeaderButton } from "./components/header/StyledHeaderButton";
+export { default as StyledHeaderDiv } from "./components/header/StyledHeaderDiv";
+export { default as StyledSiteHeader } from "./components/header/StyledSiteHeader";
+export { default as StyledHeaderTitle } from "./components/header/StyledHeaderTitle";
+export { default as StyledHeaderBarSpacer } from "./components/header/StyledHeaderBarSpacer";
 
 /* Account */
 export { default as AccountPageDiv } from "./components/account/AccountPageDiv";
-export { default as UserAvatarDropdown } from "./components/account/UserAvatarDropdown";
 
 /* Display */
-export { default as PageName } from "./components/display/PageName";
-export { default as SectionName } from "./components/display/SectionName";
-export { default as TextSectionDiv } from "./components/display/TextSectionDiv";
-export { default as PageDiv } from "./components/display/PageDiv";
-export { default as OneColumnSectionDiv } from "./components/display/OneColumnSectionDiv";
-export { default as TwoColumnSectionDiv } from "./components/display/TwoColumnSectionDiv";
-export { default as PortfolioDropdown } from "./components/display/PortfolioDropdown"
-
-/* Display Mui*/
-export {
-  Section,
-  SectionGrid,
-  CentredGrid,
-  BackgroundImage,
-  Copyright,
-  ScreenBlock,
-  PortfolioHeader,
-} from "./components/display/MuiComponents";
-
-
-
+export { default as DisplayBackground } from "./components/display/DisplayBackground"
+export { default as DisplayCopyright } from "./components/display/DisplayCopyright"
+export { default as DisplayHeader } from "./components/display/DisplayHeader"
+export { default as DisplayLinks } from "./components/display/DisplayLinks"
+export { default as DisplaySection } from "./components/display/DisplaySection"
+export { default as DisplaySectionList } from "./components/display/DisplaySectionList"
+export { default as DisplayPageList } from "./components/display/DisplayPageList"
+export { HandleNavigationClick } from "./components/display/DisplayNavigationTimeline"
+export { default as DisplayNavigationTimeline } from "./components/display/DisplayNavigationTimeline"
+export { default as DisplayNavigationSidePanel } from "./components/display/DisplayNavigationSidePanel"
+export { default as DisplayNavigationHeader } from "./components/display/DisplayNavigationHeader"
+export { default as DisplayLoading } from "./components/display/DisplayLoading"
+export { default as ThemeBackgroundColors } from "./components/display/ThemeBackgroundColors"
+export { default as ThemeSectionColors } from "./components/display/ThemeSectionColors"
 
 /* Edit */
+export { default as HeaderEditAddition } from "./components/edit/HeaderEditAddition"
 export { default as PaperSection } from "./components/edit/PaperSection"
-export { default as NewSectionMenu } from "./components/edit/NewSectionMenu"
-export { default as UploadImageSubSection } from "./components/edit/UploadImageSubSection"
-export { default as TextFieldSubSection } from "./components/edit/TextFieldSubSection"
-export { default as PortfolioNameSectionInput } from "./components/edit/PortfolioNameSectionInput"
-export { default as TextSectionInput } from "./components/edit/TextSectionInput"
-export { default as ImageSectionInput } from "./components/edit/ImageSectionInput"
-export { default as ImageTextSectionInput } from "./components/edit/ImageTextSectionInput"
-export { default as UserImage } from "./components/edit/UserImage";
-export { default as DefaultSectionData } from "./components/edit/DefaultSectionData"
-export { default as PaperSectionStatic } from "./components/edit/PaperSectionStatic"
-export { default as PaperSectionBase } from "./components/edit/PaperSectionBase"
-export { default as PaperSectionDiv } from "./components/edit/PaperSectionDiv"
-export { default as PaperSectionTitle } from "./components/edit/PaperSectionTitle"
+export { default as ContentChoiceMenu } from "./components/edit/ContentChoiceMenu"
+export { default as InputComponentTextField } from "./components/edit/InputComponentTextField"
+export { default as InputComponentUploadImage } from "./components/edit/InputComponentUploadImage"
+export { default as InputComponentVideo } from "./components/edit/InputComponentVideo"
+export { default as InputText } from "./components/edit/InputText"
+export { default as InputImage } from "./components/edit/InputImage"
+export { default as InputImageText } from "./components/edit/InputImageText"
+export { default as InputPortfolio } from "./components/edit/InputPortfolio"
+export { default as InputVideo } from "./components/edit/InputVideo"
+export { default as LinkIconMenu } from "./components/edit/LinkIconMenu"
+export { default as LinkDialog } from "./components/edit/LinkDialog"
+export { default as LinkEditMenu } from "./components/edit/LinkEditMenu"
+export { default as LinksDisplay } from "./components/edit/LinksDisplay"
+export { default as NewSectionButton } from "./components/edit/NewSectionButton"
+export { default as PortfolioNameSectionInput } from "./components/edit/LinksDisplay"
+export { default as PaperSectionsList } from "./components/edit/PaperSectionList"
+export { LinkIconEnum, LinkDisplayIcon } from "./components/edit/LinkDisplayIcon"
+export { default as PageEdit } from "./components/edit/PageEdit"
+export { default as SaveMobile } from "./components/edit/SaveMobile"
+export { default as SaveDesktop } from "./components/edit/SaveDesktop"
+export { default as StyledOneColumnSectionDiv } from "./components/edit/StyledOneColumnSectionDiv";
+export { default as StyledTwoColumnSectionDiv } from "./components/edit/StyledTwoColumnSectionDiv";
+export { default as StyledUserImageEdit } from "./components/edit/StyledUserImageEdit";
+export { default as StyledPaperSectionBase } from "./components/edit/StyledPaperSectionBase"
+export { default as StyledPaperSectionDiv } from "./components/edit/StyledPaperSectionDiv"
+export { default as StyledPaperSectionHeading } from "./components/edit/StyledPaperSectionHeading"
+export { default as SkeletonLinks } from "./components/edit/SkeletonLinks"
+export { default as SkeletonInput } from "./components/edit/SkeletonInput"
+export { default as SkeletonEditAll } from "./components/edit/SkeletonEditAll"
 
 /* Home */
 export { default as HomeTemplates } from "./components/home/HomeTemplates";
@@ -81,46 +91,45 @@ export { LoggedInRoute, LoggedOutRoute } from "./routes/ProtectedRoutes.js";
 export { PortfolioDisplay } from "./routes/PortfolioDisplay";
 export { Routes } from "./routes/Routes";
 
-/* Context */
+/* Utils */
 export {
-  UserContextProvider,
-  UserContext,
-  defaultUserContext,
-  storeUserData,
-  retrieveUserData,
-} from "./contexts/index";
-
-/* Types */
-
-export type {
-  TPortfolio,
-  TPage,
-  TSection,
-  TSectionData,
-  TEditSection,
-  TPortfolioData,
-  TPageData,
-  IUserContext,
-} from "./types/index";
+  listDelete,
+  listMoveUp,
+  listMoveDown,
+  listAdd,
+} from "./components/site/Utils";
 
 /* Hook */
 export { useUser } from "./hooks/useUser";
+export { usePortfolio } from "./hooks/usePortfolio";
+export { useSection } from "./hooks/useSection";
+export { usePage } from "./hooks/usePage";
 
-/* Theme */
+
+/* Constants */
+const LOGIN_PATH = "auth/token/login";
+const LOGOUT_PATH = "auth/token/logout";
+const ACCOUNT_PATH = "api/accounts";
+const SIGNUP_PATH = "auth/users";
+const IMAGES_PATH = "api/images";
+const PORTFOLIOS_PATH = "api/portfolios";
 export {
-  LightTheme,
-  DarkTheme,
-  LightShadowColour,
-  DarkShadowColour,
-  LightHeaderGrad,
-  DarkHeaderGrad,
-  LightTitleBGGrad,
-  DarkTitleBGGrad,
-  LightPrimaryButtonGrad,
-  LightPrimaryButtonGradHover,
-  DarkPrimaryButtonGrad,
-  BlueIconGrad,
-} from "./theme/GlobalTheme";
+  LOGIN_PATH,
+  LOGOUT_PATH,
+  ACCOUNT_PATH,
+  SIGNUP_PATH,
+  IMAGES_PATH,
+  PORTFOLIOS_PATH,
+};
 
-/* Portfolio themes */
-export { PortfolioThemes, defaultColors } from "./theme/index";
+/* Sizes */
+const BOX_HEIGHT = "130px";
+const MAX_EDIT_HEADING_WIDTH = "550px"
+const MAX_EDIT_SECTION_WIDTH = "900px"
+const SAVE_DESKTOP_WIDTH = "1380px"
+export {
+  BOX_HEIGHT,
+  MAX_EDIT_HEADING_WIDTH,
+  MAX_EDIT_SECTION_WIDTH,
+  SAVE_DESKTOP_WIDTH,
+}

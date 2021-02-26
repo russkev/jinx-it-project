@@ -2,11 +2,15 @@ export type {
   TPortfolio,
   TPage,
   TSection,
-  TSectionData,
-  TEditSection,
-  TPortfolioData,
-  TPageData,
+  TSections,
+  TSectionInfo,
+  TLink,
+  TImage,
+  Tuuid,
+  TDialog,
 } from "./PortfolioTypes";
+
+export { ESectionType } from "./PortfolioTypes"
 
 export type {
   IUserContext

@@ -8,12 +8,15 @@ import Icon from "@material-ui/core/Icon";
 import {
   SiteLayout,
   PrimaryButton,
-  LightTheme,
-  LightTitleBGGrad,
   HeaderBar,
   HomeTemplates,
   HomeFooter,
 } from "jinxui";
+
+import {
+  LightTheme,
+  LightTitleBGGrad,
+} from "jinxui/themes"
 
 // Mobile / responsive issues:
 // - Login doesn't appear to work from mobile phone

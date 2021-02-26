@@ -12,6 +12,7 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.static import serve
 
 import djoser.views
 from rest_framework.routers import DefaultRouter
@@ -51,7 +52,11 @@ urlpatterns = [
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-]
+] 
+
+# Add media path for user uploaded images
+urlpatterns += [url(r'^media/(?P<path>.*)$', serve, {'document_root':
+                                                    settings.MEDIA_ROOT})]
 
 if settings.DEBUG:
     urlpatterns += [

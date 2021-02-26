@@ -99,3 +99,55 @@ Here's what to do with the frontend:
 The default portfolio will be added as a new user's primary portfolio.
 
 To change the default portfolio, edit the `create_default_portfolio` function in the portfolio's  [models](portfolio/models.py) file.
+
+
+## How to test serializers on their own
+
+Follow [this guide](https://www.django-rest-framework.org/tutorial/1-serialization/#working-with-serializers) on using the DJango shell to test the serializer directly
+
+## How to debug in VSCode
+This is based off [this guide](https://testdriven.io/blog/django-debugging-vs-code/)
+
+  1. Create a new `launch.json` in your `.vscode` folder
+  2. Give it the following settings:
+``` json 
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Django",
+      "type": "python",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/src/backend",
+          "remoteRoot": "/backend"
+        }
+      ],
+      "port": 3001,
+      "host": "127.0.0.1",
+    }
+  ]
+}
+```
+  3. Open `manage.py`
+  4. Uncomment section surrounded by `# start debug section` and `# end debug section`
+  5. Set some break points
+  6. Spin up docker
+  7. Press the little `Start Debugging` button. Keep in mind, you need to do this in order for DJango to start up.
+  8. Now if you open up `http://localhost:3000` and do anything to hit one of the breakpoints, it should pause and give you a debugging session in VSCode.
+
+  ## How to deploy on dokku / heroku
+  The backend is set up to deploy on Dokku using a buildpack. It should work with Heroku as well (although I have not tried it)
+
+  The trick is to push the backend directory and not the whole project to Dokku. Once you have set up the remote properly (see documentation), you can push the backend directory by running:
+  ```
+  git subtree push --prefix src/backend dokku_backend master
+  ```
+  In this case `dokku_backend` is the name I've given to the remote.
+
+  On the Dokku image, the `BASE_DIR` is `/app`
+
+  Free subdomains for hosting a backend like this can be found at: `https://freedns.afraid.org`
+
+  

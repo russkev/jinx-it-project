@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-
+import uuid
 from . import views
 
 
@@ -12,38 +12,58 @@ urlpatterns = [
         name='portfolio_list',
     ),
     path(
-        'portfolios/<int:portfolio_id>',
+        'portfolios/<uuid:portfolio_id>',
         views.PortfolioDetail.as_view(),
         name='portfolio_detail',
     ),
     path(
-        'portfolios/<int:portfolio_id>/pages',
+        'portfolios/<uuid:portfolio_id>/pages',
         views.PageList.as_view(),
         name='page_list',
     ),
     path(
-        'portfolios/<int:portfolio_id>/pages/<int:page_id>',
+        'portfolios/pages/<uuid:page_id>',
         views.PageDetail.as_view(),
         name='page_detail',
     ),
     path(
-        'portfolios/<int:portfolio_id>/pages/<int:page_id>/sections',
+        'portfolios/pages/<uuid:page_id>/sections',
         views.SectionList.as_view(),
         name='section_list',
     ),
     path(
-        'portfolios/<int:portfolio_id>/pages/<int:page_id>/sections/<int:section_id>',
+        'portfolios/pages/sections/<uuid:section_id>',
         views.SectionDetail.as_view(),
         name='section_detail',
     ),
     path(
-        'images',
-        views.ImageList.as_view(),
-        name = 'image_list',
+        'portfolios/<uuid:portfolio_id>/links',
+        views.PortfolioLinkList.as_view(),
+        name='portfolio_link_list'
     ),
     path(
-        'images/<int:image_id>',
+        'portfolios/links/<uuid:link_id>',
+        views.PortfolioLinkDetail.as_view(),
+        name='portfolio_link_detail'
+    ),
+    path(
+        'portfolios/pages/sections/<uuid:section_id>/links',
+        views.SectionLinkList.as_view(),
+        name = 'section_link_list',
+    ),
+    path(
+        'portfolios/pages/sections/links/<uuid:link_id>',
+        views.SectionLinkDetail.as_view(),
+        name = 'section_link_detail',
+    ),
+    path(
+        'images',
+        views.ImageList.as_view(),
+        name='image_list',
+    ),
+    path(
+        'images/<uuid:image_id>',
         views.ImageDetail.as_view(),
-        name = 'image_list',
+        name='image_detail',
     ),
 ]

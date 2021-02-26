@@ -2,46 +2,75 @@
    with variables and components. Should be OK to not do this for prop 
    types defined within your file */
 
+// export type Tuuid = `${string}-${string}-${string}-${string}-${string}`
+export type Tuuid = string
+
 export type TPortfolio = {
-  id: number;
+  id: Tuuid;
   owner: number;
   name: string;
-  pages: number[];
+  subtitle: string;
+  pages: Tuuid[];
+  links: TLink[];
+  private: boolean;
   theme: string;
   background: string;
-} | null;
+};
 
 export type TPage = {
-  id: number;
+  id: Tuuid;
   name: string;
-  number: number;
-  sections: number[];
+  index: number;
+  sections: TSection[];
+  isNew?: boolean;
+  toDelete?: boolean;
 };
 
-export interface TSection extends TSectionData {
-  id?: number;
-  type: string;
-  number: number;
+export type TSection = {
+  id: Tuuid;
+  name: string;
+  type: ESectionType;
+  index: number;
+  border: boolean;
+  text: string;
+  image: TImage | null;
+  video: string;
+  page: Tuuid;
+  links: TLink[];
 }
-export interface TEditSection extends TSection {
-  uid: string
+
+export interface TSections {
+  [pageId: string]: TSection[]
+}
+
+export type TSectionInfo = {
+  pageId: Tuuid;
+  section: TSection;
+}
+
+export type TLink = {
+  id: Tuuid;
+  name?: string;
+  address?: string;
+  icon?: number;
+  index: number;
 };
 
-export type TPortfolioData = {
+export type TImage = {
+  id: Tuuid;
   name: string;
-  number?: number;
-};
+  path: string;
+}
 
-export type TPageData = {
-  name: string;
-  number?: number;
-};
+export type TDialog = {
+  open: boolean;
+  setOpen: any
+}
 
-export type TSectionData = {
-  name: string;
-  content: string;
-  media?: string;
-  image?: number | null;
-  path?: string;
-  alt?: string;
-};
+export enum ESectionType {
+  text = "text",
+  image = "image",
+  imageText = "image_text",
+  video = "video",
+  skeleton = "skeleton,"
+}
