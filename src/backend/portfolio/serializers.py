@@ -104,22 +104,22 @@ class PageSerializer(
         model = models.Page
         fields = ['id', 'name', 'index', 'sections']
 
-    def delete_unused_images(self, owner):
-        user_images = models.Image.objects.filter(owner=owner)
-        for user_image in user_images:
-            image_id = user_image.id
-            image_is_for_deletion = True
-            try:
-                models.Section.objects.get(image=image_id)
-                image_is_for_deletion = False
-            except models.Section.DoesNotExist:
-                pass
-            if image_is_for_deletion:
-                user_image.delete()
+    # def delete_unused_images(self, owner):
+    #     user_images = models.Image.objects.filter(owner=owner)
+    #     for user_image in user_images:
+    #         image_id = user_image.id
+    #         image_is_for_deletion = True
+    #         try:
+    #             models.Section.objects.get(image=image_id)
+    #             image_is_for_deletion = False
+    #         except models.Section.DoesNotExist:
+    #             pass
+    #         if image_is_for_deletion:
+    #             user_image.delete()
 
     def update(self, instance, validated_data):
         super().update(instance, validated_data)
-        self.delete_unused_images(instance.owner)
+        # self.delete_unused_images(instance.owner)
         return instance
 
 ################################################################################
