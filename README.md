@@ -1,6 +1,7 @@
 # Jinx ePortfolio App
 
 [![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-yellow.svg)](https://www.gnu.org/licenses/agpl-3.0.en.html)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/72be82f4-41c3-4a8c-a86a-d07b2919edac/deploy-status)](https://app.netlify.com/sites/elastic-allen-99fad7/deploys)
 
 ![Jinx Demo](./documentation/artefacts/demo.gif)
 
