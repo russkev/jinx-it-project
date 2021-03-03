@@ -1,4 +1,25 @@
 # Deployment
+Add the dokku server as a remote:
+```
+git remote add dokku dokku@kjinx.mooo.com:jinx_backend
+```
+Add SSH key to dokku:
+```
+cat ~/.ssh/<key_name>.pub | ssh kjinx dokku ssh-keys:add <key_name>
+```
+Add appropriate configuration to `~/.ssh/config`:
+```
+Host kjinx.mooo.com
+	HostName kjinx.mooo.com
+	IdentityFile ~/.ssh/<Private key name>
+```
+To deploy, run:
+```
+deploy/deploy.sh
+```
+This will upload and deploy the backend directory to the backend server and then update the github repository. This should trigger Netlify to build and deploy the frontend.
+
+# Deployment (old)
 
 1. `ssh` into the server
 2. Change directory to `/jinx/repo`

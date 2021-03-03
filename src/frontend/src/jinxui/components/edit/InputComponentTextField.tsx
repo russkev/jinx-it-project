@@ -32,6 +32,15 @@ const InputComponentTextField = (props: TInputComponentTextField) => {
     });
   };
 
+  const LogPagesState = () => {
+    const isDevelopmentMode = process.env.NODE_ENV === 'development';
+    if (isDevelopmentMode) {
+      return <Button onClick={logState}>Log State</Button>;
+    } else {
+      return null
+    }
+  }
+
   return (
     <Box>
       <Box
@@ -42,7 +51,7 @@ const InputComponentTextField = (props: TInputComponentTextField) => {
       >
         <LinksDisplay sectionId={props.section.id} pageId={props.pageId} />
         <LinkDialog sectionId={props.section.id} pageId={props.pageId} />
-        <Button onClick={logState}>Log State</Button>
+        <LogPagesState />
       </Box>
       <TextField
         name={props.section.id}

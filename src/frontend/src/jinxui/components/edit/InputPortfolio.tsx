@@ -23,10 +23,7 @@ const LinksDiv = styled.div`
 
 const InputPortfolio = () => {
   const { isLoading } = useUser();
-  const {
-    logPortfolioState,
-    getFetchedPortfolio,
-  } = usePortfolio();
+  const { logPortfolioState, getFetchedPortfolio } = usePortfolio();
   var portfolioState = getFetchedPortfolio();
   const [localTitle, setLocalTitle] = useState<string>(portfolioState.name);
   const [localSubtitle, setLocalSubtitle] = useState<string>(
@@ -53,6 +50,17 @@ const InputPortfolio = () => {
       return newValue;
     });
   };
+
+  const LogPortfolioStateButton = () => {
+    const isDevelopmentMode = process.env.NODE_ENV === "development";
+    if (isDevelopmentMode) {
+      return <Button onClick={logPortfolioState}>Log Portfolio State</Button>;
+    } else {
+      return null;
+    }
+  };
+
+  console.log(process.env.NODE_ENV);
 
   return (
     <>
@@ -100,7 +108,7 @@ const InputPortfolio = () => {
               <LinksDiv>
                 <LinksDisplay />
                 <LinkDialog />
-                <Button onClick={logPortfolioState}>Log Portfolio State</Button>
+                <LogPortfolioStateButton />
               </LinksDiv>
             </StyledOneColumnSectionDiv>
           </StyledPaperSectionBase>
