@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
 import { useUser, useSection, StyledUserImageEdit } from "jinxui";
 import { TImage, TSectionInfo } from "jinxui/types";
-import { defaultImageContext } from "jinxui/contexts"
+import { defaultImageContext } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
 const StyledInput = styled.input`
@@ -58,19 +59,21 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
   const { uploadImage } = useUser();
   // const [imageResponse, setImageResponse] = useState({ path: "", id: "null" });
   const [localImage, setLocalImage] = useState<TImage>(() => {
-    const existingImage = getFetchedSection(props.pageId, props.section.id).image
+    const existingImage = getFetchedSection(props.pageId, props.section.id)
+      .image;
     if (existingImage !== null) {
-      return existingImage
+      return existingImage;
     } else {
-      return defaultImageContext
+      return defaultImageContext;
     }
-  }
-    
-  );
+  });
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
-    if (props.section.image !== null && props.section.image.id !== defaultImageContext.id) {
+    if (
+      props.section.image !== null &&
+      props.section.image.id !== defaultImageContext.id
+    ) {
       setImageExists(true);
     }
   }, [props.section]);
@@ -80,77 +83,79 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
       {/* Make a hidden upload image button here that we will use a 
           further button to ensure provide interaction
           This button is notoriously difficult to style */}
-      <label htmlFor={input_id}>
-        <StyledInput
-          accept="image/*"
-          id={input_id}
-          multiple
-          type="file"
-          onChange={(event) => {
-            if (event.currentTarget.files && event.currentTarget.files[0]) {
-              uploadImage(
-                event.currentTarget.files[0],
-                event.currentTarget.files[0].name,
-                setProgress
-              )
-                .then((response) => {
-                  setLocalImage(() => {
-                    onSectionChange(props.pageId, props.section.id, {
-                      image: response.data,
+      <Box justifySelf="center">
+        <label htmlFor={input_id}>
+          <StyledInput
+            accept="image/*"
+            id={input_id}
+            multiple
+            type="file"
+            onChange={(event) => {
+              if (event.currentTarget.files && event.currentTarget.files[0]) {
+                uploadImage(
+                  event.currentTarget.files[0],
+                  event.currentTarget.files[0].name,
+                  setProgress
+                )
+                  .then((response) => {
+                    setLocalImage(() => {
+                      onSectionChange(props.pageId, props.section.id, {
+                        image: response.data,
+                      });
+                      return response.data;
                     });
-                    return response.data;
+                    setImageExists(true);
+                  })
+                  .catch((error) => {
+                    console.log(error);
                   });
-                  setImageExists(true);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            } else {
-              console.log("Image failure");
-            }
-          }}
-        />
-
-        {/* Use CSS grid to ensure upload image icon stays in the correct 
-            relative to the image*/}
-        <ImageGrid>
-          <ImageGridMain>
-            <StyledUserImageEdit
-              src={localImage.path}
-              onLoad={() => setProgress(0.0)}
-              style={
-                imageExists && progress === 0.0
-                  ? {
-                      opacity: "100%",
-                      padding: 0,
-                    }
-                  : {
-                      opacity: "30%",
-                      padding: "40%",
-                    }
+              } else {
+                console.log("Image failure");
               }
-            />
-          </ImageGridMain>
-          <StyledImageUploadOverlay
-            elevation={0}
-            square
-            style={progress ? { display: "none" } : {}}
-          >
-            Upload Image
-          </StyledImageUploadOverlay>
-          <ImageGridIcon>
-            <StyledImageUploadButton />
-          </ImageGridIcon>
-        </ImageGrid>
-        {progress ? (
-          <LinearProgress
-            variant="determinate"
-            color="secondary"
-            value={progress}
-            style={{ marginTop: -8 }}
+            }}
           />
-        ) : null}
-      </label>
+
+          {/* Use CSS grid to ensure upload image icon stays in the correct 
+            relative to the image*/}
+          <ImageGrid>
+            <ImageGridMain>
+              <StyledUserImageEdit
+                src={localImage.path}
+                onLoad={() => setProgress(0.0)}
+                style={
+                  imageExists && progress === 0.0
+                    ? {
+                        opacity: "100%",
+                        padding: 0,
+                      }
+                    : {
+                        opacity: "30%",
+                        padding: "40%",
+                      }
+                }
+              />
+            </ImageGridMain>
+            <StyledImageUploadOverlay
+              elevation={0}
+              square
+              style={progress ? { display: "none" } : {}}
+            >
+              Upload Image
+            </StyledImageUploadOverlay>
+            <ImageGridIcon>
+              <StyledImageUploadButton />
+            </ImageGridIcon>
+          </ImageGrid>
+          {progress ? (
+            <LinearProgress
+              variant="determinate"
+              color="secondary"
+              value={progress}
+              style={{ marginTop: -8 }}
+            />
+          ) : null}
+        </label>
+      </Box>
     </>
   );
 };
