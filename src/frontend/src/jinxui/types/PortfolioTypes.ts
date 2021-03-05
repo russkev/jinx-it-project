@@ -15,6 +15,7 @@ export type TPortfolio = {
   private: boolean;
   theme: string;
   background: string;
+  profile_picture: TImage | null;
 };
 
 export type TPage = {

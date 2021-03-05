@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
+import { useTheme } from "@material-ui/core";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
 import { useUser, useSection, StyledUserImageEdit } from "jinxui";
@@ -49,15 +51,40 @@ const StyledImageUploadOverlay = styled(Paper)`
 `;
 
 const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
-  z-index: 2;
+  z-index: 2000;
 `;
 
+const useStyles = makeStyles((theme: Theme) => {
+  const backgroundHover = theme.palette.background.paper + "80"
+  return createStyles({
+    imageOverlay: {
+      gridColumn: "1/4",
+      gridRow: "1/4",
+      display: "grid",
+      width: "100%",
+      height: "100%",
+      alignContent: "center",
+      textAlign: "center",
+      fontSize: "20px",
+      opacity: "0%",
+      transition: "all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)",
+      "&:hover": {
+        opacity: "100%",
+        background: backgroundHover
+      },
+      cursor: "pointer",
+    },
+  });
+})
+
+
 const InputComponentUploadImage = (props: TSectionInfo) => {
-  // const [imagePath, setImagePath] = useState(FRONT_END_URL + "blank_image.svg");
+  const classes = useStyles()
   const { onSectionChange, getFetchedSection } = useSection();
   const [imageExists, setImageExists] = useState(false);
   const { uploadImage } = useUser();
-  // const [imageResponse, setImageResponse] = useState({ path: "", id: "null" });
+  const theme = useTheme();
+
   const [localImage, setLocalImage] = useState<TImage>(() => {
     const existingImage = getFetchedSection(props.pageId, props.section.id)
       .image;
@@ -135,13 +162,16 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
                 }
               />
             </ImageGridMain>
-            <StyledImageUploadOverlay
+            {/* <StyledImageUploadOverlay */}
+            <Paper
               elevation={0}
               square
               style={progress ? { display: "none" } : {}}
+              classes={{ root: classes.imageOverlay }}
             >
               Upload Image
-            </StyledImageUploadOverlay>
+            {/* </StyledImageUploadOverlay> */}
+            </Paper>
             <ImageGridIcon>
               <StyledImageUploadButton />
             </ImageGridIcon>

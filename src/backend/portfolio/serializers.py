@@ -137,6 +137,6 @@ class PortfolioSerializer(
     class Meta:
         model = models.Portfolio
         fields = ['id', 'owner', 'name', 'subtitle', 'pages', 'links',
-                  'private', 'theme', 'background']
+                  'private', 'theme', 'background', 'profile_picture']
 
 
