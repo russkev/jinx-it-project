@@ -90,7 +90,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
       {/* Make a hidden upload image button here that we will use a 
           further button to ensure provide interaction
           This button is notoriously difficult to style */}
-      <Box justifySelf="center">
+      <Box justifySelf="center" width={imageExists ? "auto" : "100%"}>
         <label htmlFor={input_id}>
           <StyledInput
             accept="image/*"
