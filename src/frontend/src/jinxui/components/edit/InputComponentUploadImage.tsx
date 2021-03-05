@@ -33,29 +33,8 @@ const ImageGridIcon = styled.div`
   object-fit: cover;
 `;
 
-const StyledImageUploadOverlay = styled(Paper)`
-  grid-column: 1/4;
-  grid-row: 1/4;
-  display: grid;
-  width: 100%;
-  height: 100%;
-  align-content: center;
-  text-align: center;
-  font-size: 20px;
-  opacity: 0%;
-  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-  :hover {
-    opacity: 65%;
-  }
-  cursor: pointer;
-`;
-
-const StyledImageUploadButton = styled(AddPhotoAlternateOutlined)`
-  z-index: 2000;
-`;
-
 const useStyles = makeStyles((theme: Theme) => {
-  const backgroundHover = theme.palette.background.paper + "80"
+  const backgroundHover = theme.palette.background.paper + "80";
   return createStyles({
     imageOverlay: {
       gridColumn: "1/4",
@@ -70,16 +49,18 @@ const useStyles = makeStyles((theme: Theme) => {
       transition: "all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)",
       "&:hover": {
         opacity: "100%",
-        background: backgroundHover
+        background: backgroundHover,
       },
       cursor: "pointer",
     },
+    uploadIcon: {
+      zIndex: 1000,
+    },
   });
-})
-
+});
 
 const InputComponentUploadImage = (props: TSectionInfo) => {
-  const classes = useStyles()
+  const classes = useStyles();
   const { onSectionChange, getFetchedSection } = useSection();
   const [imageExists, setImageExists] = useState(false);
   const { uploadImage } = useUser();
@@ -170,10 +151,12 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
               classes={{ root: classes.imageOverlay }}
             >
               Upload Image
-            {/* </StyledImageUploadOverlay> */}
+              {/* </StyledImageUploadOverlay> */}
             </Paper>
             <ImageGridIcon>
-              <StyledImageUploadButton />
+              <AddPhotoAlternateOutlined
+                classes={{ root: classes.uploadIcon }}
+              />
             </ImageGridIcon>
           </ImageGrid>
           {progress ? (
