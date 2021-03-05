@@ -31,6 +31,7 @@ const ImageGridIcon = styled.div`
   grid-column: 2/3;
   grid-row: 2/3;
   object-fit: cover;
+  z-index: 200
 `;
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -52,9 +53,7 @@ const useStyles = makeStyles((theme: Theme) => {
         background: backgroundHover,
       },
       cursor: "pointer",
-    },
-    uploadIcon: {
-      zIndex: 1000,
+      zIndex: 100
     },
   });
 });
@@ -154,9 +153,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
               {/* </StyledImageUploadOverlay> */}
             </Paper>
             <ImageGridIcon>
-              <AddPhotoAlternateOutlined
-                classes={{ root: classes.uploadIcon }}
-              />
+              <AddPhotoAlternateOutlined/>
             </ImageGridIcon>
           </ImageGrid>
           {progress ? (
