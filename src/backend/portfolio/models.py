@@ -171,6 +171,9 @@ class Portfolio(models.Model):
 
     theme = models.CharField(max_length=100, null=True, blank=True)
     background = models.CharField(max_length=300, null=True, blank=True)
+    profile_picture = models.ForeignKey(
+        Image, null=True, on_delete=models.CASCADE, related_name='portfolios')
+
 
     def __str__(self):
         return self.name
