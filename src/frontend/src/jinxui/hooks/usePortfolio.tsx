@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import API from "../../API";
 import { createMuiTheme } from "@material-ui/core/styles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import { defaultImageContext, defaultPortfolioContext } from "jinxui/contexts";
 import { v4 as uuidv4, validate } from "uuid";
 
@@ -15,7 +16,7 @@ import {
   PORTFOLIOS_PATH,
 } from "jinxui";
 
-import { LightTheme, DarkTheme } from "jinxui/themes";
+import { LightTheme, DarkTheme, PortfolioThemes } from "jinxui/themes";
 
 import { PortfolioContext } from "jinxui/contexts";
 
@@ -295,6 +296,18 @@ export const usePortfolio = () => {
       });
   }
 
+  function getThemeFromName(theme_name: string): Theme {
+    const themes_list = Object.values(PortfolioThemes);
+    const currentTheme = themes_list.filter(
+      (value) => value.portfolio.theme.name === theme_name
+    );
+    if (currentTheme.length === 1) {
+      return currentTheme[0];
+    } else {
+      return themes_list[0];
+    }
+  } 
+
   async function setPortfolio(portfolio: TPortfolio) {
     try {
       await updateState(portfolio);
@@ -419,6 +432,7 @@ export const usePortfolio = () => {
     isPrivate,
     setPortfolioName,
     setPortfolioTheme,
+    getThemeFromName,
     setPortfolio,
     saveFullPortfolio,
     handlePublishAndRedirect,

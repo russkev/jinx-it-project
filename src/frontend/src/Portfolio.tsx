@@ -16,28 +16,6 @@ import { PortfolioThemes } from "jinxui/themes";
 
 import NotFound from "./NotFound";
 
-
-const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
-  const theme_name =
-    userData.authenticated &&
-    userData.theme &&
-    thisPageUser === userData.username
-      ? userData.theme
-      : portfolio
-      ? portfolio.theme
-      : "";
-
-  const themes_list = Object.values(PortfolioThemes);
-  const current_theme = themes_list.filter(
-    (value) => value.portfolio.theme.name === theme_name
-  );
-  if (current_theme.length === 1) {
-    return current_theme[0];
-  } else {
-    return themes_list[0];
-  }
-};
-
 interface PortfolioProps {
   username: string;
 }
@@ -51,9 +29,31 @@ const Portfolio = ({ username }: PortfolioProps) => {
     setSaving,
   } = useUser();
 
-  const { fetchFullPortfolio, getFetchedPortfolio } = usePortfolio();
+  const { fetchFullPortfolio, getFetchedPortfolio, getThemeFromName } = usePortfolio();
   const [author, setAuthor] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
+
+  const getTheme = (portfolio: any, userData: any, thisPageUser: string) => {
+    const theme_name =
+      userData.authenticated &&
+      userData.theme &&
+      thisPageUser === userData.username
+        ? userData.theme
+        : portfolio
+        ? portfolio.theme
+        : "";
+
+    return getThemeFromName(theme_name)
+    // const themes_list = Object.values(PortfolioThemes);
+    // const current_theme = themes_list.filter(
+    //   (value) => value.portfolio.theme.name === theme_name
+    // );
+    // if (current_theme.length === 1) {
+    //   return current_theme[0];
+    // } else {
+    //   return themes_list[0];
+    // }
+  };
 
   // Updating portfolio/page/section data
   useEffect(() => {

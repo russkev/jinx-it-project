@@ -17,7 +17,7 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 import  
     ThemeBackgroundColors 
- from "../components/display/ThemeBackgroundColors"
+from "../components/display/ThemeBackgroundColors"
 
 
 const createTheme = (theme: any) => responsiveFontSizes(createMuiTheme(theme));

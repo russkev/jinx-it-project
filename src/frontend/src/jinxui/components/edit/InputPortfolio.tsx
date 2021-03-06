@@ -71,12 +71,14 @@ const InputPortfolio = () => {
         <StyledPaperSectionDiv>
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
             <StyledOneColumnSectionDiv>
-              <Box width="200px" height="200px">
-                <InputComponentUploadImage
-                  pageId={defaultPageContext.id}
-                  section={defaultSectionContext}
-                  isAvatar={true}
-                />
+              <Box display="flex" flexWrap="wrap" justifyContent="center">
+                <Box width="200px" height="200px" marginBottom="30px">
+                  <InputComponentUploadImage isAvatar={true} />
+                </Box>
+                <Box width="30px" />
+                <Box height="200px" flexGrow={2} marginBottom="30px">
+                  <InputComponentUploadImage isBackground={true} />
+                </Box>
               </Box>
               <TextField
                 name={"portfolioTitle"}
