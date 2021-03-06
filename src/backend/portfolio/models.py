@@ -135,7 +135,23 @@ class Image(models.Model):
     def __str__(self):
         return self.name
 
+    def save_square(self, target_length):
+        file, extension = os.path.splitext(self.path.path)
+        image = pilImage.open(self.path)
 
+        length = min(image.size)
+        left = (image.width - length) / 2
+        top = (image.height - length) / 2
+        right = (image.width + length) / 2
+        bottom = (image.height + length) / 2
+        image_square = image.crop((left, top, right, bottom))
+        image_square.thumbnail((target_length, target_length))
+        image_square.save(file + '.' + str(target_length) +
+                          '_square' + extension)
+    
+    # Automatically resize image
+    # Some useful information here:
+    # https://stackoverflow.com/questions/42996150/thumbnail-for-imagefield-in-django-model-override-save
     def create_resized(self):
         if not self.path:
             return
@@ -143,14 +159,22 @@ class Image(models.Model):
 
         file, extension = os.path.splitext(self.path.path)
 
-        image_300 = pilImage.open(self.path)
+        # Save image max dimension: 300 pixels
+        image = pilImage.open(self.path)
+        image_300 = image.copy()
         image_300.thumbnail((300,300))
-        image_300.save(file + '_300' + extension)
+        image_300.save(file + '.300' + extension)
 
-        # image_50_square = pilImage.open(self.path)
-        # image_50_square.thumbnail((300, 300))
-        # image_50_square.save(file + '_300' + extension)
-
+        # Save image 40 x 40 square
+        self.save_square(40)
+        # length = min(image.size)
+        # left = (image.width - length) / 2
+        # top = (image.height - length) / 2
+        # right = (image.width + length) / 2
+        # bottom = (image.height + length) / 2
+        # image_40_square = image.crop((left, top, right, bottom))
+        # image_40_square.thumbnail((40, 40))
+        # image_40_square.save(file + '.40_square' + extension)
 
     def save(self, *args, **kwargs):
         super(Image, self).save()
