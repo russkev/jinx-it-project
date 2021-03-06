@@ -13,7 +13,7 @@ export const defaultPortfolioContext: TPortfolio = {
   private: true,
   theme: "",
   background: "",
-  profile_picture: null,
+  avatar: null,
 }
 
 export const PortfolioContext = React.createContext<[TPortfolio, any, any]>([

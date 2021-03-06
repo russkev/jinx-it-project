@@ -22,7 +22,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 @admin.register(models.Portfolio)
 class PortfolioAdmin(admin.ModelAdmin):
-    list_display = ['name', 'subtitle', 'private', 'owner', 'id', 'profile_picture' ]
+    list_display = ['name', 'subtitle', 'private', 'owner', 'id', 'avatar' ]
     inlines = [PageInline]
 
 

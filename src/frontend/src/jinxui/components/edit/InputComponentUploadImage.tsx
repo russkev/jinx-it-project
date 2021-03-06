@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) => {
 interface TInputComponentUploadImage {
   pageId?: Tuuid;
   section?: TSection;
-  isProfilePicture?: boolean;
+  isAvatar?: boolean;
 }
 const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const classes = useStyles();
@@ -79,8 +79,8 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const portfolio = getFetchedPortfolio()
 
   const [localImage, setLocalImage] = useState<TImage>(() => {
-    const existingImage = props.isProfilePicture
-      ? portfolio.profile_picture
+    const existingImage = props.isAvatar
+      ? portfolio.avatar
       : getFetchedSection(pageId, section.id).image;
     if (existingImage !== null) {
       return existingImage;
@@ -91,13 +91,13 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
-    const thisImage = props.isProfilePicture
-      ? portfolio.profile_picture
+    const thisImage = props.isAvatar
+      ? portfolio.avatar
       : section.image;
     if (thisImage !== null && thisImage.id !== defaultImageContext.id) {
       setImageExists(true);
     }
-  }, [props.section, portfolio]);
+  }, [props.section, portfolio, props.isAvatar, section.image]);
 
   return (
     <>
@@ -126,8 +126,8 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                   )
                   .then((response) => {
                     setLocalImage(() => {
-                      props.isProfilePicture
-                      ? onPortfolioChange({ profile_picture: response.data })
+                      props.isAvatar
+                      ? onPortfolioChange({ avatar: response.data })
                         : onSectionChange(pageId, section.id, {
                           image: response.data,
                           });

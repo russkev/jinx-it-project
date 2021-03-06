@@ -75,7 +75,7 @@ const InputPortfolio = () => {
                 <InputComponentUploadImage
                   pageId={defaultPageContext.id}
                   section={defaultSectionContext}
-                  isProfilePicture={true}
+                  isAvatar={true}
                 />
               </Box>
               <TextField
