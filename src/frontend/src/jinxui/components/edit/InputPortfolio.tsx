@@ -16,10 +16,7 @@ import {
   StyledPaperSectionDiv,
 } from "jinxui";
 
-import {
-  defaultPageContext,
-  defaultSectionContext,
-} from "jinxui/contexts"
+import { defaultPageContext, defaultSectionContext } from "jinxui/contexts";
 
 const LinksDiv = styled.div`
   display: flex;
@@ -66,8 +63,6 @@ const InputPortfolio = () => {
     }
   };
 
-  console.log(process.env.NODE_ENV);
-
   return (
     <>
       {isLoading() ? (
@@ -76,11 +71,13 @@ const InputPortfolio = () => {
         <StyledPaperSectionDiv>
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
             <StyledOneColumnSectionDiv>
-              <InputComponentUploadImage
-                pageId={defaultPageContext.id}
-                section={defaultSectionContext}
-                isProfilePicture={true}
-              />
+              <Box maxWidth="200px">
+                <InputComponentUploadImage
+                  pageId={defaultPageContext.id}
+                  section={defaultSectionContext}
+                  isProfilePicture={true}
+                />
+              </Box>
               <TextField
                 name={"portfolioTitle"}
                 label={"Portfolio Title"}

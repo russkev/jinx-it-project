@@ -9,6 +9,9 @@ from account.signals import account_created
 
 import uuid
 import os
+import io
+
+from PIL import Image as pilImage
 
 @receiver(account_created)
 def create_default_portfolio(sender, **kwargs):
@@ -131,6 +134,34 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
+
+
+    def create_resized(self):
+        if not self.path:
+            return
+
+        image_type = self.path.file.content_type
+        file, extension = os.path.splitext(self.path.path)
+        print(file)
+        print(extension)
+        print(self.path)
+        pil_types = {
+            'image/jpeg': 'jpeg',
+            'image/png': 'png',
+            'image/gif': 'gif',
+            'image/webp': 'webp',
+        }
+
+        # Open original image
+        # image = pilImage.open(self.path.path)
+        # print(image)
+        # image.thumbnail((300, 300))
+
+        # image
+
+    def save(self, *args, **kwargs):
+        super(Image, self).save()
+        # self.create_resized()
 
 # Auto delete files from file system when not required
 # For more info, see here:

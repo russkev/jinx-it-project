@@ -392,7 +392,7 @@ async function fetchImage(imageId: Tuuid) {
       throw e;
     }
   }
-
+  
   function getSuccessMessage() {
     return state.successMessage;
   }

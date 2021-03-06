@@ -71,15 +71,16 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const { getFetchedPortfolio, onPortfolioChange } = usePortfolio();
   const { getFetchedSection, onSectionChange } = useSection();
   const [imageExists, setImageExists] = useState(false);
-  const { uploadImage } = useUser();
+  const { uploadImage, setErrorMessage } = useUser();
   const pageId = props.pageId ? props.pageId : defaultPageContext.id;
   const section = props.section
     ? props.section
     : JSON.parse(JSON.stringify(defaultSectionContext));
+  const portfolio = getFetchedPortfolio()
 
   const [localImage, setLocalImage] = useState<TImage>(() => {
     const existingImage = props.isProfilePicture
-      ? getFetchedPortfolio().profile_picture
+      ? portfolio.profile_picture
       : getFetchedSection(pageId, section.id).image;
     if (existingImage !== null) {
       return existingImage;
@@ -91,12 +92,12 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
     const thisImage = props.isProfilePicture
-      ? getFetchedPortfolio().profile_picture
+      ? portfolio.profile_picture
       : section.image;
     if (thisImage !== null && thisImage.id !== defaultImageContext.id) {
       setImageExists(true);
     }
-  }, [props.section, getFetchedPortfolio()]);
+  }, [props.section, portfolio]);
 
   return (
     <>
@@ -111,28 +112,37 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
             multiple
             type="file"
             onChange={(event) => {
-              if (event.currentTarget.files && event.currentTarget.files[0]) {
+              try {
+                if (event.currentTarget.files && event.currentTarget.files[0]) {
+                  const type = event.currentTarget.files[0].type;
+                  if (!(["image/jpeg", "image/webp", "image/gif", "image/png"].includes(type))) {
+                  const message = "Invalid file type"
+                  throw Error(message);
+                }
                 uploadImage(
                   event.currentTarget.files[0],
                   event.currentTarget.files[0].name,
                   setProgress
-                )
+                  )
                   .then((response) => {
                     setLocalImage(() => {
                       props.isProfilePicture
-                        ? onPortfolioChange({ profile_picture: response.data })
+                      ? onPortfolioChange({ profile_picture: response.data })
                         : onSectionChange(pageId, section.id, {
-                            image: response.data,
+                          image: response.data,
                           });
-                      return response.data;
-                    });
+                          return response.data;
+                        });
                     setImageExists(true);
                   })
                   .catch((error) => {
                     console.log(error);
                   });
-              } else {
-                console.log("Image failure");
+                } else {
+                  throw Error("Image image")
+                }
+              } catch (error) {
+                setErrorMessage(error.message);
               }
             }}
           />

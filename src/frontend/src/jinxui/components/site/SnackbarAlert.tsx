@@ -45,23 +45,32 @@ const SnackbarAlert = () => {
   }, [getSavedLightThemeMode, appliedTheme]);
 
   const handleErrorClose = (event?: React.SyntheticEvent, reason?: string) => {
+    let pauseTime = 0;
     if (reason === "clickaway") {
-      return;
+      pauseTime = 500;
     }
-    setErrorIsOpen(false);
+    setTimeout(() => {
+      setErrorIsOpen(false)
+    }, pauseTime)
+
     setTimeout(() => {
       setErrorMessage("");
-    }, 1000);
+    }, pauseTime + 1000);
   };
 
   const handleSuccessClose = (
     event?: React.SyntheticEvent,
     reason?: string
   ) => {
+    let pauseTime = 0;
     if (reason === "clickaway") {
-      return;
+      pauseTime = 500;
     }
-    setSuccessIsOpen(false);
+    
+    setTimeout(() => {
+      setSuccessIsOpen(false);
+    }, pauseTime)
+
     setTimeout(() => {
       setSuccessMessage("");
     }, 1000);
@@ -103,7 +112,7 @@ const SnackbarAlert = () => {
               fontWeight: 500,
             }}
           >
-            {getSuccessMessage()}
+            {successMessage}
           </Alert>
         </Snackbar>
         <Snackbar
@@ -118,7 +127,7 @@ const SnackbarAlert = () => {
               fontWeight: 500,
             }}
           >
-            {getErrorMessage()}
+            {errorMessage}
           </Alert>
         </Snackbar>
       </ThemeProvider>
