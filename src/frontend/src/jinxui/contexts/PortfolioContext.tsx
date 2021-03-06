@@ -26,7 +26,7 @@ type TPortfolioContextProvider = {
   children: any;
 };
 export const PortfolioContextProvider = (props: TPortfolioContextProvider) => {
-  const [state, setState] = useState<TPortfolio>(defaultPortfolioContext);
+  let [state, setState] = useState<TPortfolio>(defaultPortfolioContext);
 
   const updateState = (fieldsToUpdate: Partial<TPortfolio>) => {
     setState({...state, ...fieldsToUpdate})

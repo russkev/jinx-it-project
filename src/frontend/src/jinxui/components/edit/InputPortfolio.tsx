@@ -9,11 +9,17 @@ import {
   usePortfolio,
   LinkDialog,
   LinksDisplay,
+  InputComponentUploadImage,
   SkeletonEditAll,
   StyledOneColumnSectionDiv,
   StyledPaperSectionBase,
   StyledPaperSectionDiv,
 } from "jinxui";
+
+import {
+  defaultPageContext,
+  defaultSectionContext,
+} from "jinxui/contexts"
 
 const LinksDiv = styled.div`
   display: flex;
@@ -70,6 +76,11 @@ const InputPortfolio = () => {
         <StyledPaperSectionDiv>
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
             <StyledOneColumnSectionDiv>
+              <InputComponentUploadImage
+                pageId={defaultPageContext.id}
+                section={defaultSectionContext}
+                isProfilePicture={true}
+              />
               <TextField
                 name={"portfolioTitle"}
                 label={"Portfolio Title"}

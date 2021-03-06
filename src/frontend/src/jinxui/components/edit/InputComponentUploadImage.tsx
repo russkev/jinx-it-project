@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-import { useTheme } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
-import { useUser, useSection, StyledUserImageEdit } from "jinxui";
-import { TImage, TSectionInfo } from "jinxui/types";
-import { defaultImageContext } from "jinxui/contexts";
+import { useUser, useSection, usePortfolio, StyledUserImageEdit } from "jinxui";
+import { TImage, TSection, Tuuid } from "jinxui/types";
+import {
+  defaultImageContext,
+  defaultSectionContext,
+  defaultPageContext,
+} from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
 const StyledInput = styled.input`
@@ -31,7 +34,7 @@ const ImageGridIcon = styled.div`
   grid-column: 2/3;
   grid-row: 2/3;
   object-fit: cover;
-  z-index: 200
+  z-index: 200;
 `;
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -53,21 +56,31 @@ const useStyles = makeStyles((theme: Theme) => {
         background: backgroundHover,
       },
       cursor: "pointer",
-      zIndex: 100
+      zIndex: 100,
     },
   });
 });
 
-const InputComponentUploadImage = (props: TSectionInfo) => {
+interface TInputComponentUploadImage {
+  pageId?: Tuuid;
+  section?: TSection;
+  isProfilePicture?: boolean;
+}
+const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const classes = useStyles();
-  const { onSectionChange, getFetchedSection } = useSection();
+  const { getFetchedPortfolio, onPortfolioChange } = usePortfolio();
+  const { getFetchedSection, onSectionChange } = useSection();
   const [imageExists, setImageExists] = useState(false);
   const { uploadImage } = useUser();
-  const theme = useTheme();
+  const pageId = props.pageId ? props.pageId : defaultPageContext.id;
+  const section = props.section
+    ? props.section
+    : JSON.parse(JSON.stringify(defaultSectionContext));
 
   const [localImage, setLocalImage] = useState<TImage>(() => {
-    const existingImage = getFetchedSection(props.pageId, props.section.id)
-      .image;
+    const existingImage = props.isProfilePicture
+      ? getFetchedPortfolio().profile_picture
+      : getFetchedSection(pageId, section.id).image;
     if (existingImage !== null) {
       return existingImage;
     } else {
@@ -77,13 +90,13 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
-    if (
-      props.section.image !== null &&
-      props.section.image.id !== defaultImageContext.id
-    ) {
+    const thisImage = props.isProfilePicture
+      ? getFetchedPortfolio().profile_picture
+      : section.image;
+    if (thisImage !== null && thisImage.id !== defaultImageContext.id) {
       setImageExists(true);
     }
-  }, [props.section]);
+  }, [props.section, getFetchedPortfolio()]);
 
   return (
     <>
@@ -106,9 +119,11 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
                 )
                   .then((response) => {
                     setLocalImage(() => {
-                      onSectionChange(props.pageId, props.section.id, {
-                        image: response.data,
-                      });
+                      props.isProfilePicture
+                        ? onPortfolioChange({ profile_picture: response.data })
+                        : onSectionChange(pageId, section.id, {
+                            image: response.data,
+                          });
                       return response.data;
                     });
                     setImageExists(true);
@@ -134,6 +149,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
                     ? {
                         opacity: "100%",
                         padding: 0,
+                        maxBlockSize: "600px",
                       }
                     : {
                         opacity: "30%",
@@ -153,7 +169,7 @@ const InputComponentUploadImage = (props: TSectionInfo) => {
               {/* </StyledImageUploadOverlay> */}
             </Paper>
             <ImageGridIcon>
-              <AddPhotoAlternateOutlined/>
+              <AddPhotoAlternateOutlined />
             </ImageGridIcon>
           </ImageGrid>
           {progress ? (

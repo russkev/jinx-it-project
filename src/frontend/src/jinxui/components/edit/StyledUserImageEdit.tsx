@@ -8,7 +8,6 @@ const StyledUserImageEdit = styled.img`
   margin-top: 0px;
   border: 1px solid gray;
   width: 100%;
-  max-block-size: 600px;
 `;
 
 export default StyledUserImageEdit;

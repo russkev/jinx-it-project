@@ -74,7 +74,7 @@ export const usePortfolio = () => {
   // Error and success message for a single page in edit mode
   // const [errorMessage, setErrorMessage] = useState("");
   // const [successMessage, setSuccessMessage] = useState("");
-  const [state, updateState, resetState] = useContext(PortfolioContext);
+  let [state, updateState, resetState] = useContext(PortfolioContext);
   const {
     userData,
     getConfig,
@@ -339,6 +339,12 @@ export const usePortfolio = () => {
     );
   }
 
+  const onPortfolioChange = (
+    fieldsToUpdate: Partial<TPortfolio>
+  ) => {
+    state = {...state, ...fieldsToUpdate};
+  }
+
   function getFetchedPortfolioLinks() {
     return state.links;
   }
@@ -419,6 +425,7 @@ export const usePortfolio = () => {
     handleSave,
     makePortfolioPublic,
     makePortfolioPrivate,
+    onPortfolioChange,
     portfolioIsFetched,
     getFetchedPortfolioLinks,
     portfolioLinkIndex,
