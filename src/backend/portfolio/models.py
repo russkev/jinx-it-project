@@ -139,29 +139,22 @@ class Image(models.Model):
     def create_resized(self):
         if not self.path:
             return
-
-        image_type = self.path.file.content_type
-        file, extension = os.path.splitext(self.path.path)
-        print(file)
-        print(extension)
         print(self.path)
-        pil_types = {
-            'image/jpeg': 'jpeg',
-            'image/png': 'png',
-            'image/gif': 'gif',
-            'image/webp': 'webp',
-        }
 
-        # Open original image
-        # image = pilImage.open(self.path.path)
-        # print(image)
-        # image.thumbnail((300, 300))
+        file, extension = os.path.splitext(self.path.path)
 
-        # image
+        image_300 = pilImage.open(self.path)
+        image_300.thumbnail((300,300))
+        image_300.save(file + '_300' + extension)
+
+        # image_50_square = pilImage.open(self.path)
+        # image_50_square.thumbnail((300, 300))
+        # image_50_square.save(file + '_300' + extension)
+
 
     def save(self, *args, **kwargs):
         super(Image, self).save()
-        # self.create_resized()
+        self.create_resized()
 
 # Auto delete files from file system when not required
 # For more info, see here:
