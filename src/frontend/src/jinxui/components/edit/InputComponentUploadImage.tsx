@@ -139,6 +139,12 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
         opacity: "30%",
       };
     }
+    if (props.isBackground) {
+      outStyle = {
+        ...outStyle,
+        opacity: "100%"
+      }
+    }
     return outStyle;
   }
 
@@ -219,7 +225,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                 ? "1fr 30px 10px"
                 : "1fr 30px 20px"
             }
-            height={props.isAvatar || props.isBackground ? "100%" : "auto"}
+            height={props.isAvatar || props.isBackground ? "200px" : "auto"}
           >
             <ImageGridMain>
               <StyledUserImageEdit

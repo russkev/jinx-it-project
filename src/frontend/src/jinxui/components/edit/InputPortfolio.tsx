@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Typography from "@material-ui/core/Typography"
 import { InputAdornment, TextField, Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import CreateIcon from "@material-ui/icons/Create";
+import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 import {
   useUser,
@@ -72,11 +75,17 @@ const InputPortfolio = () => {
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
             <StyledOneColumnSectionDiv>
               <Box display="flex" flexWrap="wrap" justifyContent="center">
-                <Box width="200px" height="200px" marginBottom="30px">
+                <Box width="200px" marginBottom="30px">
+                  <Box display="flex">
+                    <Typography align="left" variant="caption">Avatar:</Typography>
+                  </Box>
                   <InputComponentUploadImage isAvatar={true} />
                 </Box>
                 <Box width="30px" />
-                <Box height="200px" flexGrow={2} marginBottom="30px">
+                <Box flexGrow={2} marginBottom="30px">
+                  <Box display="flex">
+                    <Typography align="left" variant="caption">Background Image:</Typography>
+                  </Box>
                   <InputComponentUploadImage isBackground={true} />
                 </Box>
               </Box>
