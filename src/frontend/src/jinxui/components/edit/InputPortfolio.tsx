@@ -71,7 +71,7 @@ const InputPortfolio = () => {
         <StyledPaperSectionDiv>
           <StyledPaperSectionBase elevation={3} variant="outlined" square>
             <StyledOneColumnSectionDiv>
-              <Box maxWidth="200px">
+              <Box width="200px" height="200px">
                 <InputComponentUploadImage
                   pageId={defaultPageContext.id}
                   section={defaultSectionContext}

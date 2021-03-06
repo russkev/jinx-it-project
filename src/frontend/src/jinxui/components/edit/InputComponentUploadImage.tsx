@@ -5,6 +5,7 @@ import Box from "@material-ui/core/Box";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useUser, useSection, usePortfolio, StyledUserImageEdit } from "jinxui";
 import { TImage, TSection, Tuuid } from "jinxui/types";
 import {
@@ -76,7 +77,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const section = props.section
     ? props.section
     : JSON.parse(JSON.stringify(defaultSectionContext));
-  const portfolio = getFetchedPortfolio()
+  const portfolio = getFetchedPortfolio();
 
   const [localImage, setLocalImage] = useState<TImage>(() => {
     const existingImage = props.isAvatar
@@ -85,19 +86,53 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
     if (existingImage !== null) {
       return existingImage;
     } else {
-      return defaultImageContext;
+      let blankImage = JSON.parse(JSON.stringify(defaultImageContext));
+      if (props.isAvatar) {
+        blankImage.path = process.env.REACT_APP_FRONT_URL + "blank_user.svg"
+      }
+      return blankImage;
     }
   });
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
   useEffect(() => {
-    const thisImage = props.isAvatar
-      ? portfolio.avatar
-      : section.image;
+    const thisImage = props.isAvatar ? portfolio.avatar : section.image;
     if (thisImage !== null && thisImage.id !== defaultImageContext.id) {
       setImageExists(true);
     }
   }, [props.section, portfolio, props.isAvatar, section.image]);
+
+  function imageStyle() {
+    let outStyle = {};
+    if (props.isAvatar) {
+      outStyle = {
+        ...outStyle,
+        borderRadius: "50%",
+        width: "200px",
+        height: "200px",
+        objectFit: "cover",
+      };
+    }
+    if (imageExists && progress === 0.0) {
+      outStyle = {
+        ...outStyle,
+        opacity: "100%",
+
+      }
+      if (!props.isAvatar) {
+        outStyle = {
+          ...outStyle,
+          maxBlockSize: "600px"
+        }
+      }
+    } else {
+      outStyle = {
+        ...outStyle,
+        opacity: "30%",
+      };
+    }
+    return outStyle;
+  }
 
   return (
     <>
@@ -115,31 +150,38 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
               try {
                 if (event.currentTarget.files && event.currentTarget.files[0]) {
                   const type = event.currentTarget.files[0].type;
-                  if (!(["image/jpeg", "image/webp", "image/gif", "image/png"].includes(type))) {
-                  const message = "Invalid file type"
-                  throw Error(message);
-                }
-                uploadImage(
-                  event.currentTarget.files[0],
-                  event.currentTarget.files[0].name,
-                  setProgress
+                  if (
+                    ![
+                      "image/jpeg",
+                      "image/webp",
+                      "image/gif",
+                      "image/png",
+                    ].includes(type)
+                  ) {
+                    const message = "Invalid file type";
+                    throw Error(message);
+                  }
+                  uploadImage(
+                    event.currentTarget.files[0],
+                    event.currentTarget.files[0].name,
+                    setProgress
                   )
-                  .then((response) => {
-                    setLocalImage(() => {
-                      props.isAvatar
-                      ? onPortfolioChange({ avatar: response.data })
-                        : onSectionChange(pageId, section.id, {
-                          image: response.data,
-                          });
-                          return response.data;
-                        });
-                    setImageExists(true);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
+                    .then((response) => {
+                      setLocalImage(() => {
+                        props.isAvatar
+                          ? onPortfolioChange({ avatar: response.data })
+                          : onSectionChange(pageId, section.id, {
+                              image: response.data,
+                            });
+                        return response.data;
+                      });
+                      setImageExists(true);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 } else {
-                  throw Error("Image image")
+                  throw Error("Image image");
                 }
               } catch (error) {
                 setErrorMessage(error.message);
@@ -154,18 +196,28 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
               <StyledUserImageEdit
                 src={localImage.path}
                 onLoad={() => setProgress(0.0)}
-                style={
-                  imageExists && progress === 0.0
-                    ? {
-                        opacity: "100%",
-                        padding: 0,
-                        maxBlockSize: "600px",
-                      }
-                    : {
-                        opacity: "30%",
-                        padding: "40%",
-                      }
-                }
+                // style={
+                //   imageExists && progress === 0.0
+                //     ? props.isAvatar
+                //       ? {
+                //           opacity: "100%",
+                //           padding: 0,
+                //           width: "200px",
+                //           height: "200px",
+                //           borderRadius: "50%",
+                //           objectFit: "cover",
+                //         }
+                //       : {
+                //           opacity: "100%",
+                //           padding: 0,
+                //           maxBlockSize: "600px",
+                //         }
+                //     : {
+                //         opacity: "30%",
+                //         padding: "40%",
+                //       }
+                // }
+                style={imageStyle()}
               />
             </ImageGridMain>
             {/* <StyledImageUploadOverlay */}
