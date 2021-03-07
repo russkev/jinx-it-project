@@ -93,7 +93,6 @@ class SectionSerializer(
 # PAGE
 ################################################################################
 class PageSerializer(
-    # UniqueFieldsMixin,
     NestedCreateMixin,
     NestedUpdateMixin,
     serializers.ModelSerializer

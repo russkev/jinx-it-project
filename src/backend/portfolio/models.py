@@ -218,10 +218,14 @@ class Portfolio(models.Model):
     private = models.BooleanField(default=True)
 
     theme = models.CharField(max_length=100, null=True, blank=True)
-    background = models.CharField(max_length=300, null=True, blank=True)
-    avatar = models.ForeignKey(
-        Image, null=True, on_delete=models.CASCADE, related_name='portfolios')
+    # background = models.CharField(max_length=300, null=True, blank=True)
+    # avatar = models.ForeignKey(
+    #     Image, null=True, on_delete=models.CASCADE, related_name='portfolios')
+    background = models.ForeignKey(
+        Image, null=True, on_delete=models.CASCADE, related_name='portfolio_backgrounds')
 
+    avatar = models.ForeignKey(
+        Image, null=True, on_delete=models.CASCADE, related_name='portfolio_avatars')
 
     def __str__(self):
         return self.name

@@ -14,7 +14,7 @@ export type TPortfolio = {
   links: TLink[];
   private: boolean;
   theme: string;
-  background: string;
+  background: TImage | null;
   avatar: TImage | null;
 };
 

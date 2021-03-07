@@ -109,6 +109,17 @@ export const usePortfolio = () => {
         portfolioId,
         getConfig()
       );
+
+      if (portfolioDetails.background !== null) {
+        const imageResponse = await fetchImage(portfolioDetails.background);
+        portfolioDetails.background = imageResponse.data;
+      }
+
+      if (portfolioDetails.avatar !== null) {
+        const image_response = await fetchImage(portfolioDetails.avatar);
+        portfolioDetails.avatar = image_response.data;
+      }
+
       const pageDetails = portfolioDetails.pages;
       portfolioDetails.pages = [];
 
@@ -193,10 +204,14 @@ export const usePortfolio = () => {
   }
 
   async function savePortfolio(isNew: boolean) {
+    const portfolio = JSON.parse(JSON.stringify(state));
+    portfolio.background = portfolio.background.id;
+    portfolio.avatar = portfolio.avatar.id;
+
     try {
       return isNew
-        ? await postPortfolio(state, getConfig())
-        : await putPortfolio(state, getConfig());
+        ? await postPortfolio(portfolio, getConfig())
+        : await putPortfolio(portfolio, getConfig());
     } catch (e) {
       throw e;
     }
@@ -348,21 +363,13 @@ export const usePortfolio = () => {
     );
   }
 
-  // const onPortfolioChange = (
-  //   // fieldsToUpdate: Partial<TPortfolio>
-  //   new_name: string
-  // ) => {
-  //   // const new_state:TPortfolio = {...state, ...fieldsToUpdate};
-  //   // state =  new_state;
-  //   state['name'] = new_name;
-  // }
-  const onPortfolioBackgroundChange = (path: string) => {
-    state['background'] = path
+  const onPortfolioBackgroundChange = (image: TImage) => {
+    state['background'] = image;
   }
 
-  // const onPortfolioBackgroundChange = (path: string) {
-  //   state['background'] = path
-  // }
+  const onPortfolioAvatarChange = (image: TImage) => {
+    state['avatar'] = image;
+  }
 
   function getFetchedPortfolioLinks() {
     return state.links;
@@ -447,6 +454,7 @@ export const usePortfolio = () => {
     makePortfolioPublic,
     makePortfolioPrivate,
     onPortfolioBackgroundChange,
+    onPortfolioAvatarChange,
     portfolioIsFetched,
     getFetchedPortfolioLinks,
     portfolioLinkIndex,

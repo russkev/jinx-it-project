@@ -12,7 +12,7 @@ export const defaultPortfolioContext: TPortfolio = {
   links: [],
   private: true,
   theme: "",
-  background: "",
+  background: null,
   avatar: null,
 }
 

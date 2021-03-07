@@ -67,6 +67,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const {
     getFetchedPortfolio,
     onPortfolioBackgroundChange,
+    onPortfolioAvatarChange,
     getThemeFromName,
   } = usePortfolio();
   const { getFetchedSection, onSectionChange } = useSection();
@@ -100,6 +101,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   });
   const input_id = uuidv4();
   const [progress, setProgress] = useState(0.0);
+
   useEffect(() => {
     const thisImage = props.isAvatar
       ? portfolio.avatar
@@ -197,9 +199,17 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                   )
                     .then((response) => {
                       setLocalImage(() => {
-                        onPortfolioBackgroundChange(response.data.path);
+                        if (props.isBackground) {
+                          onPortfolioBackgroundChange(response.data);
+                        } else if (props.isAvatar) {
+                          onPortfolioAvatarChange(response.data);
+                        } else {
+                          onSectionChange(pageId, section.id, {
+                            image: response.data,
+                          });
+                        }
                         return response.data;
-                      })
+                      });
 
                       // setLocalImage(() => {
                       //   // onPortfolioChange({background: response.data.path})
