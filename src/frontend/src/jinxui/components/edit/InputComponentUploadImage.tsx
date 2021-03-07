@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
-import { makeStyles, createStyles, Theme, useTheme } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import AddPhotoAlternateOutlined from "@material-ui/icons/AddPhotoAlternateOutlined";
 import { useUser, useSection, usePortfolio, StyledUserImageEdit } from "jinxui";
@@ -63,7 +63,11 @@ interface TInputComponentUploadImage {
 }
 const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const classes = useStyles();
-  const { getFetchedPortfolio, onPortfolioChange, getThemeFromName } = usePortfolio();
+  const {
+    getFetchedPortfolio,
+    onPortfolioChange,
+    getThemeFromName,
+  } = usePortfolio();
   const { getFetchedSection, onSectionChange } = useSection();
   const [imageExists, setImageExists] = useState(false);
   const { uploadImage, setErrorMessage } = useUser();
@@ -87,7 +91,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
         blankImage.path = process.env.REACT_APP_FRONT_URL + "blank_user.svg";
       }
       if (props.isBackground) {
-        const theme = getThemeFromName(portfolio.theme)
+        const theme = getThemeFromName(portfolio.theme);
         blankImage.path = theme.portfolio.headerBackground.src;
       }
       return blankImage;
@@ -104,7 +108,13 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
     if (thisImage !== null && thisImage.id !== defaultImageContext.id) {
       setImageExists(true);
     }
-  }, [props.section, portfolio, props.isAvatar, section.image]);
+  }, [
+    props.section,
+    portfolio,
+    props.isAvatar,
+    section.image,
+    props.isBackground,
+  ]);
 
   function imageStyle() {
     let outStyle = {};
@@ -142,8 +152,8 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
     if (props.isBackground) {
       outStyle = {
         ...outStyle,
-        opacity: "100%"
-      }
+        opacity: "100%",
+      };
     }
     return outStyle;
   }

@@ -4,8 +4,6 @@ import Typography from "@material-ui/core/Typography"
 import { InputAdornment, TextField, Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import CreateIcon from "@material-ui/icons/Create";
-import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 import {
   useUser,
@@ -18,8 +16,6 @@ import {
   StyledPaperSectionBase,
   StyledPaperSectionDiv,
 } from "jinxui";
-
-import { defaultPageContext, defaultSectionContext } from "jinxui/contexts";
 
 const LinksDiv = styled.div`
   display: flex;

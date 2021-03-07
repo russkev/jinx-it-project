@@ -11,11 +11,7 @@ import {
   useTheme,
   responsiveFontSizes,
 } from "@material-ui/core/styles";
-import {
-  usePortfolio,
-  DisplayLinks,
-} from "jinxui";
-
+import { usePortfolio, DisplayLinks } from "jinxui";
 
 /* A block that takes up at minimum the height of the screen. Takes an optional */
 function HeaderBlock(props: any) {
@@ -73,12 +69,16 @@ function BackgroundImage(props: any) {
 
 function DisplayHeader() {
   const { getFetchedPortfolio } = usePortfolio();
-  const title = getFetchedPortfolio().name;
-  const subtitle = getFetchedPortfolio().subtitle
+  const portfolio = getFetchedPortfolio();
+  const title = portfolio.name;
+  const subtitle = getFetchedPortfolio().subtitle;
   const theme = responsiveFontSizes(useTheme());
   // Set default values if not defined
   const header = theme.portfolio.header;
   const headerBG = theme.portfolio.headerBackground;
+  const backgroundImagePath = portfolio.background
+    ? portfolio.background
+    : theme.portfolio.headerBackground.src;
 
   const verticalAlign =
     header?.verticalAlign !== undefined ? header.verticalAlign : "flex-end";
@@ -97,7 +97,7 @@ function DisplayHeader() {
 
   return (
     <>
-      <BackgroundImage url={theme.portfolio.headerBackground.src}>
+      <BackgroundImage url={backgroundImagePath}>
         <HeaderBlock>
           <Container maxWidth="lg" style={{ display: "flex" }}>
             <Grid
@@ -141,7 +141,7 @@ function DisplayHeader() {
                   {subtitle}
                 </Typography>
                 <Box height="30px" />
-                <DisplayLinks horizontalAlign={horizontalAlign}/>
+                <DisplayLinks horizontalAlign={horizontalAlign} />
               </Box>
             </Grid>
           </Container>
@@ -151,4 +151,4 @@ function DisplayHeader() {
   );
 }
 
-export default DisplayHeader
+export default DisplayHeader;

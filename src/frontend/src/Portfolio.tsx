@@ -12,8 +12,6 @@ import {
   DisplayLoading,
 } from "jinxui";
 
-import { PortfolioThemes } from "jinxui/themes";
-
 import NotFound from "./NotFound";
 
 interface PortfolioProps {
@@ -42,17 +40,7 @@ const Portfolio = ({ username }: PortfolioProps) => {
         : portfolio
         ? portfolio.theme
         : "";
-
     return getThemeFromName(theme_name)
-    // const themes_list = Object.values(PortfolioThemes);
-    // const current_theme = themes_list.filter(
-    //   (value) => value.portfolio.theme.name === theme_name
-    // );
-    // if (current_theme.length === 1) {
-    //   return current_theme[0];
-    // } else {
-    //   return themes_list[0];
-    // }
   };
 
   // Updating portfolio/page/section data
