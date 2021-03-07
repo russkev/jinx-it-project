@@ -77,7 +77,7 @@ function DisplayHeader() {
   const header = theme.portfolio.header;
   const headerBG = theme.portfolio.headerBackground;
   const backgroundImagePath = portfolio.background
-    ? portfolio.background
+    ? portfolio.background.path
     : theme.portfolio.headerBackground.src;
 
   const verticalAlign =

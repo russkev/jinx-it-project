@@ -231,6 +231,7 @@ const DropdownPortfolio = React.forwardRef(
     const anchorRef = React.useRef<HTMLButtonElement>(null);
     // const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
     const { userData } = useUser();
+    const { getFetchedPortfolio } = usePortfolio();
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -278,7 +279,11 @@ const DropdownPortfolio = React.forwardRef(
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <AccountCircleIcon style={{ fontSize: 40 }} />
+                {/*  */}
+                {getFetchedPortfolio().avatar
+                  ? <img src={getFetchedPortfolio().avatar?.path} />
+                  : <AccountCircleIcon style={{ fontSize: 40 }} />
+                }
                 <ExpandMoreIcon fontSize="small" />
               </StyledHeaderOptionsButton>
             </Tooltip>
