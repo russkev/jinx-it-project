@@ -11,6 +11,7 @@ import {
   defaultImageContext,
   defaultSectionContext,
   defaultPageContext,
+  defaultPortfolioContext,
 } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
@@ -65,7 +66,7 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
   const classes = useStyles();
   const {
     getFetchedPortfolio,
-    onPortfolioChange,
+    onPortfolioBackgroundChange,
     getThemeFromName,
   } = usePortfolio();
   const { getFetchedSection, onSectionChange } = useSection();
@@ -196,24 +197,31 @@ const InputComponentUploadImage = (props: TInputComponentUploadImage) => {
                   )
                     .then((response) => {
                       setLocalImage(() => {
-                        props.isAvatar
-                          ? onPortfolioChange({ avatar: response.data })
-                          : props.isBackground
-                          ? onPortfolioChange({
-                              background: response.background,
-                            })
-                          : onSectionChange(pageId, section.id, {
-                              image: response.data,
-                            });
+                        onPortfolioBackgroundChange(response.data.path);
                         return response.data;
-                      });
+                      })
+
+                      // setLocalImage(() => {
+                      //   // onPortfolioChange({background: response.data.path})
+
+                      //   // props.isAvatar
+                      //   //   ? onPortfolioChange({ avatar: response.data.path })
+                      //   //   : props.isBackground
+                      //   //   ? onPortfolioChange({
+                      //   //       background: response.data.path,
+                      //   //     })
+                      //   //   : onSectionChange(pageId, section.id, {
+                      //   //       image: response.data,
+                      //   //     });
+                      //   return response.data;
+                      // });
                       setImageExists(true);
                     })
                     .catch((error) => {
                       console.log(error);
                     });
                 } else {
-                  throw Error("Image image");
+                  throw Error("Invalid image");
                 }
               } catch (error) {
                 setErrorMessage(error.message);

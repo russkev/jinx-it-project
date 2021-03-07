@@ -338,8 +338,6 @@ export const usePortfolio = () => {
     return await changePortfolioPrivacy(
       portfolioId,
       false
-      // getConfig(),
-      // updateState
     );
   }
 
@@ -347,16 +345,24 @@ export const usePortfolio = () => {
     return await changePortfolioPrivacy(
       portfolioId,
       true
-      // getConfig(),
-      // updateState
     );
   }
 
-  const onPortfolioChange = (
-    fieldsToUpdate: Partial<TPortfolio>
-  ) => {
-    state = {...state, ...fieldsToUpdate};
+  // const onPortfolioChange = (
+  //   // fieldsToUpdate: Partial<TPortfolio>
+  //   new_name: string
+  // ) => {
+  //   // const new_state:TPortfolio = {...state, ...fieldsToUpdate};
+  //   // state =  new_state;
+  //   state['name'] = new_name;
+  // }
+  const onPortfolioBackgroundChange = (path: string) => {
+    state['background'] = path
   }
+
+  // const onPortfolioBackgroundChange = (path: string) {
+  //   state['background'] = path
+  // }
 
   function getFetchedPortfolioLinks() {
     return state.links;
@@ -426,6 +432,7 @@ export const usePortfolio = () => {
 
   return {
     portfolioData: state,
+    updatePortfolioState: updateState,
     fetchFullPortfolio,
     getFetchedPortfolio,
     getLightTheme,
@@ -439,7 +446,7 @@ export const usePortfolio = () => {
     handleSave,
     makePortfolioPublic,
     makePortfolioPrivate,
-    onPortfolioChange,
+    onPortfolioBackgroundChange,
     portfolioIsFetched,
     getFetchedPortfolioLinks,
     portfolioLinkIndex,
