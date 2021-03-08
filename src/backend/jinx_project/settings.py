@@ -36,9 +36,12 @@ ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com', '.kjinx.mooo.com']
 # This should be set to where the front end will be served.
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
+    'elastic-allen-99fad7.netlify.app',
     'https://elastic-allen-99fad7.netlify.app',
+    'jinxapp.work',
     'https://jinxapp.work',
     'http://localhost:3000',
+    '68.183.176.211:443'
 ]
 
 # Prevent browsers from sending cookies if on http
