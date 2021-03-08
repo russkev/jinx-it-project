@@ -21,7 +21,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -36,11 +35,11 @@ ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com', '.kjinx.mooo.com']
 # Sets which sites are allowed to contact the api
 # This should be set to where the front end will be served.
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = (
+CORS_ALLOWED_ORIGINS = [
     'https://elastic-allen-99fad7.netlify.app',
-)
-print("ALLOWED ORIGINS")
-print(CORS_ALLOWED_ORIGINS)
+    'https://jinxapp.work',
+    'http://localhost:3000',
+]
 
 # Prevent browsers from sending cookies if on http
 CSRF_COOKIE_SECURE = False
