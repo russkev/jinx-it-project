@@ -166,7 +166,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
+print("STATIC_ROOT:")
+print(STATIC_ROOT)
 # User uploaded file
 # we don't actually have a cdn lol, but just in case this project grows big enough to need one
 
