@@ -43,7 +43,7 @@ Pillow==7.2.0
 ptvsd==4.3.2
 
 ## Django Plugins
-drf_writable_nested==0.6.2
+drf-writable-nested==0.6.2
 
 ## Plugin for getting database to work with Heroku
 dj-database-url==0.5.0
