@@ -29,21 +29,18 @@ DEBUG = False
 
 # dot in front will match all our subdomains
 ALLOWED_HOSTS = ['127.0.0.1', 'kjinx.mooo.com', '.kjinx.mooo.com']
-# ALLOWED_HOSTS = ['*']
+
 
 
 # Corsheader settings.
 # Sets which sites are allowed to contact the api
 # This should be set to where the front end will be served.
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ALLOWED_ORIGINS = (
-#     'https://elastic-allen-99fad7.netlify.app',
-#     'http://localhost:3000',
-#     'localhost:3000'
-# )
-# CORS_ALLOWED_ORIGIN_REGEXES = (
-#     'https:\/\/elastic\-allen\-99fad7\.netlify\.app*'
-# )
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS = (
+    'https://elastic-allen-99fad7.netlify.app',
+)
+print("ALLOWED ORIGINS")
+print(CORS_ALLOWED_ORIGINS)
 
 # Prevent browsers from sending cookies if on http
 CSRF_COOKIE_SECURE = False
@@ -157,22 +154,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-print("STATIC_ROOT:")
-print(STATIC_ROOT)
-# User uploaded file
-# we don't actually have a cdn lol, but just in case this project grows big enough to need one
-
-# MEDIA_URL = 'https://cdn.jinx.systems/'
-# MEDIA_ROOT = '/srv/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'

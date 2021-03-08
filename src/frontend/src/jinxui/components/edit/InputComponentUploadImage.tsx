@@ -11,7 +11,6 @@ import {
   defaultImageContext,
   defaultSectionContext,
   defaultPageContext,
-  defaultPortfolioContext,
 } from "jinxui/contexts";
 import { v4 as uuidv4 } from "uuid";
 
