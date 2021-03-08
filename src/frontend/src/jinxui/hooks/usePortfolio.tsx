@@ -246,6 +246,18 @@ export const usePortfolio = () => {
     }
   }
 
+  function avatarIconPath() {
+    if (state.avatar) {
+      const imagePath = state.avatar.path;
+      const index = imagePath.lastIndexOf(".");
+      const prefix = imagePath.slice(0, index);
+      const suffix = imagePath.slice(index);
+      return prefix + ".40_square" + suffix;
+    } else {
+      return "";
+    }
+  };
+
   /* Save the currently edited page to backend and redirect to display page. */
   const handlePublishAndRedirect = (history: any) => {
     saveFullPortfolio(false).then(() => {
@@ -469,6 +481,7 @@ export const usePortfolio = () => {
     saveFullPortfolio,
     handlePublishAndRedirect,
     handleSave,
+    avatarIconPath,
     makePortfolioPublic,
     makePortfolioPrivate,
     onPortfolioBackgroundChange,

@@ -21,8 +21,6 @@ import {
   MenuGap,
 } from "jinxui";
 
-import { TPortfolio } from "jinxui/types";
-
 import { defaultUserContext, defaultPortfolioContext } from "jinxui/contexts";
 
 const DivWrapper = styled.div`
@@ -226,18 +224,6 @@ const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
   );
 });
 
-const AvatarIconPath = (portfolio: TPortfolio) => {
-  if (portfolio.avatar) {
-    const imagePath = portfolio.avatar.path;
-    const index = imagePath.lastIndexOf(".");
-    const prefix = imagePath.slice(0, index);
-    const suffix = imagePath.slice(index);
-    return prefix + ".40_square" + suffix;
-  } else {
-    return "";
-  }
-};
-
 type TDropdownPortfolio = {
   isUserView?: boolean;
   isUserEdit?: boolean;
@@ -251,7 +237,7 @@ const DropdownPortfolio = React.forwardRef(
     const anchorRef = React.useRef<HTMLButtonElement>(null);
     // const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
     const { userData } = useUser();
-    const { getFetchedPortfolio, fetchAvatar } = usePortfolio();
+    const { getFetchedPortfolio, fetchAvatar, avatarIconPath } = usePortfolio();
     const portfolio = getFetchedPortfolio();
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -308,7 +294,7 @@ const DropdownPortfolio = React.forwardRef(
                 onClick={handleToggle}
               >
                 {portfolio.avatar ? (
-                  <StyledAvatarImage src={AvatarIconPath(portfolio)} />
+                  <StyledAvatarImage src={avatarIconPath()} />
                 ) : (
                   <AccountCircleIcon style={{ fontSize: 40 }} />
                 )}

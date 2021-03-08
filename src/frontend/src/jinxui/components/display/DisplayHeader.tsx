@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
@@ -12,7 +13,12 @@ import {
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 import { usePortfolio, DisplayLinks } from "jinxui";
-import { userInfo } from "os";
+
+const StyledAvatarImage = styled.img`
+  border-radius: 50%;
+  width: 150px;
+  margin-bottom: 30px;
+`;
 
 /* A block that takes up at minimum the height of the screen. Takes an optional */
 function HeaderBlock(props: any) {
@@ -81,8 +87,6 @@ function DisplayHeader() {
     ? portfolio.background.path
     : theme.portfolio.headerBackground.src;
 
-
-
   const verticalAlign =
     header?.verticalAlign !== undefined ? header.verticalAlign : "flex-end";
 
@@ -111,10 +115,14 @@ function DisplayHeader() {
               justify={horizontalAlign}
             >
               <Box
+                display="flex"
+                flexDirection="column"
+                alignItems={horizontalAlign}
                 padding={
                   theme.portfolio.section?.borderPadding?.toString() + "px"
                 }
                 marginBottom={marginBottom}
+                marginTop="90px"
                 style={
                   headerBG.isDark === true
                     ? { color: theme.palette.common.white }
@@ -123,6 +131,9 @@ function DisplayHeader() {
                     : {}
                 }
               >
+                {portfolio.avatar ? (
+                  <StyledAvatarImage src={portfolio.avatar?.path} />
+                ) : null}
                 <Typography
                   variant="h1"
                   align={textAlign}
