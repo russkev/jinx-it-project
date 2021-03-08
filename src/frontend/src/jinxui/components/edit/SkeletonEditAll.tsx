@@ -31,6 +31,21 @@ const SkeletonPortfolioInput = () => {
     <StyledPaperSectionDiv>
       <StyledPaperSectionBase elevation={0} variant="outlined" square>
         <StyledOneColumnSectionDiv>
+          <Box display="flex" flexWrap="wrap" justifyContent="center">
+            <Box width="200px" marginBottom="30px">
+              <Box display="flex">
+                <Skeleton variant="text" height={10} width={100} />
+              </Box>
+              <Skeleton variant="circle" width="200px" height="200px" />
+            </Box>
+            <Box width="30px" />
+            <Box flexGrow={2} marginBottom="30px">
+              <Box display="flex">
+                <Skeleton variant="text" height={10} width={100} />
+              </Box>
+              <Skeleton variant="rect" height="200px" />
+            </Box>
+          </Box>
           <Skeleton variant="text" height={14} width={100} />
           <Skeleton variant="text" height={40} animation="wave" />
           <Box width="100%" height="16px" />
