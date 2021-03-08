@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from datetime import datetime
 from django.dispatch import receiver
@@ -131,6 +132,7 @@ class Image(models.Model):
         User, on_delete=models.CASCADE, related_name='images')
     name = models.CharField(max_length=100)
     path = models.ImageField(upload_to=image_path, null=True)
+    path_40_square = models.ImageField(upload_to=image_path, null=True)
 
     def __str__(self):
         return self.name
@@ -146,8 +148,9 @@ class Image(models.Model):
         bottom = (image.height + length) / 2
         image_square = image.crop((left, top, right, bottom))
         image_square.thumbnail((target_length, target_length))
-        image_square.save(file + '.' + str(target_length) +
-                          '_square' + extension)
+        path = file + '.' + str(target_length) + '_square' + extension
+        image_square.save(path)
+        return path
     
     # Automatically resize image
     # Some useful information here:
@@ -160,13 +163,18 @@ class Image(models.Model):
         file, extension = os.path.splitext(self.path.path)
 
         # Save image max dimension: 300 pixels
-        image = pilImage.open(self.path)
-        image_300 = image.copy()
-        image_300.thumbnail((300,300))
-        image_300.save(file + '.300' + extension)
+        # image = pilImage.open(self.path)
+        # image_300 = image.copy()
+        # image_300.thumbnail((300,300))
+        # image_300.save(file + '.300' + extension)
 
         # Save image 40 x 40 square
-        self.save_square(40)
+        square_image_path = self.save_square(40)
+        # f = open(square_image_path, "r")
+        # upload_file = SimpleUploadedFile("square_image", f.read())
+        # # square_image_suffix = os.path.splitext(square_image_path)[0]
+        # self.path_40_square.save(square_image_path, upload_file, save=False)
+
         # length = min(image.size)
         # left = (image.width - length) / 2
         # top = (image.height - length) / 2

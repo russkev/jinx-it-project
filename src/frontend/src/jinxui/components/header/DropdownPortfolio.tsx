@@ -21,6 +21,10 @@ import {
   MenuGap,
 } from "jinxui";
 
+import { TPortfolio } from "jinxui/types";
+
+import { defaultUserContext, defaultPortfolioContext } from "jinxui/contexts";
+
 const DivWrapper = styled.div`
   height: 100%;
 `;
@@ -34,12 +38,17 @@ const StyledHeaderOptionsButton = styled(Button)`
   padding-right: 10px;
 `;
 
+const StyledAvatarImage = styled.img`
+  border-radius: 50%;
+  border: 3px solid;
+  width: 37px;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     fontSize: "0.95rem",
   },
 }));
-
 
 const EditMenuItem = React.forwardRef((props: any, ref: any) => {
   const classes = useStyles();
@@ -57,7 +66,6 @@ const EditMenuItem = React.forwardRef((props: any, ref: any) => {
     </>
   );
 });
-
 
 const ViewMenuItem = React.forwardRef((props: any, ref: any) => {
   const { userData } = useUser();
@@ -218,6 +226,18 @@ const AccountMenuItem = React.forwardRef((props: TDialogButton, ref: any) => {
   );
 });
 
+const AvatarIconPath = (portfolio: TPortfolio) => {
+  if (portfolio.avatar) {
+    const imagePath = portfolio.avatar.path;
+    const index = imagePath.lastIndexOf(".");
+    const prefix = imagePath.slice(0, index);
+    const suffix = imagePath.slice(index);
+    return prefix + ".40_square" + suffix;
+  } else {
+    return "";
+  }
+};
+
 type TDropdownPortfolio = {
   isUserView?: boolean;
   isUserEdit?: boolean;
@@ -231,11 +251,19 @@ const DropdownPortfolio = React.forwardRef(
     const anchorRef = React.useRef<HTMLButtonElement>(null);
     // const themeAnchorRef = React.useRef<HTMLButtonElement>(null);
     const { userData } = useUser();
-    const { getFetchedPortfolio } = usePortfolio();
-
+    const { getFetchedPortfolio, fetchAvatar } = usePortfolio();
+    const portfolio = getFetchedPortfolio();
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
     };
+
+    if (
+      portfolio.id === defaultPortfolioContext.id &&
+      userData.authenticated &&
+      userData.portfolioId !== defaultUserContext.portfolioId
+    ) {
+      fetchAvatar(userData.portfolioId);
+    }
 
     const handleClose = (event: React.MouseEvent<EventTarget>) => {
       if (
@@ -279,11 +307,11 @@ const DropdownPortfolio = React.forwardRef(
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                {/*  */}
-                {getFetchedPortfolio().avatar
-                  ? <img src={getFetchedPortfolio().avatar?.path} />
-                  : <AccountCircleIcon style={{ fontSize: 40 }} />
-                }
+                {portfolio.avatar ? (
+                  <StyledAvatarImage src={AvatarIconPath(portfolio)} />
+                ) : (
+                  <AccountCircleIcon style={{ fontSize: 40 }} />
+                )}
                 <ExpandMoreIcon fontSize="small" />
               </StyledHeaderOptionsButton>
             </Tooltip>

@@ -12,6 +12,7 @@ import {
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 import { usePortfolio, DisplayLinks } from "jinxui";
+import { userInfo } from "os";
 
 /* A block that takes up at minimum the height of the screen. Takes an optional */
 function HeaderBlock(props: any) {
@@ -79,6 +80,8 @@ function DisplayHeader() {
   const backgroundImagePath = portfolio.background
     ? portfolio.background.path
     : theme.portfolio.headerBackground.src;
+
+
 
   const verticalAlign =
     header?.verticalAlign !== undefined ? header.verticalAlign : "flex-end";

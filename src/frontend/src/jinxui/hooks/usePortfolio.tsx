@@ -103,6 +103,23 @@ export const usePortfolio = () => {
 
   const PORTFOLIOS_PATH = "api/portfolios";
 
+  async function fetchAvatar(portfolioId: Tuuid) {
+    try {
+      const portfolioDetails: any = await getPortfolio(
+        portfolioId,
+        getConfig()
+      );
+
+      if (portfolioDetails.avatar !== null) {
+        const image_response = await fetchImage(portfolioDetails.avatar);
+        portfolioDetails.avatar = image_response.data;
+      }
+      updateState(portfolioDetails)
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async function fetchPortfolio(portfolioId: Tuuid) {
     try {
       const portfolioDetails: any = await getPortfolio(
@@ -440,6 +457,7 @@ export const usePortfolio = () => {
   return {
     portfolioData: state,
     updatePortfolioState: updateState,
+    fetchAvatar,
     fetchFullPortfolio,
     getFetchedPortfolio,
     getLightTheme,
